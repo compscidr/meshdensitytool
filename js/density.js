@@ -39,6 +39,22 @@ function prepare(animate, density, ap, coverage)
 }
 
 /**
+ * Animation frame.
+ */
+function frame() {
+  clear();
+  update();
+  draw();
+}
+
+/**
+ * Update status of all animated things.
+ */
+function update() {
+  // TODO: stub, currently all done by draw.
+}
+
+/**
  * Clear the canvas.
  */
 function clear() {
