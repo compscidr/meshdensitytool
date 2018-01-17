@@ -20,21 +20,24 @@ var avgClients;
  * @param ap: Percentage of devices that are wifi hotspots.
  * @param coverage: The range of wifi hotspot connection in spatial units.
  */
-function prepare(animate, density, ap, coverage)
-{
-	if(intervalid != -1) {
+function Animator(continuous, density, ap, coverage) {
+  if(intervalid != -1) {
 		clearInterval(intervalid);
   }
 
-	generate(density, ap, coverage);
+  this.density = density;
+  this.wifiHotspotFraction = ap;
+  this.wifiHotspotRange = coverage;
 
-	if(animate == false)
+	generate(this.density, this.wifiHotspotFraction, this.wifiHotspotRange);
+
+	if(continuous == false)
 	{
 		draw(density, ap, coverage, false);
 	}
 	else
 	{
-		intervalid = setInterval( function() { draw(density, ap, coverage, true); }, 100);
+		intervalid = setInterval( function() { draw(this.density, this.wifiHotspotFraction, this.wifiHotspotRange, true); }, 100);
 	}
 }
 
