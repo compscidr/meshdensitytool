@@ -1,4 +1,4 @@
-var intervalid = -1;
+var intervalid = -1; // TODO: wat
 var canvas = document.getElementById('canvas');
 var ctx = $('#canvas')[0].getContext("2d");
 var id = ctx.getImageData(0, 0, 1, 1);
@@ -12,16 +12,21 @@ var hasntHotspot;
 var avgHotspots;
 var avgClients;
 
+/**
+ * Grab input parameters from test boxes and create an initial distribution
+ * of nodes.
+ * @param animate: boolean to determine whether to evolve the sim
+ */
 function prepare(animate)
 {
 	if(intervalid != -1)
 			clearInterval(intervalid);
-			
+
 	var density = $('#density').val();
 	var ap = $('#ap').val();
 	var coverage = $('#coverage').val();
 	generate(density, ap, coverage);
-	
+
 	if(animate == false)
 	{
 		$('#debug').text("F");
@@ -36,13 +41,20 @@ function prepare(animate)
 	}
 }
 
+/**
+ * Clear the canvas.
+ */
 function clear() {
-	
 	ctx.clearRect(0, 0, cw, ch);
 }
 
-
-function compute_stats(density, ap, coverage)
+/**
+ * Compute stats and display them.
+ * @param density: The density that was set at sim start.
+ * @param ap: // TODO: wat
+ * @param coverage: // TODO: wat
+ */
+ function compute_stats(density, ap, coverage)
 {
 	hasHotspot = 0;
 	hasntHotspot = 0;
@@ -60,7 +72,7 @@ function compute_stats(density, ap, coverage)
 			hasHotspot++;
 		avgHotspots += hotspots.length;
 		counter++;
-		
+
 		if(device.hotspot == true)
 		{
 			totalHotspots++;
@@ -71,6 +83,12 @@ function compute_stats(density, ap, coverage)
 	$('#status').text("DENSITY (pp/sq. km): " + density + " AP%: " + ap + " COVERAGE: (m):" + coverage + " COVERAGE: " + ((hasHotspot / density)*100).toFixed(2) + "% AVG HOTSPOTS: " + (avgHotspots / hasHotspot).toFixed(2) + " AVG CLIENTS: " + ( avgClients / totalHotspots).toFixed(2));
 }
 
+/**
+ * Generate an arrangement of mesh nodes, with the given group characteristics.
+ * @param density: The desired average density of nodes.
+ * @param ap: // TODO: wat
+ * @param coverage: The radius of the wifi hotspot coverage area.
+ */
 function generate ( density, ap, coverage ) {
 	devices = new Array();
 	clear();
@@ -78,7 +96,7 @@ function generate ( density, ap, coverage ) {
 	while(counter < density)
 	{
 		var device = new Object();
-		var x = Math.floor(Math.random() * cw);
+		var x = Math.floor(Math.random() * cw); // TODO: globals
 		var y = Math.floor(Math.random() * ch);
 		device.dx = 0;
 		device.dy = 0;
@@ -92,7 +110,11 @@ function generate ( density, ap, coverage ) {
 	}
 }
 
-function draw(density, ap, coverage, move)
+/**
+ * Draw a single frame of animation.
+ * TODO: params
+ */
+function draw(density, ap, coverage, move) // TODO: parameters aren't used, except in subroutine
 {
 	clear();
 	var counter = 0;
@@ -108,40 +130,40 @@ function draw(density, ap, coverage, move)
 				devices[counter].dx += x;
 			else
 				devices[counter].dx -= x;
-			
+
 			if(diry > 0.5)
 				devices[counter].dy += y;
 			else
 				devices[counter].dy -= y;
-			
+
 			devices[counter].x+=devices[counter].dx;
 			devices[counter].y+=devices[counter].dy;
-				
+
 			if(devices[counter].x < 0)
 			{
 				devices[counter].x = 0;
 				devices[counter].dx*=-1;
 			}
-			
+
 			if(devices[counter].y < 0)
 			{
 				devices[counter].dy*=-1;
 				devices[counter].y = 0;
 			}
-				
+
 			if(devices[counter].x > cw)
 			{
 				devices[counter].dx*=-1;
 				devices[counter].x = cw;
 			}
-			
+
 			if(devices[counter].y > ch)
 			{
 				devices[counter].dy*=-1;
 				devices[counter].y = ch;
 			}
 		}
-			
+
 		draw_device(devices[counter]);
 		counter++;
 	}
@@ -149,6 +171,9 @@ function draw(density, ap, coverage, move)
 	compute_stats(density, ap, coverage);
 }
 
+/**
+ * Draw a device, showing its coverage area if it is a wifi hotspot.
+ */
 function draw_device(device)
 {
 	var r = 0;
@@ -158,22 +183,25 @@ function draw_device(device)
 	id.data[1] = g;
 	id.data[2] = b;
 	id.data[3] = 255;
-	
+
 	ctx.putImageData(id, device.x, device.y);
 	if(device.hotspot == true)
 	{
 		ctx.fillStyle = "rgba(255, 10, 10, .5)";
 		ctx.beginPath();
-		ctx.arc(device.x, device.y, device.coverage, 0, Math.PI*2, true); 
+		ctx.arc(device.x, device.y, device.coverage, 0, Math.PI*2, true);
 		ctx.closePath();
 		ctx.fill();
 	}
 	else
 	{
-		
+
 	}
 }
 
+/**
+ * Draw links between every device and each hotspot that it is connected to.
+ */
 function draw_links()
 {
 	var counter = 0;
@@ -202,7 +230,7 @@ function get_hotspots(device)
 {
 	var index = 0;
 	var hotspots = new Array();
-	
+
 	var counter = 0;
 	while(counter < devices.length)
 	{
@@ -217,7 +245,7 @@ function get_hotspots(device)
 		}
 		counter++;
 	}
-	return hotspots;	
+	return hotspots;
 }
 
 /*
@@ -227,7 +255,7 @@ function get_clients(device)
 {
 	var index = 0;
 	var clients = new Array();
-	
+
 	var counter = 0;
 	while(counter < devices.length)
 	{
@@ -242,6 +270,7 @@ function get_clients(device)
 	return clients;
 }
 
+// Characteristicis of Canada
 function canada()
 {
 	 $('#density').val("4");
@@ -250,6 +279,7 @@ function canada()
 			clearInterval(intervalid);
 }
 
+// Characteristicis of Guatamala City
 function guatcity()
 {
 	 $('#density').val("1000");
@@ -258,6 +288,7 @@ function guatcity()
 			clearInterval(intervalid);
 }
 
+// Characteristicis of Toronto
 function tor()
 {
 	 $('#density').val("2650");
@@ -266,6 +297,7 @@ function tor()
 			clearInterval(intervalid);
 }
 
+// Characteristicis of Vancouver
 function van()
 {
 	 $('#density').val("5249");
