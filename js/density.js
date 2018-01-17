@@ -15,29 +15,26 @@ var avgClients;
 /**
  * Grab input parameters from test boxes and create an initial distribution
  * of nodes.
- * @param animate: boolean to determine whether to evolve the sim
+ * @param animate: boolean to determine whether to evolve the sim.
+ * @param density: The density, in nodes per square spatial unit.
+ * @param ap: Percentage of devices that are wifi hotspots.
+ * @param coverage: The range of wifi hotspot connection in spatial units.
  */
-function prepare(animate)
+function prepare(animate, density, ap, coverage)
 {
-	if(intervalid != -1)
-			clearInterval(intervalid);
+	if(intervalid != -1) {
+		clearInterval(intervalid);
+  }
 
-	var density = $('#density').val();
-	var ap = $('#ap').val();
-	var coverage = $('#coverage').val();
 	generate(density, ap, coverage);
 
 	if(animate == false)
 	{
-		$('#debug').text("F");
 		draw(density, ap, coverage, false);
 	}
 	else
 	{
-		$('#debug').text("T");
 		intervalid = setInterval( function() { draw(density, ap, coverage, true); }, 100);
-		return intervalid;
-		//return setInterval( function() { draw(density, ap, coverage, true); }, 100);
 	}
 }
 
