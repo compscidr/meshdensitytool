@@ -20,31 +20,38 @@ var avgClients;
  * @param ap: Percentage of devices that are wifi hotspots.
  * @param coverage: The range of wifi hotspot connection in spatial units.
  */
-function Animator(continuous, density, ap, coverage) {
-  if(intervalid != -1) {
-		clearInterval(intervalid);
-  }
+let Animator = {
+  prepare: function(continuous, density, ap, coverage) {
+    if(intervalid != -1) {
+  		clearInterval(intervalid);
+    }
 
-  this.density = density;
-  this.wifiHotspotFraction = ap;
-  this.wifiHotspotRange = coverage;
+    this.density = density;
+    this.wifiHotspotFraction = ap;
+    this.wifiHotspotRange = coverage;
 
-	generate(this.density, this.wifiHotspotFraction, this.wifiHotspotRange);
+  };
 
-	if(continuous == false)
+}
+
+/**
+ * Animation sequence.
+ */
+Animator.run = function(continuous) {
+  if(continuous == false)
 	{
-		draw(density, ap, coverage, false);
+		this.draw(density, ap, coverage, false);
 	}
 	else
 	{
-		intervalid = setInterval( function() { draw(this.density, this.wifiHotspotFraction, this.wifiHotspotRange, true); }, 100);
+		intervalid = setInterval( function() { this.draw(this.density, this.wifiHotspotFraction, this.wifiHotspotRange, true); }, 100);
 	}
 }
 
 /**
  * Animation frame.
  */
-function frame() {
+Animator.frame = function() {
   clear();
   update();
   draw();
@@ -130,7 +137,7 @@ function generate ( density, ap, coverage ) {
  * Draw a single frame of animation.
  * TODO: params
  */
-function draw(density, ap, coverage, move) // TODO: parameters aren't used, except in subroutine
+Animator.prototype.draw = function (density, ap, coverage, move) // TODO: parameters aren't used, except in subroutine
 {
 	clear();
 	var counter = 0;
