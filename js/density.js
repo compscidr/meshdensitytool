@@ -1,16 +1,16 @@
-var intervalid = -1; // TODO: wat
-var canvas = document.getElementById('canvas');
-var ctx = $('#canvas')[0].getContext("2d");
-var id = ctx.getImageData(0, 0, 1, 1);
-var cw = canvas.width;
-var ch = canvas.height;
-var devices;
+let intervalid = -1; // TODO: wat
+let canvas = document.getElementById('canvas');
+let ctx = $('#canvas')[0].getContext("2d");
+let id = ctx.getImageData(0, 0, 1, 1);
+let cw = canvas.width;
+let ch = canvas.height;
+let devices;
 
 //stats
-var hasHotspot;
-var hasntHotspot;
-var avgHotspots;
-var avgClients;
+let hasHotspot;
+let hasntHotspot;
+let avgHotspots;
+let avgClients;
 
 /**
  * The simulator engine.
@@ -64,14 +64,14 @@ class Simulator {
     ctx.clearRect(0, 0, cw, ch);
   }
 
-  draw() {
+  update() {
     let counter = 0;
   	while(counter < this.devices.length)
   	{
-			var x = Math.random() * 0.1;
-			var y = Math.random() * 0.1;
-			var dirx = Math.random();
-			var diry = Math.random();
+			let x = Math.random() * 0.1;
+			let y = Math.random() * 0.1;
+			let dirx = Math.random();
+			let diry = Math.random();
 			if(dirx > 0.5)
 				this.devices[counter].dx += x;
 			else
@@ -108,7 +108,13 @@ class Simulator {
 				this.devices[counter].dy*=-1;
 				this.devices[counter].y = ch;
 			}
+  	}
+  }
 
+  draw() {
+    let counter = 0;
+  	while(counter < this.devices.length)
+  	{
   		this.draw_device(this.devices[counter]);
   		counter++;
   	}
@@ -118,9 +124,9 @@ class Simulator {
 
   draw_device(device)
   {
-  	var r = 0;
-  	var g = 0;
-  	var b = 0;
+  	let r = 0;
+  	let g = 0;
+  	let b = 0;
   	id.data[0] = r;
   	id.data[1] = g;
   	id.data[2] = b;
@@ -186,7 +192,7 @@ class Simulator {
   	let counter = 0;
   	while(counter < this.devices.length)
   	{
-  		var distance = Math.sqrt(Math.pow(this.devices[counter].x - device.x,2) + Math.pow(this.devices[counter].y - device.y,2));
+  		let distance = Math.sqrt(Math.pow(this.devices[counter].x - device.x,2) + Math.pow(this.devices[counter].y - device.y,2));
   		if(distance < this.devices[counter].range)
   		{
   			clients[index] = this.devices[counter];
