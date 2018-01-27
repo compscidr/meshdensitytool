@@ -57,14 +57,14 @@ class Simulator {
   }
 
   pause(continuous) {
-    clearInterval(intervalid);
+    clearInterval(intervalid)
   }
 
   clear() {
     ctx.clearRect(0, 0, cw, ch);
   }
 
-  update() {
+  draw() {
     let counter = 0;
   	while(counter < this.devices.length)
   	{
@@ -108,13 +108,7 @@ class Simulator {
 				this.devices[counter].dy*=-1;
 				this.devices[counter].y = ch;
 			}
-  	}
-  }
 
-  draw() {
-    let counter = 0;
-  	while(counter < this.devices.length)
-  	{
   		this.draw_device(this.devices[counter]);
   		counter++;
   	}
