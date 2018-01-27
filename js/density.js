@@ -13,285 +13,227 @@ var avgHotspots;
 var avgClients;
 
 /**
- * Grab input parameters from test boxes and create an initial distribution
- * of nodes.
- * @param animate: boolean to determine whether to evolve the sim.
- * @param density: The density, in nodes per square spatial unit.
- * @param ap: Percentage of devices that are wifi hotspots.
- * @param coverage: The range of wifi hotspot connection in spatial units.
+ * The simulator engine.
  */
-let Animator = {
-  prepare: function(continuous, density, ap, coverage) {
+class Simulator {
+  generate(width, height, count, hotspotFraction, hotspotRange) {
+    console.log("generating");
+
     if(intervalid != -1) {
-  		clearInterval(intervalid);
+      clearInterval(intervalid);
     }
 
-    this.density = density;
-    this.wifiHotspotFraction = ap;
-    this.wifiHotspotRange = coverage;
+    this.width = width
+    this.height = height
+    this.count = count
+    this.wifiHotspotFraction = hotspotFraction
+    this.wifiHotspotRange = hotspotRange
 
-  };
+  	this.devices = new Array();
+  	let counter = 0;
+  	while(counter < this.count) {
+  		let device = new Object();
+  		let x = Math.floor(Math.random() * cw); // TODO: globals
+  		let y = Math.floor(Math.random() * ch);
+  		device.dx = 0;
+  		device.dy = 0;
+  		device.x = x;
+  		device.y = y;
+  		device.range = Math.floor(Math.random() * hotspotRange) + (2/3 * hotspotRange);
+  		if(Math.floor(Math.random() * 100) < hotspotFraction) {
+  			device.hotspot = true;
+      }
+  		this.devices[counter] = device;
+  		counter++;
+  	}
+  }
 
-}
+  run(continuous) {
+    if(continuous == false) {
+      this.frame();
+    } else {
+      intervalid = setInterval( this.frame.bind(this), 100);
+    }
+  }
 
-/**
- * Animation sequence.
- */
-Animator.run = function(continuous) {
-  if(continuous == false)
-	{
-		this.draw(density, ap, coverage, false);
-	}
-	else
-	{
-		intervalid = setInterval( function() { this.draw(this.density, this.wifiHotspotFraction, this.wifiHotspotRange, true); }, 100);
-	}
-}
+  pause(continuous) {
+    clearInterval(intervalid);
+  }
 
-/**
- * Animation frame.
- */
-Animator.frame = function() {
-  clear();
-  update();
-  draw();
-}
+  clear() {
+    ctx.clearRect(0, 0, cw, ch);
+  }
 
-/**
- * Update status of all animated things.
- */
-function update() {
-  // TODO: stub, currently all done by draw.
-}
-
-/**
- * Clear the canvas.
- */
-function clear() {
-	ctx.clearRect(0, 0, cw, ch);
-}
-
-/**
- * Compute stats and display them.
- * @param density: The density that was set at sim start.
- * @param ap: // TODO: wat
- * @param coverage: // TODO: wat
- */
- function compute_stats(density, ap, coverage)
-{
-	hasHotspot = 0;
-	hasntHotspot = 0;
-	avgHotspots = 0;
-	avgClients = 0;
-	var counter = 0;
-	var totalHotspots = 0;
-	while(counter < devices.length)
-	{
-		device = devices[counter];
-		var hotspots = get_hotspots(device);
-		if(hotspots.length == 0)
-			hasntHotspot++;
-		else
-			hasHotspot++;
-		avgHotspots += hotspots.length;
-		counter++;
-
-		if(device.hotspot == true)
-		{
-			totalHotspots++;
-			var clients = get_clients(device);
-			avgClients+=clients.length;
-		}
-	}
-	$('#status').text("DENSITY (pp/sq. km): " + density + " AP%: " + ap + " COVERAGE: (m):" + coverage + " COVERAGE: " + ((hasHotspot / density)*100).toFixed(2) + "% AVG HOTSPOTS: " + (avgHotspots / hasHotspot).toFixed(2) + " AVG CLIENTS: " + ( avgClients / totalHotspots).toFixed(2));
-}
-
-/**
- * Generate an arrangement of mesh nodes, with the given group characteristics.
- * @param density: The desired average density of nodes.
- * @param ap: // TODO: wat
- * @param coverage: The radius of the wifi hotspot coverage area.
- */
-function generate ( density, ap, coverage ) {
-	devices = new Array();
-	clear();
-	var counter = 0;
-	while(counter < density)
-	{
-		var device = new Object();
-		var x = Math.floor(Math.random() * cw); // TODO: globals
-		var y = Math.floor(Math.random() * ch);
-		device.dx = 0;
-		device.dy = 0;
-		device.x = x;
-		device.y = y;
-		device.coverage = Math.floor(Math.random() * coverage) + (2/3 * coverage);
-		if(Math.floor(Math.random() * 100) < ap)
-			device.hotspot = true;
-		devices[counter] = device;
-		counter++;
-	}
-}
-
-/**
- * Draw a single frame of animation.
- * TODO: params
- */
-Animator.prototype.draw = function (density, ap, coverage, move) // TODO: parameters aren't used, except in subroutine
-{
-	clear();
-	var counter = 0;
-	while(counter < devices.length)
-	{
-		if(move == true)
-		{
+  draw() {
+    let counter = 0;
+  	while(counter < this.devices.length)
+  	{
 			var x = Math.random() * 0.1;
 			var y = Math.random() * 0.1;
 			var dirx = Math.random();
 			var diry = Math.random();
 			if(dirx > 0.5)
-				devices[counter].dx += x;
+				this.devices[counter].dx += x;
 			else
-				devices[counter].dx -= x;
+				this.devices[counter].dx -= x;
 
 			if(diry > 0.5)
-				devices[counter].dy += y;
+				this.devices[counter].dy += y;
 			else
-				devices[counter].dy -= y;
+				this.devices[counter].dy -= y;
 
-			devices[counter].x+=devices[counter].dx;
-			devices[counter].y+=devices[counter].dy;
+			this.devices[counter].x+=this.devices[counter].dx;
+			this.devices[counter].y+=this.devices[counter].dy;
 
-			if(devices[counter].x < 0)
+			if(this.devices[counter].x < 0)
 			{
-				devices[counter].x = 0;
-				devices[counter].dx*=-1;
+				this.devices[counter].x = 0;
+				this.devices[counter].dx*=-1;
 			}
 
-			if(devices[counter].y < 0)
+			if(this.devices[counter].y < 0)
 			{
-				devices[counter].dy*=-1;
-				devices[counter].y = 0;
+				this.devices[counter].dy*=-1;
+				this.devices[counter].y = 0;
 			}
 
-			if(devices[counter].x > cw)
+			if(this.devices[counter].x > cw)
 			{
-				devices[counter].dx*=-1;
-				devices[counter].x = cw;
+				this.devices[counter].dx*=-1;
+				this.devices[counter].x = cw;
 			}
 
-			if(devices[counter].y > ch)
+			if(this.devices[counter].y > ch)
 			{
-				devices[counter].dy*=-1;
-				devices[counter].y = ch;
+				this.devices[counter].dy*=-1;
+				this.devices[counter].y = ch;
 			}
-		}
 
-		draw_device(devices[counter]);
-		counter++;
-	}
-	draw_links();
-	compute_stats(density, ap, coverage);
+  		this.draw_device(this.devices[counter]);
+  		counter++;
+  	}
+  	this.draw_links();
+  	this.compute_stats();
+  }
+
+  draw_device(device)
+  {
+  	var r = 0;
+  	var g = 0;
+  	var b = 0;
+  	id.data[0] = r;
+  	id.data[1] = g;
+  	id.data[2] = b;
+  	id.data[3] = 255;
+
+  	ctx.putImageData(id, device.x, device.y);
+  	if(device.hotspot == true)
+  	{
+  		ctx.fillStyle = "rgba(255, 10, 10, .5)";
+  		ctx.beginPath();
+  		ctx.arc(device.x, device.y, device.range, 0, Math.PI*2, true);
+  		ctx.closePath();
+  		ctx.fill();
+  	}
+  	else
+  	{
+
+  	}
+  }
+
+  draw_links() {
+    let counter = 0;
+  	while(counter < this.devices.length)
+  	{
+  		let device = this.devices[counter];
+  		let hotspots = this.get_hotspots(device);
+  		let counter2 = 0;
+  		while(counter2 < hotspots.length)
+  		{
+  			ctx.strokeStyle = "rgba(10, 100, 100, 1)";
+  			ctx.beginPath();
+  			ctx.moveTo(device.x,device.y);
+  			ctx.lineTo(hotspots[counter2].x,hotspots[counter2].y);
+  			ctx.stroke();
+  			counter2++;
+  		}
+  		counter++;
+  	}
+  }
+
+  get_hotspots(device) {
+  	let index = 0;
+  	let hotspots = new Array();
+
+  	let counter = 0;
+  	while(counter < this.devices.length) {
+  		if(this.devices[counter].hotspot == true) {
+  			let distance = Math.sqrt(Math.pow(this.devices[counter].x - device.x,2) + Math.pow(this.devices[counter].y - device.y,2));
+  			if(distance < this.devices[counter].range) {
+  				hotspots[index] = this.devices[counter];
+  				index++;
+  			}
+  		}
+  		counter++;
+  	}
+  	return hotspots;
+  }
+
+  get_clients(device) {
+  	let index = 0;
+  	let clients = new Array();
+
+  	let counter = 0;
+  	while(counter < this.devices.length)
+  	{
+  		var distance = Math.sqrt(Math.pow(this.devices[counter].x - device.x,2) + Math.pow(this.devices[counter].y - device.y,2));
+  		if(distance < this.devices[counter].range)
+  		{
+  			clients[index] = this.devices[counter];
+  			index++;
+  		}
+  		counter++;
+  	}
+  	return clients;
+  }
+
+  frame() {
+    this.clear();
+    //this.update();
+    this.draw();
+  }
+
+  compute_stats() {
+  	hasHotspot = 0;
+  	hasntHotspot = 0;
+  	avgHotspots = 0;
+  	avgClients = 0;
+  	let counter = 0;
+  	let totalHotspots = 0;
+    let device = this.devices[0]
+  	while(counter < this.devices.length)
+  	{
+  		device = this.devices[counter];
+  		let hotspots = this.get_hotspots(device);
+  		if(hotspots.length == 0) {
+        hasntHotspot++;
+      } else {
+  			hasHotspot++;
+      }
+  		avgHotspots += hotspots.length;
+  		counter++;
+
+  		if(device.hotspot == true) {
+  			totalHotspots++;
+  			let clients = this.get_clients(device);
+  			avgClients+=clients.length;
+  		}
+  	}
+  	$('#status').text("DENSITY (pp/sq. km): " + this.count + " AP%: " + this.wifiHotspotFraction + " COVERAGE: (m):" + this.wifiHotspotRange + " COVERAGE: " + ((hasHotspot / this.count)*100).toFixed(2) + "% AVG HOTSPOTS: " + (avgHotspots / hasHotspot).toFixed(2) + " AVG CLIENTS: " + ( avgClients / totalHotspots).toFixed(2));
+  }
 }
 
-/**
- * Draw a device, showing its coverage area if it is a wifi hotspot.
- */
-function draw_device(device)
-{
-	var r = 0;
-	var g = 0;
-	var b = 0;
-	id.data[0] = r;
-	id.data[1] = g;
-	id.data[2] = b;
-	id.data[3] = 255;
-
-	ctx.putImageData(id, device.x, device.y);
-	if(device.hotspot == true)
-	{
-		ctx.fillStyle = "rgba(255, 10, 10, .5)";
-		ctx.beginPath();
-		ctx.arc(device.x, device.y, device.coverage, 0, Math.PI*2, true);
-		ctx.closePath();
-		ctx.fill();
-	}
-	else
-	{
-
-	}
-}
-
-/**
- * Draw links between every device and each hotspot that it is connected to.
- */
-function draw_links()
-{
-	var counter = 0;
-	while(counter < devices.length)
-	{
-		var device = devices[counter];
-		var hotspots = get_hotspots(device);
-		var counter2 = 0;
-		while(counter2 < hotspots.length)
-		{
-			ctx.strokeStyle = "rgba(10, 100, 100, 1)";
-			ctx.beginPath();
-			ctx.moveTo(device.x,device.y);
-			ctx.lineTo(hotspots[counter2].x,hotspots[counter2].y);
-			ctx.stroke();
-			counter2++;
-		}
-		counter++;
-	}
-}
-
-/*
- * Returns an array of hotspots that this device is in range of
- */
-function get_hotspots(device)
-{
-	var index = 0;
-	var hotspots = new Array();
-
-	var counter = 0;
-	while(counter < devices.length)
-	{
-		if(devices[counter].hotspot == true)
-		{
-			var distance = Math.sqrt(Math.pow(devices[counter].x - device.x,2) + Math.pow(devices[counter].y - device.y,2));
-			if(distance < devices[counter].coverage)
-			{
-				hotspots[index] = devices[counter];
-				index++;
-			}
-		}
-		counter++;
-	}
-	return hotspots;
-}
-
-/*
- * Returns an array of clients that this hotspot is in range of
- */
-function get_clients(device)
-{
-	var index = 0;
-	var clients = new Array();
-
-	var counter = 0;
-	while(counter < devices.length)
-	{
-		var distance = Math.sqrt(Math.pow(devices[counter].x - device.x,2) + Math.pow(devices[counter].y - device.y,2));
-		if(distance < devices[counter].coverage)
-		{
-			clients[index] = devices[counter];
-			index++;
-		}
-		counter++;
-	}
-	return clients;
-}
+let sim = new Simulator();
 
 // Characteristicis of Canada
 function canada()

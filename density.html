@@ -16,8 +16,10 @@
 	<label>Population Density / Square km: </label> <br/><input id="density" type="text" value="140"/> <br/>
 	<label>Hotspot percentage: </label> <br/><input id="ap" type="text" value="5"/> <br/>
 	<label>Coverage: </label> <br/><input id="coverage" type="text" value="20"/> <br/>
-	<button onclick="Animator.prepare(false, $('#density').val(), $('#ap').val(), $('#coverage').val()); Animator.run(false);" id="once">Run Once</button> <br/>
-	<button onclick="Animator.prepare(true, $('#density').val(), $('#ap').val(), $('#coverage').val()); Animator.run(true);" id="animate">Animate!</button>
+  <button onclick="sim.generate(500, 500, $('#density').val(), $('#ap').val(), $('#coverage').val());" id="generate_btn">Generate</button> <br />
+	<button onclick="sim.run(false);" id="once">Run Once</button> <br/>
+	<button onclick="sim.run(true);" id="animate">Animate!</button>
+  <button onclick="sim.pause();" id="pause">Pause</button>
 </div>
 
 <div>
