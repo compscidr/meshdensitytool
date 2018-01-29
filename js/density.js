@@ -4,7 +4,6 @@ let ctx = $('#canvas')[0].getContext("2d");
 let id = ctx.getImageData(0, 0, 1, 1);
 let cw = canvas.width;
 let ch = canvas.height;
-let devices;
 
 //stats
 let hasHotspot;
