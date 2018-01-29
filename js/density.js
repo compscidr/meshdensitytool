@@ -11,6 +11,11 @@ let hasntHotspot;
 let avgHotspots;
 let avgClients;
 
+const RED_CHAN = 0
+const GREEN_CHAN = 1
+const BLUE_CHAN = 2
+const ALPHA_CHAN = 3
+
 const WIFI_LINK = 0
 const BT_LINK = 1
 
@@ -150,13 +155,10 @@ class Simulator {
 
   draw_device(device)
   {
-  	let r = 0;
-  	let g = 0;
-  	let b = 0;
-  	id.data[0] = r;
-  	id.data[1] = g;
-  	id.data[2] = b;
-  	id.data[3] = 255;
+  	id.data[RED_CHAN] = 0
+  	id.data[GREEN_CHAN] = 0
+  	id.data[BLUE_CHAN] = 0
+  	id.data[ALPHA_CHAN] = 255
 
   	ctx.putImageData(id, device.x, device.y);
   	if(device.hotspot == true)
