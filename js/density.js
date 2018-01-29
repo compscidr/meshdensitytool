@@ -67,47 +67,49 @@ class Simulator {
   update() {
     let counter = 0;
   	while(counter < this.devices.length) {
-			let x = Math.random() * 0.1;
-			let y = Math.random() * 0.1;
-			let dirx = Math.random();
-			let diry = Math.random();
-			if(dirx > 0.5)
-				this.devices[counter].dx += x;
-			else
-				this.devices[counter].dx -= x;
+      let device = this.devices[counter]
 
-			if(diry > 0.5)
-				this.devices[counter].dy += y;
-			else
-				this.devices[counter].dy -= y;
+      this.moveDevice(device)
+      this.boundDevice(device)
 
-			this.devices[counter].x+=this.devices[counter].dx;
-			this.devices[counter].y+=this.devices[counter].dy;
-
-			if(this.devices[counter].x < 0)
-			{
-				this.devices[counter].x = 0;
-				this.devices[counter].dx*=-1;
-			}
-
-			if(this.devices[counter].y < 0)
-			{
-				this.devices[counter].dy*=-1;
-				this.devices[counter].y = 0;
-			}
-
-			if(this.devices[counter].x > cw)
-			{
-				this.devices[counter].dx*=-1;
-				this.devices[counter].x = cw;
-			}
-
-			if(this.devices[counter].y > ch)
-			{
-				this.devices[counter].dy*=-1;
-				this.devices[counter].y = ch;
-			}
       counter++;
+    }
+  }
+
+  moveDevice(device) {
+    let xStep = (Math.random() * 0.2) - 0.1;
+    let yStep = (Math.random() * 0.2) - 0.1;
+
+    device.dx += xStep;
+    device.dy += yStep;
+
+    device.x+=device.dx;
+    device.y+=device.dy;
+  }
+
+  boundDevice(device) {
+    if(device.x < 0)
+    {
+      device.x = 0;
+      device.dx*=-1;
+    }
+
+    if(device.y < 0)
+    {
+      device.dy*=-1;
+      device.y = 0;
+    }
+
+    if(device.x > cw)
+    {
+      device.dx*=-1;
+      device.x = cw;
+    }
+
+    if(device.y > ch)
+    {
+      device.dy*=-1;
+      device.y = ch;
     }
   }
 
