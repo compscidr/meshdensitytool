@@ -66,8 +66,7 @@ class Simulator {
 
   update() {
     let counter = 0;
-  	while(counter < this.devices.length)
-  	{
+  	while(counter < this.devices.length) {
 			let x = Math.random() * 0.1;
 			let y = Math.random() * 0.1;
 			let dirx = Math.random();
