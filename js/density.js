@@ -176,8 +176,7 @@ class Simulator {
   }
 
   draw_links() {
-    let counter = 0;
-  	while(counter < this.devices.length)
+  	for (let counter in this.devices)
   	{
   		let device = this.devices[counter];
   		let hotspots = this.get_hotspots(device);
