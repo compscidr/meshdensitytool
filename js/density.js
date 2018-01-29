@@ -52,8 +52,9 @@ class Simulator {
     this.wifiHotspotFraction = hotspotFraction
     this.wifiHotspotRange = hotspotRange
 
-  	this.devices = new Array();
+  	this.devices = new Array()
     this.wifiConnections = new Array()
+
   	let counter = 0;
   	while(counter < this.count) {
   		let device = new Object();
