@@ -205,14 +205,17 @@ class Simulator {
 
     ctx.putImageData(id, device.x, device.y)
     if (device.hotspot === true) {
-      ctx.fillStyle = 'rgba(255, 10, 10, .5)'
+      ctx.fillStyle = 'rgba(255, 10, 10, .2)'
       ctx.beginPath()
       ctx.arc(device.x, device.y, device.range, 0, Math.PI * 2, true)
       ctx.closePath()
       ctx.fill()
-    } else {
-
     }
+    ctx.fillStyle = 'rgba(10, 10, 255, .2)'
+    ctx.beginPath()
+    ctx.arc(device.x, device.y, BT_RANGE, 0, Math.PI * 2, true)
+    ctx.closePath()
+    ctx.fill()
   }
 
   updateLinks () {
@@ -248,7 +251,7 @@ class Simulator {
   drawLinks () {
     for (let counter in this.wifiConnections) {
       let link = this.wifiConnections[counter]
-      ctx.strokeStyle = 'rgba(10, 100, 100, 1)'
+      ctx.strokeStyle = 'rgba(150, 10, 10, 1)'
       ctx.beginPath()
       ctx.moveTo(link.left.x, link.left.y)
       ctx.lineTo(link.right.x, link.right.y)
