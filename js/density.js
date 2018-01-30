@@ -272,7 +272,6 @@ let sim = new Simulator();
 function canada()
 {
 	 $('#density').val("4");
-	 clear();
 	 if(intervalid != -1)
 			clearInterval(intervalid);
 }
@@ -281,7 +280,6 @@ function canada()
 function guatcity()
 {
 	 $('#density').val("1000");
-	 clear();
 	 if(intervalid != -1)
 			clearInterval(intervalid);
 }
@@ -290,7 +288,6 @@ function guatcity()
 function tor()
 {
 	 $('#density').val("2650");
-	 clear();
 	 if(intervalid != -1)
 			clearInterval(intervalid);
 }
@@ -299,7 +296,6 @@ function tor()
 function van()
 {
 	 $('#density').val("5249");
-	 clear();
 	 if(intervalid != -1)
 			clearInterval(intervalid);
 }
