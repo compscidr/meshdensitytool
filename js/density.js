@@ -216,7 +216,7 @@ class Simulator {
       let deviceLeft = this.devices[counterLeft]
       let hotspots = this.getHotspots(deviceLeft)
       for (let counterRight in hotspots) {
-        let deviceRight = this.devices[counterRight]
+        let deviceRight = hotspots[counterRight]
         this.wifiConnections.push(new EnergyLink(
           deviceLeft, deviceRight, WIFI_LINK, WIFI_ENERGY
         ))
