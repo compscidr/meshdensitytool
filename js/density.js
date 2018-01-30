@@ -19,6 +19,8 @@ const ALPHA_CHAN = 3
 const WIFI_LINK = 0
 const BT_LINK = 1
 
+const WIFI_ENERGY = 1
+
 /**
 * Store connection info of a link between two devices.
 * There is no distinction between the two devices.
@@ -207,20 +209,28 @@ class Simulator {
     }
   }
 
-  drawLinks () {
-    for (let counter in this.devices) {
-      let device = this.devices[counter]
-      let hotspots = this.getHotspots(device)
-      let counter2 = 0
-      while (counter2 < hotspots.length) {
-        ctx.strokeStyle = 'rgba(10, 100, 100, 1)'
-        ctx.beginPath()
-        ctx.moveTo(device.x, device.y)
-        ctx.lineTo(hotspots[counter2].x, hotspots[counter2].y)
-        ctx.stroke()
-        counter2++
+  updateLinks () {
+    this.wifiConnections = []
+    for (let counterLeft in this.devices) {
+      let deviceLeft = this.devices[counterLeft]
+      let hotspots = this.getHotspots(deviceLeft)
+      for (let counterRight in hotspots) {
+        let deviceRight = this.devices[counterRight]
+        this.wifiConnections.push(new EnergyLink(
+          deviceLeft, deviceRight, WIFI_LINK, WIFI_ENERGY
+        ))
       }
-      counter++
+    }
+  }
+
+  drawLinks () {
+    for (let counter in this.wifiConnections) {
+      let link = this.wifiConnections[counter]
+      ctx.strokeStyle = 'rgba(10, 100, 100, 1)'
+      ctx.beginPath()
+      ctx.moveTo(link.deviceLeft.x, link.deviceLeft.y)
+      ctx.lineTo(link.deviceRight.x, link.deviceRight.y)
+      ctx.stroke()
     }
   }
 
