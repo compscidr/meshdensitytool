@@ -115,8 +115,7 @@ class Simulator {
 	draw() {
     let counter = 0;
   	while(counter < this.devices.length) {
-			this.drawDevice
-	(this.devices[counter]);
+			this.drawDevice(this.devices[counter]);
   		counter++;
   	}
   	this.drawLinks();
