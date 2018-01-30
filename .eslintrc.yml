@@ -1,1 +1,9 @@
 extends: standard
+env:
+  browser: true
+  es6: true
+  jquery: true
+
+rules:
+  no-unused-vars:
+    - off
