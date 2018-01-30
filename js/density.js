@@ -229,8 +229,8 @@ class Simulator {
       let link = this.wifiConnections[counter]
       ctx.strokeStyle = 'rgba(10, 100, 100, 1)'
       ctx.beginPath()
-      ctx.moveTo(link.deviceLeft.x, link.deviceLeft.y)
-      ctx.lineTo(link.deviceRight.x, link.deviceRight.y)
+      ctx.moveTo(link.left.x, link.left.y)
+      ctx.lineTo(link.right.x, link.right.y)
       ctx.stroke()
     }
   }
