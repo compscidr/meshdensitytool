@@ -19,7 +19,10 @@ const ALPHA_CHAN = 3
 const WIFI_LINK = 0
 const BT_LINK = 1
 
+const BT_RANGE = 3
+
 const WIFI_ENERGY = 1
+const BT_ENERGY = 1
 
 /**
 * Store connection info of a link between two devices.
@@ -61,6 +64,7 @@ class Simulator {
 
     this.devices = []
     this.wifiConnections = []
+    this.btConnections = []
 
     let counter = 0
     while (counter < this.count) {
@@ -224,10 +228,34 @@ class Simulator {
     }
   }
 
+  updateBTLinks () {
+    this.btConnections = []
+    for (let counterLeft = 0; counterLeft < this.devices.length; counterLeft++) {
+      let deviceLeft = this.devices[counterLeft]
+      for (let counterRight = counterLeft + 1; counterRight < this.devices.length; counterRight++) {
+        let deviceRight = this.devices[counterRight]
+        let distance = Math.sqrt(Math.pow(deviceLeft.x - deviceRight.x, 2) + Math.pow(deviceLeft.y - deviceRight.y, 2))
+        if (distance < BT_RANGE) {
+          this.btConnections.push(new EnergyLink(
+            deviceLeft, deviceRight, BT_LINK, BT_ENERGY
+          ))
+        }
+      }
+    }
+  }
+
   drawLinks () {
     for (let counter in this.wifiConnections) {
       let link = this.wifiConnections[counter]
       ctx.strokeStyle = 'rgba(10, 100, 100, 1)'
+      ctx.beginPath()
+      ctx.moveTo(link.left.x, link.left.y)
+      ctx.lineTo(link.right.x, link.right.y)
+      ctx.stroke()
+    }
+    for (let counter in this.btConnections) {
+      let link = this.btConnections[counter]
+      ctx.strokeStyle = 'rgba(10, 10, 200, 1)'
       ctx.beginPath()
       ctx.moveTo(link.left.x, link.left.y)
       ctx.lineTo(link.right.x, link.right.y)
