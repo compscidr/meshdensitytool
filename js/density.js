@@ -88,6 +88,12 @@ class Simulator {
 
   pause(continuous) {
     clearInterval(intervalid)
+	}
+	
+  frame() {
+    this.clear();
+    this.update();
+    this.draw();
   }
 
   clear() {
@@ -104,6 +110,17 @@ class Simulator {
 
       counter++;
     }
+	}
+	
+	draw() {
+    let counter = 0;
+  	while(counter < this.devices.length) {
+			this.drawDevice
+	(this.devices[counter]);
+  		counter++;
+  	}
+  	this.drawLinks();
+  	this.compute_stats();
   }
 
   moveDevice(device) {
@@ -141,19 +158,45 @@ class Simulator {
       device.dy*=-1;
       device.y = ch;
     }
-  }
+	}
+	
+	getHotspots(device) {
+  	let index = 0;
+  	let hotspots = new Array();
 
-  draw() {
-    let counter = 0;
+  	let counter = 0;
   	while(counter < this.devices.length) {
-  		this.draw_device(this.devices[counter]);
+  		if(this.devices[counter].hotspot == true) {
+  			let distance = Math.sqrt(Math.pow(this.devices[counter].x - device.x,2) + Math.pow(this.devices[counter].y - device.y,2));
+  			if(distance < this.devices[counter].range) {
+  				hotspots[index] = this.devices[counter];
+  				index++;
+  			}
+  		}
   		counter++;
   	}
-  	this.draw_links();
-  	this.compute_stats();
+  	return hotspots;
   }
 
-  draw_device(device)
+  getClients(device) {
+  	let index = 0;
+  	let clients = new Array();
+
+  	let counter = 0;
+  	while(counter < this.devices.length)
+  	{
+  		let distance = Math.sqrt(Math.pow(this.devices[counter].x - device.x,2) + Math.pow(this.devices[counter].y - device.y,2));
+  		if(distance < this.devices[counter].range)
+  		{
+  			clients[index] = this.devices[counter];
+  			index++;
+  		}
+  		counter++;
+  	}
+  	return clients;
+  }
+
+	drawDevice(device)
   {
   	id.data[RED_CHAN] = 0
   	id.data[GREEN_CHAN] = 0
@@ -175,11 +218,11 @@ class Simulator {
   	}
   }
 
-  draw_links() {
+  drawLinks() {
   	for (let counter in this.devices)
   	{
   		let device = this.devices[counter];
-  		let hotspots = this.get_hotspots(device);
+			let hotspots = this.getHotspots(device);
   		let counter2 = 0;
   		while(counter2 < hotspots.length)
   		{
@@ -194,48 +237,6 @@ class Simulator {
   	}
   }
 
-  get_hotspots(device) {
-  	let index = 0;
-  	let hotspots = new Array();
-
-  	let counter = 0;
-  	while(counter < this.devices.length) {
-  		if(this.devices[counter].hotspot == true) {
-  			let distance = Math.sqrt(Math.pow(this.devices[counter].x - device.x,2) + Math.pow(this.devices[counter].y - device.y,2));
-  			if(distance < this.devices[counter].range) {
-  				hotspots[index] = this.devices[counter];
-  				index++;
-  			}
-  		}
-  		counter++;
-  	}
-  	return hotspots;
-  }
-
-  get_clients(device) {
-  	let index = 0;
-  	let clients = new Array();
-
-  	let counter = 0;
-  	while(counter < this.devices.length)
-  	{
-  		let distance = Math.sqrt(Math.pow(this.devices[counter].x - device.x,2) + Math.pow(this.devices[counter].y - device.y,2));
-  		if(distance < this.devices[counter].range)
-  		{
-  			clients[index] = this.devices[counter];
-  			index++;
-  		}
-  		counter++;
-  	}
-  	return clients;
-  }
-
-  frame() {
-    this.clear();
-    this.update();
-    this.draw();
-  }
-
   compute_stats() {
   	hasHotspot = 0;
   	hasntHotspot = 0;
@@ -247,7 +248,7 @@ class Simulator {
   	while(counter < this.devices.length)
   	{
   		device = this.devices[counter];
-  		let hotspots = this.get_hotspots(device);
+			let hotspots = this.getHotspots(device);
   		if(hotspots.length == 0) {
         hasntHotspot++;
       } else {
@@ -258,7 +259,7 @@ class Simulator {
 
   		if(device.hotspot == true) {
   			totalHotspots++;
-  			let clients = this.get_clients(device);
+  			let clients = this.getClients(device);
   			avgClients+=clients.length;
   		}
   	}
