@@ -24,6 +24,9 @@ const BT_RANGE = 10
 const WIFI_ENERGY = 1
 const BT_ENERGY = 1
 
+const WIFI_RADIO = "WIFI_RADIO"
+const BT_RADIO = "BT_RADIO"
+
 /**
 * Store connection info of a link between two devices.
 * There is no distinction between the two devices.
