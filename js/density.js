@@ -24,8 +24,13 @@ const BT_RANGE = 10
 const WIFI_ENERGY = 1
 const BT_ENERGY = 1
 
+const WIFI_HOTSPOT = "WIFI_HOTSPOT"
+const WIFI_CLIENT = "WIFI_CLIENT"
+
 const WIFI_RADIO = "WIFI_RADIO"
 const BT_RADIO = "BT_RADIO"
+
+const INFINITE_RANGE = -1
 
 /**
 * Store connection info of a link between two devices.
@@ -74,6 +79,7 @@ class Radio {
 class Device {
   constructor (x, y) {
     this.radios = {}
+    this.modes = {}
     this.move(x, y)
     this.speed(0, 0)
   }
@@ -88,6 +94,11 @@ class Device {
   addRadio (name, range) {
     this.radios[name] = new Radio(true, range)
   }
+
+  radioMode (name, mode) {
+    this.modes[name] = mode
+  }
+
   enableRadio (name) {
     this.radios[name].enable()
   }
@@ -128,21 +139,22 @@ class Simulator {
     this.wifiConnections = []
     this.btConnections = []
 
-    let counter = 0
-    while (counter < this.count) {
-      let device = {}
+    for (let counter = 0; counter < this.count; counter++) {
       let x = Math.floor(Math.random() * cw) // TODO: globals
       let y = Math.floor(Math.random() * ch)
-      device.dx = 0
-      device.dy = 0
-      device.x = x
-      device.y = y
-      device.range = Math.floor(Math.random() * hotspotRange) + (2 / 3 * hotspotRange)
+
+      let device = new Device(x, y)
+
       if (Math.floor(Math.random() * 100) < hotspotFraction) {
-        device.hotspot = true
+        let range = Math.floor(Math.random() * hotspotRange) + (2 / 3 * hotspotRange)
+        device.addRadio(WIFI_RADIO, range)
+        device.radioMode(WIFI_RADIO, WIFI_HOTSPOT)
+      } else {
+        device.addRadio(WIFI_RADIO, INFINITE_RANGE)
+        device.radioMode(WIFI_RADIO, WIFI_CLIENT)
       }
-      this.devices[counter] = device
-      counter++
+
+      this.devices.push(device)
     }
   }
 
