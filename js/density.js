@@ -45,6 +45,65 @@ class EnergyLink extends Link {
   }
 }
 
+class Radio {
+  constructor (defaultState, range) {
+    this._enabled = defaultState
+    this._range = range
+  }
+
+  enable () {
+    this._enabled = false
+  }
+
+  disable () {
+    this._enabled = true
+  }
+
+  get enabled () {
+    return this._enabled
+  }
+
+  get range () {
+    return this._range
+  }
+}
+
+class Device {
+  constructor (x, y) {
+    this.radios = {}
+    this.move(x, y)
+    this.speed(0, 0)
+  }
+  move (x, y) {
+    this._x = x
+    this._y = y
+  }
+  speed (dx, dy) {
+    this.dx = dx
+    this.dy = dy
+  }
+  addRadio (name, range) {
+    this.radios[name] = new Radio(true, range)
+  }
+  enableRadio (name) {
+    this.radios[name].enable()
+  }
+  disableRadio (name) {
+    this.radios[name].disable()
+  }
+  get enabled (name) {
+    return this.radios[name].enabled
+  }
+
+  get x () {
+    return this._x
+  }
+
+  get y () {
+    return this._y
+  }
+}
+
 /**
 * The simulator engine.
 */
