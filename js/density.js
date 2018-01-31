@@ -82,13 +82,13 @@ class Device {
   constructor (x, y, clamp) {
     this.radios = {}
     this.modes = {}
-    this.move(x, y)
+    this.moveTo(x, y)
     this._dx = 0
     this._dy = 0
     this.clamp = clamp
   }
 
-  move (x, y) {
+  moveTo (x, y) {
     this._x = x
     this._y = y
   }
