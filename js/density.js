@@ -105,6 +105,17 @@ class Device {
     this.modes[name] = mode
   }
 
+  is (name, mode) {
+    if (this.modes[name] === mode) {
+      return true
+    }
+    return false
+  }
+
+  range (name) {
+    return this.radios[name].range
+  }
+
   enableRadio (name) {
     this.radios[name].enable()
   }
@@ -284,9 +295,9 @@ class Simulator {
 
     let counter = 0
     while (counter < this.devices.length) {
-      if (this.devices[counter].hotspot === true) {
+      if (this.devices[counter].is(WIFI_RADIO, WIFI_HOTSPOT) === true) {
         let distance = Math.sqrt(Math.pow(this.devices[counter].x - device.x, 2) + Math.pow(this.devices[counter].y - device.y, 2))
-        if (distance < this.devices[counter].range) {
+        if (distance < this.devices[counter].range(WIFI_RADIO)) {
           hotspots[index] = this.devices[counter]
           index++
         }
@@ -297,13 +308,16 @@ class Simulator {
   }
 
   getClients (device) {
+    if (!device.is(WIFI_RADIO, WIFI_HOTSPOT)) {
+      return []
+    }
     let index = 0
     let clients = []
 
     let counter = 0
     while (counter < this.devices.length) {
       let distance = Math.sqrt(Math.pow(this.devices[counter].x - device.x, 2) + Math.pow(this.devices[counter].y - device.y, 2))
-      if (distance < this.devices[counter].range) {
+      if (distance < device.range(WIFI_RADIO)) {
         clients[index] = this.devices[counter]
         index++
       }
@@ -319,10 +333,10 @@ class Simulator {
     id.data[ALPHA_CHAN] = 255
 
     ctx.putImageData(id, device.x, device.y)
-    if (device.hotspot === true) {
+    if (device.is(WIFI_RADIO, WIFI_HOTSPOT) === true) {
       ctx.fillStyle = 'rgba(255, 10, 10, .2)'
       ctx.beginPath()
-      ctx.arc(device.x, device.y, device.range, 0, Math.PI * 2, true)
+      ctx.arc(device.x, device.y, device.range(WIFI_RADIO), 0, Math.PI * 2, true)
       ctx.closePath()
       ctx.fill()
     }
@@ -401,7 +415,7 @@ class Simulator {
       avgHotspots += hotspots.length
       counter++
 
-      if (device.hotspot === true) {
+      if (device.is(WIFI_RADIO, WIFI_HOTSPOT)) {
         totalHotspots++
         let clients = this.getClients(device)
         avgClients += clients.length
