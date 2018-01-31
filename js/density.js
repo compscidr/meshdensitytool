@@ -30,6 +30,8 @@ const WIFI_CLIENT = "WIFI_CLIENT"
 const WIFI_RADIO = "WIFI_RADIO"
 const BT_RADIO = "BT_RADIO"
 
+const CLAMP_BOUNCE = "CLAMP_BOUNCE"
+
 const INFINITE_RANGE = -1
 
 /**
@@ -77,11 +79,13 @@ class Radio {
 }
 
 class Device {
-  constructor (x, y) {
+  constructor (x, y, clamp) {
     this.radios = {}
     this.modes = {}
     this.move(x, y)
-    this.speed(0, 0)
+    this._dx = 0
+    this._dy = 0
+    this.clamp = clamp
   }
 
   move (x, y) {
@@ -89,17 +93,8 @@ class Device {
     this._y = y
   }
 
-  moveRel (dx, dy) {
-    move (this._x + dx, this._y + dy)
-  }
-
-  speed (dx, dy) {
-    this.dx = dx
-    this.dy = dy
-  }
-
-  speedRel (ddx, ddy) {
-    speed(this.dx + ddx, this.dy + ddy)
+  moveAtSpeed () {
+    moveRel(this._dx, this._dy)
   }
 
   addRadio (name, range) {
@@ -116,16 +111,52 @@ class Device {
   disableRadio (name) {
     this.radios[name].disable()
   }
-  get enabled (name) {
+  enabled (name) {
     return this.radios[name].enabled
   }
 
   get x () {
     return this._x
   }
+  set x (pos) {
+    this._x = pos
+    switch (this.clamp) {
+      case CLAMP_BOUNCE:
+        if (this._x < 0) {
+          this._x = 0
+          this._dx *= -1
+        }
+        break
+    }
+  }
 
   get y () {
     return this._y
+  }
+  set y (pos) {
+    this._y = pos
+    switch(this.clamp) {
+      case CLAMP_BOUNCE:
+        if (this._y < 0) {
+          this._y = 0
+          this._dy *= -1
+        }
+        break
+    }
+  }
+
+  get dx () {
+    return this._dx
+  }
+  set dx (val) {
+    this._dx = val
+  }
+
+  get dy () {
+    return this._dy
+  }
+  set dy (val) {
+    this._dy = val
   }
 }
 
@@ -154,7 +185,7 @@ class Simulator {
       let x = Math.floor(Math.random() * cw) // TODO: globals
       let y = Math.floor(Math.random() * ch)
 
-      let device = new Device(x, y)
+      let device = new Device(x, y, CLAMP_BOUNCE)
 
       if (Math.floor(Math.random() * 100) < hotspotFraction) {
         let range = Math.floor(Math.random() * hotspotRange) + (2 / 3 * hotspotRange)
@@ -221,7 +252,6 @@ class Simulator {
 
     device.dx += xStep
     device.dy += yStep
-
     device.x += device.dx
     device.y += device.dy
   }
