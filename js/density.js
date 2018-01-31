@@ -83,14 +83,25 @@ class Device {
     this.move(x, y)
     this.speed(0, 0)
   }
+
   move (x, y) {
     this._x = x
     this._y = y
   }
+
+  moveRel (dx, dy) {
+    move (this._x + dx, this._y + dy)
+  }
+
   speed (dx, dy) {
     this.dx = dx
     this.dy = dy
   }
+
+  speedRel (ddx, ddy) {
+    speed(this.dx + ddx, this.dy + ddy)
+  }
+
   addRadio (name, range) {
     this.radios[name] = new Radio(true, range)
   }
