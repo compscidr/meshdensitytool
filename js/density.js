@@ -227,7 +227,7 @@ class Simulator {
     }
   }
 
-  pause (continuous) {
+  pause () {
     clearInterval(intervalid)
   }
 
