@@ -137,6 +137,10 @@ class Device {
           this._x = 0
           this._dx *= -1
         }
+        if (this._x > cw) {
+          this._x = cw
+          this._dx *= -1
+        }
         break
     }
   }
@@ -150,6 +154,10 @@ class Device {
       case CLAMP_BOUNCE:
         if (this._y < 0) {
           this._y = 0
+          this._dy *= -1
+        }
+        if (this._y > ch) {
+          this._y = ch
           this._dy *= -1
         }
         break
