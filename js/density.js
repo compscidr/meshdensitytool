@@ -470,6 +470,17 @@ class Simulator {
         avgClients += clients.length
       }
     }
+
+    for (let counter in this.wifiConnections) {
+      let link = this.wifiConnections[counter]
+    }
+    for (let counter in this.btConnections) {
+      let link = this.btConnections[counter]
+    }
+    for (let counter in this.wifiDirectConnections) {
+      let link = this.wifiDirectConnections[counter]
+    }
+
     $('#status').text('DENSITY (pp/sq. km): ' + this.count + ' AP%: ' + this.wifiHotspotFraction + ' COVERAGE: (m):' + this.wifiHotspotRange + ' COVERAGE: ' + ((hasHotspot / this.count) * 100).toFixed(2) + '% AVG HOTSPOTS: ' + (avgHotspots / hasHotspot).toFixed(2) + ' AVG CLIENTS: ' + (avgClients / totalHotspots).toFixed(2))
   }
 }
