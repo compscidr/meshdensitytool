@@ -343,6 +343,13 @@ class Simulator {
       ctx.closePath()
       ctx.fill()
     }
+    if (device.is(WIFI_DIRECT_RADIO, WIFI_DIRECT_HOTSPOT)) {
+      ctx.fillStyle = 'rgba(155, 155, 10, .2)'
+      ctx.beginPath()
+      ctx.arc(device.x, device.y, device.range(WIFI_DIRECT_RADIO), 0, Math.PI * 2, true)
+      ctx.closePath()
+      ctx.fill()
+    }
     ctx.fillStyle = 'rgba(10, 10, 255, .2)'
     ctx.beginPath()
     ctx.arc(device.x, device.y, BT_RANGE, 0, Math.PI * 2, true)
