@@ -435,6 +435,14 @@ class Simulator {
       ctx.lineTo(link.right.x, link.right.y)
       ctx.stroke()
     }
+    for (let counter in this.wifiDirectConnections) {
+      let link = this.wifiDirectConnections[counter]
+      ctx.strokeStyle = 'rgba(80, 80, 10, 1)'
+      ctx.beginPath()
+      ctx.moveTo(link.left.x, link.left.y)
+      ctx.lineTo(link.right.x, link.right.y)
+      ctx.stroke()
+    }
   }
 
   computeStats () {
