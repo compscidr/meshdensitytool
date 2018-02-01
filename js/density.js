@@ -269,6 +269,7 @@ class Simulator {
     }
     this.updateLinks()
     this.updateBTLinks()
+    this.updateWDLinks()
   }
 
   draw () {
@@ -359,6 +360,37 @@ class Simulator {
         this.wifiConnections.push(new EnergyLink(
           deviceLeft, deviceRight, WIFI_LINK, WIFI_ENERGY
         ))
+      }
+    }
+  }
+
+  updateWDLinks () {
+    this.wifiDirectConnections = []
+    for (let counterLeft = 0; counterLeft < this.devices.length; counterLeft++) {
+      let deviceLeft = this.devices[counterLeft]
+      for (let counterRight = counterLeft + 1; counterRight < this.devices.length; counterRight++) {
+        let deviceRight = this.devices[counterRight]
+        let distance = Math.sqrt(Math.pow(deviceLeft.x - deviceRight.x, 2) + Math.pow(deviceLeft.y - deviceRight.y, 2))
+        
+        let rangeLimit = 0
+        let canHazHotspot = false
+
+        if (deviceLeft.is(WIFI_DIRECT_HOTSPOT)) {
+          rangeLimit = deviceLeft.range(WIFI_DIRECT_RADIO)
+          canHazHotspot = true
+        } else if (deviceRight.is(WIFI_DIRECT_HOTSPOT)) {
+          rangeLimit = deviceRight.range(WIFI_DIRECT_RADIO)
+          canHazHotspot = true
+        }
+
+        if (canHazHotspot) {
+          if (distance < rangeLimit) {
+            this.wifiDirectConnections.push(new EnergyLink(
+              deviceLeft, deviceRight, WIFI_DIRECT_LINK, WIFI_DIRECT_ENERGY
+            ))
+          }
+        }
+
       }
     }
   }
