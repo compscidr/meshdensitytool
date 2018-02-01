@@ -183,7 +183,7 @@ class Device {
 * The simulator engine.
 */
 class Simulator {
-  generate (width, height, count, hotspotFraction, hotspotRange) {
+  generate (width, height, count, hotspotFraction, hotspotRange, dHotspotFraction) {
     console.log('generating')
 
     if (intervalid !== -1) {
