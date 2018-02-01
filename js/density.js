@@ -247,7 +247,6 @@ class Simulator {
       let device = this.devices[counter]
 
       this.moveDevice(device)
-      this.boundDevice(device)
 
       counter++
     }
@@ -273,28 +272,6 @@ class Simulator {
     device.dy += yStep
     device.x += device.dx
     device.y += device.dy
-  }
-
-  boundDevice (device) {
-    if (device.x < 0) {
-      device.x = 0
-      device.dx *= -1
-    }
-
-    if (device.y < 0) {
-      device.dy *= -1
-      device.y = 0
-    }
-
-    if (device.x > cw) {
-      device.dx *= -1
-      device.x = cw
-    }
-
-    if (device.y > ch) {
-      device.dy *= -1
-      device.y = ch
-    }
   }
 
   getHotspots (device) {
