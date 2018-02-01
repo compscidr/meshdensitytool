@@ -369,7 +369,7 @@ class Simulator {
   drawLinks () {
     for (let counter in this.wifiConnections) {
       let link = this.wifiConnections[counter]
-      ctx.strokeStyle = 'rgba(150, 10, 10, 1)'
+      ctx.strokeStyle = 'rgba(100, 10, 10, 1)'
       ctx.beginPath()
       ctx.moveTo(link.left.x, link.left.y)
       ctx.lineTo(link.right.x, link.right.y)
@@ -377,7 +377,7 @@ class Simulator {
     }
     for (let counter in this.btConnections) {
       let link = this.btConnections[counter]
-      ctx.strokeStyle = 'rgba(10, 10, 200, 1)'
+      ctx.strokeStyle = 'rgba(10, 10, 100, 1)'
       ctx.beginPath()
       ctx.moveTo(link.left.x, link.left.y)
       ctx.lineTo(link.right.x, link.right.y)
