@@ -471,17 +471,22 @@ class Simulator {
       }
     }
 
+    let totalEnergy = 0
+
     for (let counter in this.wifiConnections) {
       let link = this.wifiConnections[counter]
+      totalEnergy += link.energy
     }
     for (let counter in this.btConnections) {
       let link = this.btConnections[counter]
+      totalEnergy += link.energy
     }
     for (let counter in this.wifiDirectConnections) {
       let link = this.wifiDirectConnections[counter]
+      totalEnergy += link.energy
     }
 
-    $('#status').text('DENSITY (pp/sq. km): ' + this.count + ' AP%: ' + this.wifiHotspotFraction + ' COVERAGE: (m):' + this.wifiHotspotRange + ' COVERAGE: ' + ((hasHotspot / this.count) * 100).toFixed(2) + '% AVG HOTSPOTS: ' + (avgHotspots / hasHotspot).toFixed(2) + ' AVG CLIENTS: ' + (avgClients / totalHotspots).toFixed(2))
+    $('#status').text('DENSITY (pp/sq. km): ' + this.count + ' AP%: ' + this.wifiHotspotFraction + ' COVERAGE: (m):' + this.wifiHotspotRange + ' COVERAGE: ' + ((hasHotspot / this.count) * 100).toFixed(2) + '% AVG HOTSPOTS: ' + (avgHotspots / hasHotspot).toFixed(2) + ' AVG CLIENTS: ' + (avgClients / totalHotspots).toFixed(2) + ' ENERGY: ' + totalEnergy)
   }
 }
 
