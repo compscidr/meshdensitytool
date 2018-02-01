@@ -1,0 +1,5 @@
+meshdensitytool:
+  density: 1000
+  wifiHotspotPercentage: 2
+  wifiHotspotRange: 20
+  wifiDirectHotspotPercentage: 10

@@ -439,3 +439,27 @@ function van () {
   $('#density').val('5249')
   if (intervalid !== -1) { clearInterval(intervalid) }
 }
+
+
+
+// ref: https://stackoverflow.com/questions/750032/reading-file-contents-on-the-client-side-in-javascript-in-various-browsers
+function updateConf () {
+  // Config file loading
+  var confInput = document.getElementById('conf')
+  var curFiles = confInput.files
+  var conf = curFiles[0]
+  var reader = new FileReader();
+  reader.readAsText(conf, "UTF-8");
+  reader.onload = function (evt) {
+    document.getElementById("fileContents").innerHTML = evt.target.result
+    nativeObject = YAML.parse(evt.target.result)
+    const meshconf = nativeObject.meshdensitytool
+    $('#density').val(meshconf.density)
+    $('#ap').val(meshconf.wifiHotspotPercentage)
+    $('#coverage').val(meshconf.wifiHotspotRange)
+    $('#dap').val(meshconf.wifiDirectHotspotPercentage)
+  }
+  reader.onerror = function (evt) {
+    document.getElementById("fileContents").innerHTML = "error reading file";
+  }
+}

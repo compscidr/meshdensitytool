@@ -2,6 +2,7 @@
 <head>
 <title>Density Calculator</title>
 <script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/yaml.min.js"></script>
 <link rel="stylesheet" href="css/density.css">
 </head>
 <body>
@@ -17,6 +18,8 @@
 	<label>Hotspot percentage: </label> <br/><input id="ap" type="text" value="5"/> <br/>
   <label>Coverage: </label> <br/><input id="coverage" type="text" value="20"/> <br/>
   <label>Direct hotspot percentage: </label> <br/><input id="dap" type="text" value="5"/> <br/>
+  <label>Config </label> <br/><input id="conf" type="file" onchange="updateConf()"/> <br/>
+  <div id="fileContents">Contents</div>
   <button onclick="sim.generate(500, 500, $('#density').val(), $('#ap').val(), $('#coverage').val(), $('#dap').val());sim.run(false);" id="generate_btn">Generate</button> <br />
 	<button onclick="sim.run(false);" id="step">Step</button> <br/>
 	<button onclick="sim.run(true);" id="animate">Animate!</button>
