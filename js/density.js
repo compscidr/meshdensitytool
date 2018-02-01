@@ -21,7 +21,7 @@ const BT_LINK = 1
 
 const BT_RANGE = 10
 
-const WIFI_ENERGY = 1
+const WIFI_ENERGY = 10
 const BT_ENERGY = 1
 
 const WIFI_HOTSPOT = "WIFI_HOTSPOT"
