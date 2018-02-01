@@ -18,11 +18,13 @@ const ALPHA_CHAN = 3
 
 const WIFI_LINK = 0
 const BT_LINK = 1
+const WIFI_DIRECT_LINK = 2
 
 const BT_RANGE = 10
 
 const WIFI_ENERGY = 10
 const BT_ENERGY = 1
+const WIFI_DIRECT_ENERGY = 10
 
 const WIFI_HOTSPOT = "WIFI_HOTSPOT"
 const WIFI_CLIENT = "WIFI_CLIENT"
@@ -199,10 +201,12 @@ class Simulator {
     this.count = count
     this.wifiHotspotFraction = hotspotFraction
     this.wifiHotspotRange = hotspotRange
+    this.wifiDirectHotspotFraction = dHotspotFraction
 
     this.devices = []
     this.wifiConnections = []
     this.btConnections = []
+    this.wifiDirectConnections = []
 
     for (let counter = 0; counter < this.count; counter++) {
       let x = Math.floor(Math.random() * cw) // TODO: globals
@@ -217,6 +221,15 @@ class Simulator {
       } else {
         device.addRadio(WIFI_RADIO, INFINITE_RANGE)
         device.radioMode(WIFI_RADIO, WIFI_CLIENT)
+      }
+
+      if (Math.floor(Math.random() * 100) < dHotspotFraction) {
+        let range = Math.floor(Math.random() * hotspotRange) + (2/3 * hotspotRange)
+        device.addRadio(WIFI_DIRECT_RADIO, range)
+        device.radioMode(WIFI_DIRECT_RADIO, WIFI_DIRECT_HOTSPOT)
+      } else {
+        device.addRadio(WIFI_DIRECT_RADIO, INFINITE_RANGE)
+        device.radioMode(WIFI_DIRECT_RADIO, WIFI_DIRECT_CLIENT)
       }
 
       this.devices.push(device)
