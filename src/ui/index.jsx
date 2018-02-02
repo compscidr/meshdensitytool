@@ -14,13 +14,9 @@ class SimulationParameter extends React.Component {
   }
   render() {
     return (
-      <div className="SimulationParameter">
-        <label>
-        {this.props.label}
-        <br />
+      <div className="SimulationParameter" class="param-grid-container">
+        <label>{this.props.label}</label>
         <input id={this.props.id} type="text" value={this.state.value} onChange={this.handleChange} />
-        </label>
-        <br />
       </div>
     )
   }

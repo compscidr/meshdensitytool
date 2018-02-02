@@ -11,7 +11,6 @@
 form {
   margin-top: 10px;
 }
-input,
 #once,
 #animate {
   margin-bottom: 10px;
@@ -38,4 +37,11 @@ input,
 .grid-regions {
   grid-column: 1 / 2;
   grid-row: 2 / 3;
+}
+
+.param-grid-container {
+  display: grid;
+  grid-template-columns: 300px 200px;
+  grid-template-rows: 25px;
+  grid-auto-flow: row;
 }
