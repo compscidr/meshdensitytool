@@ -500,7 +500,6 @@ class Simulator {
 
     while (nodesToVisit.length != 0) {
       let visit = nodesToVisit[0]
-      console.log(visit)
 
       for (let counter in this.links) {
         let link = this.links[counter]
@@ -557,6 +556,8 @@ class Simulator {
   }
 
   computeStats () {
+    let largestLocalMeshSize = 0
+
     hasHotspot = 0
     hasntHotspot = 0
     avgHotspots = 0
@@ -580,6 +581,13 @@ class Simulator {
         let clients = this.getClients(device)
         avgClients += clients.length
       }
+
+      // Find largest local mesh
+      let currentLocalMeshSize = 0
+      if ((currentLocalMeshSize = this.getLocalMeshDevices(device).length)
+           > largestLocalMeshSize) {
+        largestLocalMeshSize = currentLocalMeshSize
+      }
     }
 
     let totalEnergy = 0
@@ -597,6 +605,7 @@ class Simulator {
     $('#stat-wifi-average-clients').text((avgClients / totalHotspots).toFixed(2))
     $('#stat-total-energy').text(totalEnergy)
     $('#stat-unconnected').text(this.getUnconnectedDevices().length)
+    $('#stat-largest-local').text(largestLocalMeshSize)
   }
 }
 
