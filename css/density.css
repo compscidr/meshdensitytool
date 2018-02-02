@@ -1,4 +1,41 @@
-#canvas { border: 1px solid DarkGray; width: 100%; height: 100%; display: block }
-#container { width: 500px; height: 500px; }
-form { margin-top: 10px; }
-input, #once, #animate { margin-bottom: 10px; width: 500px; border: 1px solid DarkGray; }
+#canvas {
+  border: 1px solid DarkGray;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#container {
+  width: 500px;
+  height: 500px;
+}
+form {
+  margin-top: 10px;
+}
+input,
+#once,
+#animate {
+  margin-bottom: 10px;
+  width: 500px;
+  border: 1px solid DarkGray;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 520px 500px;
+  grid-template-rows: 500px 500px;
+}
+
+.grid-output {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+}
+
+.grid-controls {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+}
+
+.grid-regions {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+}
