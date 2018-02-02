@@ -34,8 +34,8 @@ const WIFI_CLIENT = "WIFI_CLIENT"
 const WIFI_DIRECT_HOTSPOT = "WIFI_DIRECT_HOTSPOT"
 const WIFI_DIRECT_CLIENT = "WIFI_DIRECT_CLIENT"
 
-const CELL_INTERNET = "CELL_INTERNET"
-const CELL_NO_INTERNET = "CELL_NO_INTERNET"
+const INTERNET_CONNECTED = "CELL_INTERNET"
+const NOT_INTERNET_CONNECTED = "CELL_NO_INTERNET"
 
 const WIFI_RADIO = "WIFI_RADIO"
 const BT_RADIO = "BT_RADIO"
@@ -239,11 +239,11 @@ class Simulator {
       }
 
       if (Math.floor(Math.random() * 100) < internetFraction) {
-        device.addRadio(CELL_RADIO, RANGE_INFINITE)
-        device.radioMode(CELL_RADIO, CELL_INTERNET)
+        device.addRadio(CELL_RADIO, INFINITE_RANGE)
+        device.radioMode(CELL_RADIO, INTERNET_CONNECTED)
       } else {
-        device.addRadio(CELL_RADIO, RANGE_INFINITE)
-        device.radioMode(CELL_RADIO, CELL_NO_INTERNET)
+        device.addRadio(CELL_RADIO, INFINITE_RANGE)
+        device.radioMode(CELL_RADIO, NOT_INTERNET_CONNECTED)
       }
 
       this.devices.push(device)
@@ -428,6 +428,15 @@ class Simulator {
     ctx.arc(device.x, device.y, BT_RANGE, 0, Math.PI * 2, true)
     ctx.closePath()
     ctx.fill()
+
+    if (device.is(CELL_RADIO, INTERNET_CONNECTED)) {
+      ctx.fillStyle = 'rgba(0,0,0,.2)'
+      ctx.strokeStyle = 'rgba(0,0,0,1)'
+      ctx.arc(device.x, device.y, 5, 0, 2 * Math.PI, false)
+      ctx.closePath()
+      ctx.fill()
+      ctx.stroke()
+    }
   }
 
   drawLinks () {
