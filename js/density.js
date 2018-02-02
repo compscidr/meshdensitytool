@@ -203,10 +203,8 @@ class Simulator {
     this.wifiHotspotRange = hotspotRange
     this.wifiDirectHotspotFraction = dHotspotFraction
 
+    this.links = []
     this.devices = []
-    this.wifiConnections = []
-    this.btConnections = []
-    this.wifiDirectConnections = []
 
     for (let counter = 0; counter < this.count; counter++) {
       let x = Math.floor(Math.random() * cw) // TODO: globals
@@ -267,6 +265,7 @@ class Simulator {
 
       counter++
     }
+    this.links = []
     this.updateLinks()
     this.updateBTLinks()
     this.updateWDLinks()
@@ -320,13 +319,12 @@ class Simulator {
   }
 
   updateLinks () {
-    this.wifiConnections = []
     for (let counterLeft in this.devices) {
       let deviceLeft = this.devices[counterLeft]
       let hotspots = this.getHotspots(deviceLeft)
       for (let counterRight in hotspots) {
         let deviceRight = hotspots[counterRight]
-        this.wifiConnections.push(new EnergyLink(
+        this.links.push(new EnergyLink(
           deviceLeft, deviceRight, WIFI_LINK, WIFI_ENERGY
         ))
       }
@@ -334,7 +332,6 @@ class Simulator {
   }
 
   updateWDLinks () {
-    this.wifiDirectConnections = []
     for (let counterLeft = 0; counterLeft < this.devices.length; counterLeft++) {
       let deviceLeft = this.devices[counterLeft]
       for (let counterRight = counterLeft + 1; counterRight < this.devices.length; counterRight++) {
@@ -354,7 +351,7 @@ class Simulator {
 
         if (canHazHotspot) {
           if (distance < rangeLimit) {
-            this.wifiDirectConnections.push(new EnergyLink(
+            this.links.push(new EnergyLink(
               deviceLeft, deviceRight, WIFI_DIRECT_LINK, WIFI_DIRECT_ENERGY
             ))
           }
@@ -365,14 +362,13 @@ class Simulator {
   }
 
   updateBTLinks () {
-    this.btConnections = []
     for (let counterLeft = 0; counterLeft < this.devices.length; counterLeft++) {
       let deviceLeft = this.devices[counterLeft]
       for (let counterRight = counterLeft + 1; counterRight < this.devices.length; counterRight++) {
         let deviceRight = this.devices[counterRight]
         let distance = Math.sqrt(Math.pow(deviceLeft.x - deviceRight.x, 2) + Math.pow(deviceLeft.y - deviceRight.y, 2))
         if (distance < BT_RANGE) {
-          this.btConnections.push(new EnergyLink(
+          this.links.push(new EnergyLink(
             deviceLeft, deviceRight, BT_LINK, BT_ENERGY
           ))
         }
@@ -419,29 +415,21 @@ class Simulator {
   }
 
   drawLinks () {
-    for (let counter in this.wifiConnections) {
-      let link = this.wifiConnections[counter]
+    for (let counter in this.links) {
+      let link = this.links[counter]
       if (link.type === WIFI_LINK) {
         ctx.strokeStyle = 'rgba(100, 10, 10, 1)'
         ctx.beginPath()
         ctx.moveTo(link.left.x, link.left.y)
         ctx.lineTo(link.right.x, link.right.y)
         ctx.stroke()
-      }
-    }
-    for (let counter in this.btConnections) {
-      let link = this.btConnections[counter]
-      if (link.type === BT_LINK) {
+      } else if (link.type === BT_LINK) {
         ctx.strokeStyle = 'rgba(10, 10, 100, 1)'
         ctx.beginPath()
         ctx.moveTo(link.left.x, link.left.y)
         ctx.lineTo(link.right.x, link.right.y)
         ctx.stroke()
-      }
-    }
-    for (let counter in this.wifiDirectConnections) {
-      let link = this.wifiDirectConnections[counter]
-      if (link.type === WIFI_DIRECT_LINK) {
+      } else if (link.type === WIFI_DIRECT_LINK) {
         ctx.strokeStyle = 'rgba(80, 80, 10, 1)'
         ctx.beginPath()
         ctx.moveTo(link.left.x, link.left.y)
@@ -479,16 +467,8 @@ class Simulator {
 
     let totalEnergy = 0
 
-    for (let counter in this.wifiConnections) {
-      let link = this.wifiConnections[counter]
-      totalEnergy += link.energy
-    }
-    for (let counter in this.btConnections) {
-      let link = this.btConnections[counter]
-      totalEnergy += link.energy
-    }
-    for (let counter in this.wifiDirectConnections) {
-      let link = this.wifiDirectConnections[counter]
+    for (let counter in this.links) {
+      let link = this.links[counter]
       totalEnergy += link.energy
     }
 
