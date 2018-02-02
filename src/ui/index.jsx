@@ -64,6 +64,7 @@ class AppStats extends React.Component {
         <StatOutput id="stat-wifi-average-hotspots" />
         <StatOutput id="stat-wifi-average-clients" />
         <StatOutput id="stat-total-energy" />
+        <StatOutput id="stat-unconnected" />
       </div>
     )
   }

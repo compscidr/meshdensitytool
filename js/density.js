@@ -486,6 +486,41 @@ class Simulator {
     }
   }
 
+  /**
+   * Return the set of all devices that are connected to this one
+   * by a local mesh. A local mesh is composed of devices that are connected
+   * to each other not via the internet.
+   */
+  getLocalMeshDevices (device) {
+    
+  }
+
+  /**
+   * Return the set of all unconnected devices.
+   */
+  getUnconnectedDevices () {
+    let unconnectedDevices = []
+    for (let counter in this.devices) {
+      let device = this.devices[counter]
+      unconnectedDevices.push(device)
+    }
+
+    for (let counter in this.links) {
+      let link = this.links[counter]
+      let index = -1;
+      index = unconnectedDevices.indexOf(link.left)
+      if (index !== -1) {
+        unconnectedDevices.splice(index, 1)
+      }
+      index = unconnectedDevices.indexOf(link.right)
+      if (index !== -1) {
+        unconnectedDevices.splice(index, 1)
+      }
+    }
+
+    return unconnectedDevices
+  }
+
   computeStats () {
     hasHotspot = 0
     hasntHotspot = 0
@@ -526,6 +561,7 @@ class Simulator {
     $('#stat-wifi-average-hotspots').text((avgHotspots / hasHotspot).toFixed(2))
     $('#stat-wifi-average-clients').text((avgClients / totalHotspots).toFixed(2))
     $('#stat-total-energy').text(totalEnergy)
+    $('#stat-unconnected').text(this.getUnconnectedDevices().length)
   }
 }
 
