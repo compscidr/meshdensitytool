@@ -19,12 +19,14 @@ const ALPHA_CHAN = 3
 const WIFI_LINK = 0
 const BT_LINK = 1
 const WIFI_DIRECT_LINK = 2
+const CELL_LINK = 10
 
 const BT_RANGE = 10
 
 const WIFI_ENERGY = 10
 const BT_ENERGY = 1
 const WIFI_DIRECT_ENERGY = 10
+const CELL_ENERGY = 100
 
 const WIFI_HOTSPOT = "WIFI_HOTSPOT"
 const WIFI_CLIENT = "WIFI_CLIENT"
@@ -32,9 +34,13 @@ const WIFI_CLIENT = "WIFI_CLIENT"
 const WIFI_DIRECT_HOTSPOT = "WIFI_DIRECT_HOTSPOT"
 const WIFI_DIRECT_CLIENT = "WIFI_DIRECT_CLIENT"
 
+const CELL_INTERNET = "CELL_INTERNET"
+const CELL_NO_INTERNET = "CELL_NO_INTERNET"
+
 const WIFI_RADIO = "WIFI_RADIO"
 const BT_RADIO = "BT_RADIO"
 const WIFI_DIRECT_RADIO = "WIFI_DIRECT_RADIO"
+const CELL_RADIO = "INTERNET_RADIO"
 
 const CLAMP_BOUNCE = "CLAMP_BOUNCE"
 
@@ -189,8 +195,9 @@ class Device {
 * The simulator engine.
 */
 class Simulator {
-  generate (width, height, count, hotspotFraction, hotspotRange, dHotspotFraction) {
+  generate (width, height, count, hotspotFraction, hotspotRange, dHotspotFraction, internetFraction) {
     console.log('generating')
+    console.log(internetFraction)
 
     if (intervalid !== -1) {
       clearInterval(intervalid)
@@ -202,6 +209,7 @@ class Simulator {
     this.wifiHotspotFraction = hotspotFraction
     this.wifiHotspotRange = hotspotRange
     this.wifiDirectHotspotFraction = dHotspotFraction
+    this.internetFraction = internetFraction
 
     this.links = []
     this.devices = []
@@ -228,6 +236,14 @@ class Simulator {
       } else {
         device.addRadio(WIFI_DIRECT_RADIO, INFINITE_RANGE)
         device.radioMode(WIFI_DIRECT_RADIO, WIFI_DIRECT_CLIENT)
+      }
+
+      if (Math.floor(Math.random() * 100) < internetFraction) {
+        device.addRadio(CELL_RADIO, RANGE_INFINITE)
+        device.radioMode(CELL_RADIO, CELL_INTERNET)
+      } else {
+        device.addRadio(CELL_RADIO, RANGE_INFINITE)
+        device.radioMode(CELL_RADIO, CELL_NO_INTERNET)
       }
 
       this.devices.push(device)
