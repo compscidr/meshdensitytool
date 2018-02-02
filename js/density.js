@@ -19,7 +19,8 @@ const ALPHA_CHAN = 3
 const WIFI_LINK = 0
 const BT_LINK = 1
 const WIFI_DIRECT_LINK = 2
-const CELL_LINK = 10
+const CELL_LINK = 3
+const INTERNET_LINK = 100
 
 const BT_RANGE = 10
 
@@ -354,7 +355,7 @@ class Simulator {
         if (deviceLeft.is(CELL_RADIO, INTERNET_CONNECTED)
             && deviceRight.is(CELL_RADIO, INTERNET_CONNECTED)) {
           this.links.push(new EnergyLink(
-            deviceLeft, deviceRight, CELL_LINK, CELL_ENERGY
+            deviceLeft, deviceRight, INTERNET_LINK, CELL_ENERGY
           ))
         }
       }
@@ -444,9 +445,10 @@ class Simulator {
     ctx.fill()
 
     if (device.is(CELL_RADIO, INTERNET_CONNECTED)) {
+      ctx.beginPath()
       ctx.fillStyle = 'rgba(0,0,0,.2)'
       ctx.strokeStyle = 'rgba(0,0,0,1)'
-      ctx.arc(device.x, device.y, 5, 0, 2 * Math.PI, false)
+      ctx.arc(device.x, device.y, 5, 0, 2 * Math.PI)
       ctx.closePath()
       ctx.fill()
       ctx.stroke()
@@ -470,6 +472,12 @@ class Simulator {
         ctx.stroke()
       } else if (link.type === WIFI_DIRECT_LINK) {
         ctx.strokeStyle = 'rgba(80, 80, 10, 1)'
+        ctx.beginPath()
+        ctx.moveTo(link.left.x, link.left.y)
+        ctx.lineTo(link.right.x, link.right.y)
+        ctx.stroke()
+      } else if (link.type === INTERNET_LINK) {
+        ctx.strokeStyle = 'rgba(0, 0, 0, .1)'
         ctx.beginPath()
         ctx.moveTo(link.left.x, link.left.y)
         ctx.lineTo(link.right.x, link.right.y)
