@@ -272,16 +272,6 @@ class Simulator {
     this.updateWDLinks()
   }
 
-  draw () {
-    let counter = 0
-    while (counter < this.devices.length) {
-      this.drawDevice(this.devices[counter])
-      counter++
-    }
-    this.drawLinks()
-    this.computeStats()
-  }
-
   moveDevice (device) {
     let xStep = (Math.random() * 0.2) - 0.1
     let yStep = (Math.random() * 0.2) - 0.1
@@ -327,34 +317,6 @@ class Simulator {
       counter++
     }
     return clients
-  }
-
-  drawDevice (device) {
-    id.data[RED_CHAN] = 0
-    id.data[GREEN_CHAN] = 0
-    id.data[BLUE_CHAN] = 0
-    id.data[ALPHA_CHAN] = 255
-
-    ctx.putImageData(id, device.x, device.y)
-    if (device.is(WIFI_RADIO, WIFI_HOTSPOT) === true) {
-      ctx.fillStyle = 'rgba(255, 10, 10, .2)'
-      ctx.beginPath()
-      ctx.arc(device.x, device.y, device.range(WIFI_RADIO), 0, Math.PI * 2, true)
-      ctx.closePath()
-      ctx.fill()
-    }
-    if (device.is(WIFI_DIRECT_RADIO, WIFI_DIRECT_HOTSPOT)) {
-      ctx.fillStyle = 'rgba(155, 155, 10, .2)'
-      ctx.beginPath()
-      ctx.arc(device.x, device.y, device.range(WIFI_DIRECT_RADIO), 0, Math.PI * 2, true)
-      ctx.closePath()
-      ctx.fill()
-    }
-    ctx.fillStyle = 'rgba(10, 10, 255, .2)'
-    ctx.beginPath()
-    ctx.arc(device.x, device.y, BT_RANGE, 0, Math.PI * 2, true)
-    ctx.closePath()
-    ctx.fill()
   }
 
   updateLinks () {
@@ -416,6 +378,44 @@ class Simulator {
         }
       }
     }
+  }
+
+  draw () {
+    let counter = 0
+    while (counter < this.devices.length) {
+      this.drawDevice(this.devices[counter])
+      counter++
+    }
+    this.drawLinks()
+    this.computeStats()
+  }
+
+  drawDevice (device) {
+    id.data[RED_CHAN] = 0
+    id.data[GREEN_CHAN] = 0
+    id.data[BLUE_CHAN] = 0
+    id.data[ALPHA_CHAN] = 255
+
+    ctx.putImageData(id, device.x, device.y)
+    if (device.is(WIFI_RADIO, WIFI_HOTSPOT) === true) {
+      ctx.fillStyle = 'rgba(255, 10, 10, .2)'
+      ctx.beginPath()
+      ctx.arc(device.x, device.y, device.range(WIFI_RADIO), 0, Math.PI * 2, true)
+      ctx.closePath()
+      ctx.fill()
+    }
+    if (device.is(WIFI_DIRECT_RADIO, WIFI_DIRECT_HOTSPOT)) {
+      ctx.fillStyle = 'rgba(155, 155, 10, .2)'
+      ctx.beginPath()
+      ctx.arc(device.x, device.y, device.range(WIFI_DIRECT_RADIO), 0, Math.PI * 2, true)
+      ctx.closePath()
+      ctx.fill()
+    }
+    ctx.fillStyle = 'rgba(10, 10, 255, .2)'
+    ctx.beginPath()
+    ctx.arc(device.x, device.y, BT_RANGE, 0, Math.PI * 2, true)
+    ctx.closePath()
+    ctx.fill()
   }
 
   drawLinks () {
