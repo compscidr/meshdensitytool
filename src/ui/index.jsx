@@ -30,6 +30,8 @@ class AppUI extends React.Component {
       <SimulationParameter label="Wifi hotspot percentage:" id="ap" default="10" />
       <SimulationParameter label="Wifi hotspot range:" id="coverage" default="20" />
       <SimulationParameter label="Wifi-direct hotspot percentage:" id="dap" default="5" />
+      <SimulationParameter label="Percentage of internet-sharers:" id="percent-internet" default="5" />
+      <br />
       <SimulationParameter label="Number of runs" id="runs" default="10" />
       </div>
     )
