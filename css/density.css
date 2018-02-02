@@ -22,12 +22,17 @@ form {
 
 .grid-container {
   display: grid;
-  grid-template-columns: 520px 500px;
+  grid-template-columns: 520px 520px 500px;
   grid-template-rows: 500px 500px;
 }
 
 .grid-output {
   grid-column: 1 / 2;
+  grid-row: 1 / 2;
+}
+
+.grid-history {
+  grid-column: 3 / 4;
   grid-row: 1 / 2;
 }
 
@@ -42,6 +47,13 @@ form {
 }
 
 .param-grid-container {
+  display: grid;
+  grid-template-columns: 300px 200px;
+  grid-template-rows: 25px;
+  grid-auto-flow: row;
+}
+
+.StatOutput {
   display: grid;
   grid-template-columns: 300px 200px;
   grid-template-rows: 25px;

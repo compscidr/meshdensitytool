@@ -486,7 +486,13 @@ class Simulator {
       totalEnergy += link.energy
     }
 
-    $('#status').text('DENSITY (pp/sq. km): ' + this.count + ' AP%: ' + this.wifiHotspotFraction + ' COVERAGE: (m):' + this.wifiHotspotRange + ' COVERAGE: ' + ((hasHotspot / this.count) * 100).toFixed(2) + '% AVG HOTSPOTS: ' + (avgHotspots / hasHotspot).toFixed(2) + ' AVG CLIENTS: ' + (avgClients / totalHotspots).toFixed(2) + ' ENERGY: ' + totalEnergy)
+    $('#stat-density').text(this.count)
+    $('#stat-wifi-hotspot-percent').text(this.wifiHotspotFraction)
+    $('#stat-wifi-hotspot-range').text(this.wifiHotspotRange)
+    $('#stat-wifi-hotspot-coverage').text(((hasHotspot / this.count) * 100).toFixed(2))
+    $('#stat-wifi-average-hotspots').text((avgHotspots / hasHotspot).toFixed(2))
+    $('#stat-wifi-average-clients').text((avgClients / totalHotspots).toFixed(2))
+    $('#stat-total-energy').text(totalEnergy)
   }
 }
 

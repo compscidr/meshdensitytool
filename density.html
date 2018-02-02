@@ -13,9 +13,6 @@
       <canvas id="canvas" width="500" height="500"></canvas>
     </div>
 
-    <label id="debug"></label>
-    <label id="status"></label>
-
     <div class="grid-controls">
       <div id="app-ui"></div>
       <label>Config </label>
@@ -28,6 +25,16 @@
       <button onclick="sim.run(false);" id="step" class="control-btn">Step</button>
       <button onclick="sim.run(true);" id="animate" class="control-btn">Animate!</button>
       <button onclick="sim.pause();" id="pause" class="control-btn">Pause</button>
+
+      <div>
+        <label id="debug"></label>
+      </div>
+      
+      <div id="app-stats"></div>
+    </div>
+
+    <div class="grid-history">
+      History will show up here.
     </div>
     <script type="text/javascript" src="js/bundle.js"></script>
 
