@@ -1,3 +1,7 @@
+# Editors
 .vscode
+
+# Node, NPM, Yarn
 node_modules
 package-lock.json
+yarn.lock
