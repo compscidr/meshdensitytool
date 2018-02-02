@@ -421,27 +421,33 @@ class Simulator {
   drawLinks () {
     for (let counter in this.wifiConnections) {
       let link = this.wifiConnections[counter]
-      ctx.strokeStyle = 'rgba(100, 10, 10, 1)'
-      ctx.beginPath()
-      ctx.moveTo(link.left.x, link.left.y)
-      ctx.lineTo(link.right.x, link.right.y)
-      ctx.stroke()
+      if (link.type === WIFI_LINK) {
+        ctx.strokeStyle = 'rgba(100, 10, 10, 1)'
+        ctx.beginPath()
+        ctx.moveTo(link.left.x, link.left.y)
+        ctx.lineTo(link.right.x, link.right.y)
+        ctx.stroke()
+      }
     }
     for (let counter in this.btConnections) {
       let link = this.btConnections[counter]
-      ctx.strokeStyle = 'rgba(10, 10, 100, 1)'
-      ctx.beginPath()
-      ctx.moveTo(link.left.x, link.left.y)
-      ctx.lineTo(link.right.x, link.right.y)
-      ctx.stroke()
+      if (link.type === BT_LINK) {
+        ctx.strokeStyle = 'rgba(10, 10, 100, 1)'
+        ctx.beginPath()
+        ctx.moveTo(link.left.x, link.left.y)
+        ctx.lineTo(link.right.x, link.right.y)
+        ctx.stroke()
+      }
     }
     for (let counter in this.wifiDirectConnections) {
       let link = this.wifiDirectConnections[counter]
-      ctx.strokeStyle = 'rgba(80, 80, 10, 1)'
-      ctx.beginPath()
-      ctx.moveTo(link.left.x, link.left.y)
-      ctx.lineTo(link.right.x, link.right.y)
-      ctx.stroke()
+      if (link.type === WIFI_DIRECT_LINK) {
+        ctx.strokeStyle = 'rgba(80, 80, 10, 1)'
+        ctx.beginPath()
+        ctx.moveTo(link.left.x, link.left.y)
+        ctx.lineTo(link.right.x, link.right.y)
+        ctx.stroke()
+      }
     }
   }
 

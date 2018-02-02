@@ -26,7 +26,7 @@ class AppUI extends React.Component {
   render () {
     return (
       <div>
-      <SimulationParameter label="Population density / square km:" id="density" default="100" />
+      <SimulationParameter label="Population density / square km:" id="density" default="500" />
       <SimulationParameter label="Wifi hotspot percentage:" id="ap" default="10" />
       <SimulationParameter label="Wifi hotspot range:" id="coverage" default="20" />
       <SimulationParameter label="Wifi-direct hotspot percentage:" id="dap" default="5" />
