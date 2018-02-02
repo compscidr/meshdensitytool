@@ -11,11 +11,13 @@
 form {
   margin-top: 10px;
 }
-#once,
-#animate {
-  margin-bottom: 10px;
-  width: 500px;
+
+.control-btn {
+  margin-bottom: 5px;
+  width: 100px;
   border: 1px solid DarkGray;
+  background-color: #1FAB81;
+  color: white;
 }
 
 .grid-container {

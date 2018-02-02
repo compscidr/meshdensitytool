@@ -24,12 +24,10 @@
       <br/>
       <div id="fileContents">Contents</div>
       <button onclick="sim.generate(500, 500, $('#density').val(), $('#ap').val(), $('#coverage').val(), $('#dap').val());sim.run(false);"
-        id="generate_btn">Generate</button>
-      <br />
-      <button onclick="sim.run(false);" id="step">Step</button>
-      <br/>
-      <button onclick="sim.run(true);" id="animate">Animate!</button>
-      <button onclick="sim.pause();" id="pause">Pause</button>
+        id="generate_btn" class="control-btn">Generate</button>
+      <button onclick="sim.run(false);" id="step" class="control-btn">Step</button>
+      <button onclick="sim.run(true);" id="animate" class="control-btn">Animate!</button>
+      <button onclick="sim.pause();" id="pause" class="control-btn">Pause</button>
     </div>
     <script type="text/javascript" src="js/bundle.js"></script>
 
