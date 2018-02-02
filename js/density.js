@@ -492,7 +492,42 @@ class Simulator {
    * to each other not via the internet.
    */
   getLocalMeshDevices (device) {
-    
+    let nodesVisited = []
+    let nodesToVisit = []
+    let nodesToConsider = []
+
+    nodesToVisit.push(device)
+
+    while (nodesToVisit.length != 0) {
+      let visit = nodesToVisit[0]
+      console.log(visit)
+
+      for (let counter in this.links) {
+        let link = this.links[counter]
+
+        nodesToConsider = []
+        if (link.type !== INTERNET_LINK) {
+          if (link.left === visit) {
+            nodesToConsider.push(link.right)
+          } else if (link.right === visit) {
+            nodesToConsider.push(link.left)
+          }
+        }
+
+        for (let considerCounter in nodesToConsider) {
+          let consider = nodesToConsider[considerCounter]
+          if (nodesVisited.indexOf(consider) === -1
+              && nodesToVisit.indexOf(consider) === -1) {
+            nodesToVisit.push(consider)
+          }
+        }
+      }
+
+      nodesVisited.push(visit)
+      nodesToVisit.splice(nodesToVisit.indexOf(visit), 1)
+    }
+
+    return nodesVisited
   }
 
   /**
