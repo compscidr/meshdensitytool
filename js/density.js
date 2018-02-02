@@ -345,6 +345,20 @@ class Simulator {
         ))
       }
     }
+
+    // Internet links
+    for (let counterLeft = 0; counterLeft < this.devices.length; counterLeft++) {
+      let deviceLeft = this.devices[counterLeft]
+      for (let counterRight = counterLeft + 1; counterRight < this.devices.length; counterRight++) {
+        let deviceRight = this.devices[counterRight]
+        if (deviceLeft.is(CELL_RADIO, INTERNET_CONNECTED)
+            && deviceRight.is(CELL_RADIO, INTERNET_CONNECTED)) {
+          this.links.push(new EnergyLink(
+            deviceLeft, deviceRight, CELL_LINK, CELL_ENERGY
+          ))
+        }
+      }
+    }
   }
 
   updateWDLinks () {
