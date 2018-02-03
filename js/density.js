@@ -197,8 +197,6 @@ class Device {
 */
 class Simulator {
   generate (width, height, count, hotspotFraction, hotspotRange, dHotspotFraction, internetFraction) {
-    console.log('generating')
-    console.log(internetFraction)
 
     if (intervalid !== -1) {
       clearInterval(intervalid)
@@ -336,14 +334,23 @@ class Simulator {
   }
 
   updateLinks () {
+    // Wifi links
     for (let counterLeft in this.devices) {
       let deviceLeft = this.devices[counterLeft]
       let hotspots = this.getHotspots(deviceLeft)
       for (let counterRight in hotspots) {
         let deviceRight = hotspots[counterRight]
-        this.links.push(new EnergyLink(
-          deviceLeft, deviceRight, WIFI_LINK, WIFI_ENERGY
-        ))
+
+        // TODO: figure out where this bug comes from
+        // Wifi is self-linking, which means that every device is
+        // being reported as a hotspot of itself.
+        // We remove self-links here, for now.
+
+        if (deviceLeft !== deviceRight) {
+          this.links.push(new EnergyLink(
+            deviceLeft, deviceRight, WIFI_LINK, WIFI_ENERGY
+          ))
+        }
       }
     }
 
