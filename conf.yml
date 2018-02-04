@@ -1,5 +1,11 @@
 meshdensitytool:
-  density: 1000
-  wifiHotspotPercentage: 2
-  wifiHotspotRange: 20
-  wifiDirectHotspotPercentage: 10
+  region: NONE
+  devices:
+    density: 100
+    wifi:
+      hotspotPercentage: 2
+      hotspotRange: 20
+    wifiDirect:
+      hotspotPercentage: 10
+    internet:
+      sharerPercentage: 7

@@ -656,10 +656,11 @@ function updateConf () {
     document.getElementById("fileContents").innerHTML = evt.target.result
     nativeObject = YAML.parse(evt.target.result)
     const meshconf = nativeObject.meshdensitytool
-    $('#density').val(meshconf.density)
-    $('#ap').val(meshconf.wifiHotspotPercentage)
-    $('#coverage').val(meshconf.wifiHotspotRange)
-    $('#dap').val(meshconf.wifiDirectHotspotPercentage)
+    $('#density').val(meshconf.devices.density)
+    $('#ap').val(meshconf.devices.wifi.hotspotPercentage)
+    $('#coverage').val(meshconf.devices.wifi.hotspotRange)
+    $('#dap').val(meshconf.devices.wifiDirect.hotspotPercentage)
+    $('#percent-internet').val(meshconf.devices.internet.sharerPercentage)
   }
   reader.onerror = function (evt) {
     document.getElementById("fileContents").innerHTML = "error reading file";
