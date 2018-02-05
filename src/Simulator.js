@@ -1,9 +1,4 @@
-let intervalid = -1 // TODO: wat
-let canvas = document.getElementById('canvas')
-let ctx = $('#canvas')[0].getContext('2d')
-let id = ctx.getImageData(0, 0, 1, 1)
-let cw = canvas.width
-let ch = canvas.height
+import $ from 'jquery'
 
 // stats
 let hasHotspot
@@ -106,10 +101,6 @@ class Device {
     this._y = y
   }
 
-  moveAtSpeed () {
-    moveRel(this._dx, this._dy)
-  }
-
   addRadio (name, range) {
     this.radios[name] = new Radio(true, range)
   }
@@ -150,8 +141,8 @@ class Device {
           this._x = 0
           this._dx *= -1
         }
-        if (this._x > cw) {
-          this._x = cw
+        if (this._x > 500) {
+          this._x = 500
           this._dx *= -1
         }
         break
@@ -169,8 +160,8 @@ class Device {
           this._y = 0
           this._dy *= -1
         }
-        if (this._y > ch) {
-          this._y = ch
+        if (this._y > 500) {
+          this._y = 500
           this._dy *= -1
         }
         break
@@ -196,10 +187,17 @@ class Device {
 * The simulator engine.
 */
 class Simulator {
+
+  constructor (context) {
+    this.ctx = context
+    this.id = this.ctx.getImageData(0, 0, 1, 1)
+    this.intervalid = -1
+  }
+
   generate (width, height, count, hotspotFraction, hotspotRange, dHotspotFraction, internetFraction) {
 
-    if (intervalid !== -1) {
-      clearInterval(intervalid)
+    if (this.intervalid !== -1) {
+      clearInterval(this.intervalid)
     }
 
     this.width = width
@@ -214,8 +212,8 @@ class Simulator {
     this.devices = []
 
     for (let counter = 0; counter < this.count; counter++) {
-      let x = Math.floor(Math.random() * cw) // TODO: globals
-      let y = Math.floor(Math.random() * ch)
+      let x = Math.floor(Math.random() * 500) // TODO: globals
+      let y = Math.floor(Math.random() * 500)
 
       let device = new Device(x, y, CLAMP_BOUNCE)
 
@@ -253,12 +251,12 @@ class Simulator {
     if (continuous === false) {
       this.frame()
     } else {
-      intervalid = setInterval(this.frame.bind(this), 100)
+      this.intervalid = setInterval(this.frame.bind(this), 100)
     }
   }
 
   pause () {
-    clearInterval(intervalid)
+    clearInterval(this.intervalid)
   }
 
   frame () {
@@ -268,7 +266,7 @@ class Simulator {
   }
 
   clear () {
-    ctx.clearRect(0, 0, cw, ch)
+    this.ctx.clearRect(0, 0, 500, 500)
   }
 
   update () {
@@ -425,40 +423,40 @@ class Simulator {
   }
 
   drawDevice (device) {
-    id.data[RED_CHAN] = 0
-    id.data[GREEN_CHAN] = 0
-    id.data[BLUE_CHAN] = 0
-    id.data[ALPHA_CHAN] = 255
+    this.id.data[RED_CHAN] = 0
+    this.id.data[GREEN_CHAN] = 0
+    this.id.data[BLUE_CHAN] = 0
+    this.id.data[ALPHA_CHAN] = 255
 
-    ctx.putImageData(id, device.x, device.y)
+    this.ctx.putImageData(this.id, device.x, device.y)
     if (device.is(WIFI_RADIO, WIFI_HOTSPOT) === true) {
-      ctx.fillStyle = 'rgba(255, 10, 10, .2)'
-      ctx.beginPath()
-      ctx.arc(device.x, device.y, device.range(WIFI_RADIO), 0, Math.PI * 2, true)
-      ctx.closePath()
-      ctx.fill()
+      this.ctx.fillStyle = 'rgba(255, 10, 10, .2)'
+      this.ctx.beginPath()
+      this.ctx.arc(device.x, device.y, device.range(WIFI_RADIO), 0, Math.PI * 2, true)
+      this.ctx.closePath()
+      this.ctx.fill()
     }
     if (device.is(WIFI_DIRECT_RADIO, WIFI_DIRECT_HOTSPOT)) {
-      ctx.fillStyle = 'rgba(155, 155, 10, .2)'
-      ctx.beginPath()
-      ctx.arc(device.x, device.y, device.range(WIFI_DIRECT_RADIO), 0, Math.PI * 2, true)
-      ctx.closePath()
-      ctx.fill()
+      this.ctx.fillStyle = 'rgba(155, 155, 10, .2)'
+      this.ctx.beginPath()
+      this.ctx.arc(device.x, device.y, device.range(WIFI_DIRECT_RADIO), 0, Math.PI * 2, true)
+      this.ctx.closePath()
+      this.ctx.fill()
     }
-    ctx.fillStyle = 'rgba(10, 10, 255, .2)'
-    ctx.beginPath()
-    ctx.arc(device.x, device.y, BT_RANGE, 0, Math.PI * 2, true)
-    ctx.closePath()
-    ctx.fill()
+    this.ctx.fillStyle = 'rgba(10, 10, 255, .2)'
+    this.ctx.beginPath()
+    this.ctx.arc(device.x, device.y, BT_RANGE, 0, Math.PI * 2, true)
+    this.ctx.closePath()
+    this.ctx.fill()
 
     if (device.is(CELL_RADIO, INTERNET_CONNECTED)) {
-      ctx.beginPath()
-      ctx.fillStyle = 'rgba(0,0,0,.2)'
-      ctx.strokeStyle = 'rgba(0,0,0,1)'
-      ctx.arc(device.x, device.y, 5, 0, 2 * Math.PI)
-      ctx.closePath()
-      ctx.fill()
-      ctx.stroke()
+      this.ctx.beginPath()
+      this.ctx.fillStyle = 'rgba(0,0,0,.2)'
+      this.ctx.strokeStyle = 'rgba(0,0,0,1)'
+      this.ctx.arc(device.x, device.y, 5, 0, 2 * Math.PI)
+      this.ctx.closePath()
+      this.ctx.fill()
+      this.ctx.stroke()
     }
   }
 
@@ -466,29 +464,29 @@ class Simulator {
     for (let counter in this.links) {
       let link = this.links[counter]
       if (link.type === WIFI_LINK) {
-        ctx.strokeStyle = 'rgba(100, 10, 10, 1)'
-        ctx.beginPath()
-        ctx.moveTo(link.left.x, link.left.y)
-        ctx.lineTo(link.right.x, link.right.y)
-        ctx.stroke()
+        this.ctx.strokeStyle = 'rgba(100, 10, 10, 1)'
+        this.ctx.beginPath()
+        this.ctx.moveTo(link.left.x, link.left.y)
+        this.ctx.lineTo(link.right.x, link.right.y)
+        this.ctx.stroke()
       } else if (link.type === BT_LINK) {
-        ctx.strokeStyle = 'rgba(10, 10, 100, 1)'
-        ctx.beginPath()
-        ctx.moveTo(link.left.x, link.left.y)
-        ctx.lineTo(link.right.x, link.right.y)
-        ctx.stroke()
+        this.ctx.strokeStyle = 'rgba(10, 10, 100, 1)'
+        this.ctx.beginPath()
+        this.ctx.moveTo(link.left.x, link.left.y)
+        this.ctx.lineTo(link.right.x, link.right.y)
+        this.ctx.stroke()
       } else if (link.type === WIFI_DIRECT_LINK) {
-        ctx.strokeStyle = 'rgba(80, 80, 10, 1)'
-        ctx.beginPath()
-        ctx.moveTo(link.left.x, link.left.y)
-        ctx.lineTo(link.right.x, link.right.y)
-        ctx.stroke()
+        this.ctx.strokeStyle = 'rgba(80, 80, 10, 1)'
+        this.ctx.beginPath()
+        this.ctx.moveTo(link.left.x, link.left.y)
+        this.ctx.lineTo(link.right.x, link.right.y)
+        this.ctx.stroke()
       } else if (link.type === INTERNET_LINK) {
-        ctx.strokeStyle = 'rgba(0, 0, 0, .1)'
-        ctx.beginPath()
-        ctx.moveTo(link.left.x, link.left.y)
-        ctx.lineTo(link.right.x, link.right.y)
-        ctx.stroke()
+        this.ctx.strokeStyle = 'rgba(0, 0, 0, .1)'
+        this.ctx.beginPath()
+        this.ctx.moveTo(link.left.x, link.left.y)
+        this.ctx.lineTo(link.right.x, link.right.y)
+        this.ctx.stroke()
       }
     }
   }
@@ -616,53 +614,4 @@ class Simulator {
   }
 }
 
-let sim = new Simulator()
-
-// Characteristicis of Canada
-function canada () {
-  $('#density').val('4')
-  if (intervalid !== -1) { clearInterval(intervalid) }
-}
-
-// Characteristicis of Guatamala City
-function guatcity () {
-  $('#density').val('1000')
-  if (intervalid !== -1) { clearInterval(intervalid) }
-}
-
-// Characteristicis of Toronto
-function tor () {
-  $('#density').val('2650')
-  if (intervalid !== -1) { clearInterval(intervalid) }
-}
-
-// Characteristic=is of Vancouver
-function van () {
-  $('#density').val('5249')
-  if (intervalid !== -1) { clearInterval(intervalid) }
-}
-
-
-
-// ref: https://stackoverflow.com/questions/750032/reading-file-contents-on-the-client-side-in-javascript-in-various-browsers
-function updateConf () {
-  // Config file loading
-  var confInput = document.getElementById('conf')
-  var curFiles = confInput.files
-  var conf = curFiles[0]
-  var reader = new FileReader();
-  reader.readAsText(conf, "UTF-8");
-  reader.onload = function (evt) {
-    document.getElementById("fileContents").innerHTML = evt.target.result
-    nativeObject = YAML.parse(evt.target.result)
-    const meshconf = nativeObject.meshdensitytool
-    $('#density').val(meshconf.devices.density)
-    $('#ap').val(meshconf.devices.wifi.hotspotPercentage)
-    $('#coverage').val(meshconf.devices.wifi.hotspotRange)
-    $('#dap').val(meshconf.devices.wifiDirect.hotspotPercentage)
-    $('#percent-internet').val(meshconf.devices.internet.sharerPercentage)
-  }
-  reader.onerror = function (evt) {
-    document.getElementById("fileContents").innerHTML = "error reading file";
-  }
-}
+export default Simulator;

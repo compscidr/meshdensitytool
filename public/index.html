@@ -3,7 +3,6 @@
 <head>
   <title>Density Calculator</title>
   <script type="text/javascript" src="jquery.min.js"></script>
-  <script type="text/javascript" src="yaml.min.js"></script>
   <link rel="stylesheet" href="density.css">
 </head>
 
@@ -15,16 +14,6 @@
 
     <div class="grid-controls">
       <div id="app-ui"></div>
-      <label>Config </label>
-      <br/>
-      <input id="conf" type="file" onchange="updateConf()" />
-      <br/>
-      <div id="fileContents">Contents</div>
-      <button onclick="sim.generate(500, 500, $('#density').val(), $('#ap').val(), $('#coverage').val(), $('#dap').val(), $('#percent-internet').val());sim.run(false);"
-        id="generate_btn" class="control-btn">Generate</button>
-      <button onclick="sim.run(false);" id="step" class="control-btn">Step</button>
-      <button onclick="sim.run(true);" id="animate" class="control-btn">Animate!</button>
-      <button onclick="sim.pause();" id="pause" class="control-btn">Pause</button>
 
       <div>
         <label id="debug"></label>
@@ -47,7 +36,7 @@
 
   <div id="root"></div>
 
-  <script type="text/javascript" src="density.js"></script>
+  <script type="text/javascript" src="regions.js"></script>
 </body>
 
 </html>
