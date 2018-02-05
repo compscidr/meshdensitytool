@@ -1,21 +1,16 @@
 {
-  "name": "meshdensitytool",
+  "name": "reactplay",
   "version": "0.1.0",
-  "description": "A mesh simulator",
-  "main": "index.js",
-  "repository": "git@bitbucket.org:benhughesprogrammer/mesh-density-tool.git",
-  "author": "Ben Hughes <benjamin.b.hughes@gmail.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
+  "private": true,
+  "dependencies": {
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "webpack": "^3.10.0"
+    "react-scripts": "1.1.0"
   },
   "scripts": {
-    "dev": "webpack -d --watch"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   }
 }
