@@ -2,7 +2,6 @@ import $ from 'jquery'
 
 // stats
 let hasHotspot
-let hasntHotspot
 let avgHotspots
 let avgClients
 
@@ -146,6 +145,8 @@ class Device {
           this._dx *= -1
         }
         break
+      default:
+        break
     }
   }
 
@@ -164,6 +165,8 @@ class Device {
           this._y = 500
           this._dy *= -1
         }
+        break
+      default:
         break
     }
   }
@@ -503,7 +506,7 @@ class Simulator {
 
     nodesToVisit.push(device)
 
-    while (nodesToVisit.length != 0) {
+    while (nodesToVisit.length !== 0) {
       let visit = nodesToVisit[0]
 
       for (let counter in this.links) {
@@ -564,7 +567,6 @@ class Simulator {
     let largestLocalMeshSize = 0
 
     hasHotspot = 0
-    hasntHotspot = 0
     avgHotspots = 0
     avgClients = 0
     let counter = 0
@@ -573,9 +575,7 @@ class Simulator {
     while (counter < this.devices.length) {
       device = this.devices[counter]
       let hotspots = this.getHotspots(device)
-      if (hotspots.length === 0) {
-        hasntHotspot++
-      } else {
+      if (hotspots.length !== 0) {
         hasHotspot++
       }
       avgHotspots += hotspots.length

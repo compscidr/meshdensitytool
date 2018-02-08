@@ -1,12 +1,6 @@
-import React, { Component } from 'react';
-
-import ReactDOM from 'react-dom'
+import React from 'react';
 
 class StatOutput extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
   render () {
     return (
       <div className="StatOutput">
