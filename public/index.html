@@ -1,0 +1,42 @@
+<html>
+
+<head>
+  <title>Density Calculator</title>
+  <script type="text/javascript" src="jquery.min.js"></script>
+  <link rel="stylesheet" href="density.css">
+</head>
+
+<body>
+  <div class="grid-container">
+    <div id="container" class="grid-output">
+      <canvas id="canvas" width="500" height="500"></canvas>
+    </div>
+
+    <div class="grid-controls">
+      <div id="app-ui"></div>
+
+      <div>
+        <label id="debug"></label>
+      </div>
+
+      <div id="app-stats"></div>
+    </div>
+
+    <div class="grid-history">
+      History will show up here.
+    </div>
+
+    <div class="grid-regions">
+      <button onClick="canada();">Canada</button>
+      <button onClick="guatcity();">Guatamala City</button>
+      <button onClick="van();">Vancouver</button>
+      <button onClick="tor();">Toronto</button>
+    </div>
+  </div>
+
+  <div id="root"></div>
+
+  <script type="text/javascript" src="regions.js"></script>
+</body>
+
+</html>
