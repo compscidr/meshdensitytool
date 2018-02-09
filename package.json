@@ -9,6 +9,7 @@
     "react-scripts": "1.1.0",
     "yamljs": "^0.3.0"
   },
+  "homepage": "http://research.rightmesh.io:8080/density",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
