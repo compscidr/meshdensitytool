@@ -1,6 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import AppUI from './AppUI';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import AppUI from './AppUI'
 
 it('renders without crashing', () => {
   const wrapper = document.createElement('div')
@@ -12,6 +12,6 @@ it('renders without crashing', () => {
   )
   ReactDOM.renderIntoDocument(wrapper)
   ReactDOM.render(div, wrapper)
-  ReactDOM.render(<AppUI />, document.getElementById('root'));
-  ReactDOM.unmountComponentAtNode(wrapper);
-});
+  ReactDOM.render(<AppUI />, document.getElementById('root'))
+  ReactDOM.unmountComponentAtNode(wrapper)
+})

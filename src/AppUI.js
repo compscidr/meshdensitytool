@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 import YAML from 'yamljs'
 import $ from 'jquery'
@@ -8,15 +8,15 @@ import Simulator from './Simulator'
 class SimulationParameter extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {value: this.props.default }
+    this.state = {value: this.props.default}
 
     this.handleChange = this.handleChange.bind(this)
   }
 
-  handleChange(event) {
+  handleChange (event) {
     this.setState({value: event.target.value})
   }
-  render() {
+  render () {
     return (
       <div className="SimulationParameter param-grid-container">
         <label>{this.props.label}</label>
@@ -33,7 +33,7 @@ class AppUI extends React.Component {
     this.sim = new Simulator(canvas.getContext('2d'), canvas.width, canvas.height)
   }
 
-  handleGenerateClick() {
+  handleGenerateClick () {
     this.sim.generate(500, 500, $('#density').val(), $('#ap').val(), $('#coverage').val(), $('#dap').val(), $('#percent-internet').val())
     this.sim.run(false)
   }
@@ -56,10 +56,10 @@ class AppUI extends React.Component {
     var confInput = document.getElementById('conf')
     var curFiles = confInput.files
     var conf = curFiles[0]
-    var reader = new FileReader();
-    reader.readAsText(conf, "UTF-8");
+    var reader = new FileReader()
+    reader.readAsText(conf, 'UTF-8')
     reader.onload = function (evt) {
-      document.getElementById("fileContents").innerHTML = evt.target.result
+      document.getElementById('fileContents').innerHTML = evt.target.result
       let nativeObject = YAML.parse(evt.target.result)
       const meshconf = nativeObject.meshdensitytool
       $('#density').val(meshconf.devices.density)
@@ -69,7 +69,7 @@ class AppUI extends React.Component {
       $('#percent-internet').val(meshconf.devices.internet.sharerPercentage)
     }
     reader.onerror = function (evt) {
-      document.getElementById("fileContents").innerHTML = "error reading file";
+      document.getElementById('fileContents').innerHTML = 'error reading file'
     }
   }
 
@@ -90,15 +90,14 @@ class AppUI extends React.Component {
         <br/>
         <div id="fileContents">Contents</div>
 
-
-      <button onClick={() => this.handleGenerateClick()}
-        id="generate_btn" className="control-btn">Generate</button>
-      <button onClick={() => this.handleStepClick()} id="step" className="control-btn">Step</button>
-      <button onClick={() => this.handleRunClick()} id="animate" className="control-btn">Animate!</button>
-      <button onClick={() => this.handlePauseClick()} id="pause" className="control-btn">Pause</button>
+        <button onClick={() => this.handleGenerateClick()}
+          id="generate_btn" className="control-btn">Generate</button>
+        <button onClick={() => this.handleStepClick()} id="step" className="control-btn">Step</button>
+        <button onClick={() => this.handleRunClick()} id="animate" className="control-btn">Animate!</button>
+        <button onClick={() => this.handlePauseClick()} id="pause" className="control-btn">Pause</button>
       </div>
     )
   }
 }
 
-export default AppUI;
+export default AppUI

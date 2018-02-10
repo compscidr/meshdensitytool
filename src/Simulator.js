@@ -523,8 +523,8 @@ class Simulator {
 
         for (let considerCounter in nodesToConsider) {
           let consider = nodesToConsider[considerCounter]
-          if (nodesVisited.indexOf(consider) === -1
-              && nodesToVisit.indexOf(consider) === -1) {
+          if (nodesVisited.indexOf(consider) === -1 &&
+              nodesToVisit.indexOf(consider) === -1) {
             nodesToVisit.push(consider)
           }
         }
@@ -549,7 +549,7 @@ class Simulator {
 
     for (let counter in this.links) {
       let link = this.links[counter]
-      let index = -1;
+      let index = -1
       index = unconnectedDevices.indexOf(link.left)
       if (index !== -1) {
         unconnectedDevices.splice(index, 1)
@@ -589,8 +589,8 @@ class Simulator {
 
       // Find largest local mesh
       let currentLocalMeshSize = 0
-      if ((currentLocalMeshSize = this.getLocalMeshDevices(device).length)
-           > largestLocalMeshSize) {
+      if ((currentLocalMeshSize = this.getLocalMeshDevices(device).length) >
+          largestLocalMeshSize) {
         largestLocalMeshSize = currentLocalMeshSize
       }
     }
@@ -614,4 +614,4 @@ class Simulator {
   }
 }
 
-export default Simulator;
+export default Simulator
