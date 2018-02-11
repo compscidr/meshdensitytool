@@ -24,14 +24,21 @@ class AppUI extends React.Component {
 
     this.state = {
       density: 50,
-      wifiHotspotPercentage: 10,
+      wifiHotspotPercentage: 15,
+      wifiHotspotRange: 35,
     }
 
     this.regenerate()
   }
 
   regenerate () {
-    this.sim.generate(500, 500, this.state.density, $('#ap').val(), $('#coverage').val(), $('#dap').val(), $('#percent-internet').val())
+    this.sim.generate(
+      500,
+      500,
+      this.state.density,
+      this.state.wifiHotspotPercentage,
+      this.state.wifiHotspotRange,
+      $('#dap').val(), $('#percent-internet').val())
     this.sim.run(false)
   }
 
@@ -58,6 +65,10 @@ class AppUI extends React.Component {
 
   handleWifiHotspotPercentageChange () {
     this.setState({wifiHotspotPercentage: $('#ap').val()})
+  }
+
+  handleWifiHotspotRangeChange () {
+    this.setState({wifiHotspotRange: $('#coverage').val()})
   }
 
   // ref: https://stackoverflow.com/questions/750032/reading-file-contents-on-the-client-side-in-javascript-in-various-browsers
@@ -98,11 +109,28 @@ class AppUI extends React.Component {
           value={this.state.wifiHotspotPercentage}
           onChange={() => this.handleWifiHotspotPercentageChange()}
         />
-        <SimulationParameter label="Wifi hotspot range:" id="coverage" default="20" />
-        <SimulationParameter label="Wifi-direct hotspot percentage:" id="dap" default="5" />
-        <SimulationParameter label="Percentage of internet-sharers:" id="percent-internet" default="5" />
+        <SimulationParameter
+          label="Wifi hotspot range:"
+          id="coverage"
+          value={this.state.wifiHotspotRange}
+          onChange={() => this.handleWifiHotspotRangeChange()}
+        />
+        <SimulationParameter
+          label="Wifi-direct hotspot percentage:"
+          id="dap"
+          default="5"
+        />
+        <SimulationParameter
+          label="Percentage of internet-sharers:"
+          id="percent-internet"
+          default="5"
+          />
         <br />
-        <SimulationParameter label="Number of runs" id="runs" default="10" />
+        <SimulationParameter
+          label="Number of runs"
+          id="runs"
+          default="10"
+        />
 
         <label>Config </label>
         <br/>
