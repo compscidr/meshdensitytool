@@ -26,6 +26,7 @@ class AppUI extends React.Component {
       density: 50,
       wifiHotspotPercentage: 15,
       wifiHotspotRange: 35,
+      wifiDirectHotspotPercentage: 8,
     }
 
     this.regenerate()
@@ -38,7 +39,8 @@ class AppUI extends React.Component {
       this.state.density,
       this.state.wifiHotspotPercentage,
       this.state.wifiHotspotRange,
-      $('#dap').val(), $('#percent-internet').val())
+      this.state.wifiDirectHotspotPercentage,
+      $('#percent-internet').val())
     this.sim.run(false)
   }
 
@@ -69,6 +71,10 @@ class AppUI extends React.Component {
 
   handleWifiHotspotRangeChange () {
     this.setState({wifiHotspotRange: $('#coverage').val()})
+  }
+
+  handleWifiDirectHotspotPercentageChange () {
+    this.setState({wifiDirectHotspotPercentage: $('#dap').val()})
   }
 
   // ref: https://stackoverflow.com/questions/750032/reading-file-contents-on-the-client-side-in-javascript-in-various-browsers
@@ -118,7 +124,8 @@ class AppUI extends React.Component {
         <SimulationParameter
           label="Wifi-direct hotspot percentage:"
           id="dap"
-          default="5"
+          value={this.state.wifiDirectHotspotPercentage}
+          onChange={() => this.handleWifiDirectHotspotPercentageChange()}
         />
         <SimulationParameter
           label="Percentage of internet-sharers:"
