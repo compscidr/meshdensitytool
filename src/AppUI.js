@@ -6,21 +6,11 @@ import $ from 'jquery'
 import Simulator from './Simulator'
 
 class SimulationParameter extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {value: this.props.default}
-
-    this.handleChange = this.handleChange.bind(this)
-  }
-
-  handleChange (event) {
-    this.setState({value: event.target.value})
-  }
   render () {
     return (
       <div className="SimulationParameter param-grid-container">
         <label>{this.props.label}</label>
-        <input id={this.props.id} type="text" value={this.state.value} onChange={this.handleChange} />
+        <input id={this.props.id} type="text" value={this.props.value} onChange={() => this.props.onChange()} />
       </div>
     )
   }
@@ -31,11 +21,23 @@ class AppUI extends React.Component {
     super(props)
     let canvas = document.getElementById('canvas')
     this.sim = new Simulator(canvas.getContext('2d'), canvas.width, canvas.height)
+
+    this.state = {
+      density: 50,
+      wifiHotspotPercentage: 10,
+    }
+
+    this.regenerate()
+  }
+
+  regenerate () {
+    this.sim.generate(500, 500, this.state.density, $('#ap').val(), $('#coverage').val(), $('#dap').val(), $('#percent-internet').val())
+    this.sim.run(false)
   }
 
   handleGenerateClick () {
-    this.sim.generate(500, 500, $('#density').val(), $('#ap').val(), $('#coverage').val(), $('#dap').val(), $('#percent-internet').val())
-    this.sim.run(false)
+    this.setState({density: $('#density').val()})
+    this.regenerate()
   }
 
   handleStepClick () {
@@ -48,6 +50,14 @@ class AppUI extends React.Component {
 
   handlePauseClick () {
     this.sim.pause()
+  }
+
+  handleDensityChange () {
+    this.setState({density: $('#density').val()})
+  }
+
+  handleWifiHotspotPercentageChange () {
+    this.setState({wifiHotspotPercentage: $('#ap').val()})
   }
 
   // ref: https://stackoverflow.com/questions/750032/reading-file-contents-on-the-client-side-in-javascript-in-various-browsers
@@ -76,8 +86,18 @@ class AppUI extends React.Component {
   render () {
     return (
       <div>
-        <SimulationParameter label="Population density / square km:" id="density" default="100" />
-        <SimulationParameter label="Wifi hotspot percentage:" id="ap" default="20" />
+        <SimulationParameter
+          label="Population density / square km:"
+          id="density"
+          value={this.state.density}
+          onChange={() => this.handleDensityChange()}
+        />
+        <SimulationParameter
+          label="Wifi hotspot percentage:"
+          id="ap"
+          value={this.state.wifiHotspotPercentage}
+          onChange={() => this.handleWifiHotspotPercentageChange()}
+        />
         <SimulationParameter label="Wifi hotspot range:" id="coverage" default="20" />
         <SimulationParameter label="Wifi-direct hotspot percentage:" id="dap" default="5" />
         <SimulationParameter label="Percentage of internet-sharers:" id="percent-internet" default="5" />
