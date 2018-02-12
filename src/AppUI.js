@@ -87,6 +87,18 @@ class AppUI extends React.Component {
     )
   }
 
+  handleConfLoad (event) {
+    let nativeObject = YAML.parse(event.target.result)
+    const meshconf = nativeObject.meshdensitytool
+    this.setState({
+      density: meshconf.devices.density,
+      wifiHotspotPercentage: meshconf.devices.wifi.hotspotPercentage,
+      wifiHotspotRange: meshconf.devices.wifi.hotspotRange,
+      wifiDirectHotspotPercentage: meshconf.devices.wifiDirect.hotspotPercentage,
+      internetSharerPercentage: meshconf.devices.internet.sharerPercentage,
+    })
+  }
+
   // ref: https://stackoverflow.com/questions/750032/reading-file-contents-on-the-client-side-in-javascript-in-various-browsers
   updateConf () {
     // Config file loading
@@ -95,16 +107,7 @@ class AppUI extends React.Component {
     var conf = curFiles[0]
     var reader = new FileReader()
     reader.readAsText(conf, 'UTF-8')
-    reader.onload = function (evt) {
-      document.getElementById('fileContents').innerHTML = evt.target.result
-      let nativeObject = YAML.parse(evt.target.result)
-      const meshconf = nativeObject.meshdensitytool
-      $('#density').val(meshconf.devices.density)
-      $('#ap').val(meshconf.devices.wifi.hotspotPercentage)
-      $('#coverage').val(meshconf.devices.wifi.hotspotRange)
-      $('#dap').val(meshconf.devices.wifiDirect.hotspotPercentage)
-      $('#percent-internet').val(meshconf.devices.internet.sharerPercentage)
-    }
+    reader.onload = (event) => this.handleConfLoad(event)
     reader.onerror = function (evt) {
       document.getElementById('fileContents').innerHTML = 'error reading file'
     }
