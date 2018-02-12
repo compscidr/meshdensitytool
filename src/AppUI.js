@@ -99,6 +99,28 @@ class AppUI extends React.Component {
     })
   }
 
+  handleRegionClick (region) {
+    let density = 0
+    switch (region) {
+      case "canada":
+        density = 4
+        break;
+      case "guatcity":
+        density = 1000
+        break;
+      case "toronto":
+        density = 2650
+        break;
+      case "vancouver":
+        density = 5249
+        break;
+    }
+
+    this.setState({
+      density: density
+    })
+  }
+
   // ref: https://stackoverflow.com/questions/750032/reading-file-contents-on-the-client-side-in-javascript-in-various-browsers
   updateConf () {
     // Config file loading
@@ -164,6 +186,13 @@ class AppUI extends React.Component {
         <button onClick={() => this.handleStepClick()} id="step" className="control-btn">Step</button>
         <button onClick={() => this.handleRunClick()} id="animate" className="control-btn">Animate!</button>
         <button onClick={() => this.handlePauseClick()} id="pause" className="control-btn">Pause</button>
+
+        <div class="grid-regions">
+          <button onClick={() => this.handleRegionClick("canada")}>Canada</button>
+          <button onClick={() => this.handleRegionClick("guatcity")}>Guatamala City</button>
+          <button onClick={() => this.handleRegionClick("toronto")}>Vancouver</button>
+          <button onClick={() => this.handleRegionClick("vancouver")}>Toronto</button>
+        </div>
       </div>
     )
   }
