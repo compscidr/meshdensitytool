@@ -12,4 +12,10 @@ describe('A radio', () => {
     radio.enable()
     expect(radio.enabled).toBe(true)
   })
+  test('can be disabled', () => {
+    const radio = new Radio(true, 5)
+    expect(radio.enabled).toBe(true)
+    radio.disable()
+    expect(radio.enabled).toBe(false)
+  })
 })
