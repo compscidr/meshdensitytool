@@ -5,11 +5,11 @@ class Radio {
   }
 
   enable () {
-    this._enabled = false
+    this._enabled = true
   }
 
   disable () {
-    this._enabled = true
+    this._enabled = false
   }
 
   get enabled () {
