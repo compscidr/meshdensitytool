@@ -1,4 +1,5 @@
 import $ from 'jquery'
+import Device, { CLAMP_BOUNCE } from './models/Device'
 
 // stats
 let hasHotspot
@@ -37,8 +38,6 @@ const BT_RADIO = "BT_RADIO"
 const WIFI_DIRECT_RADIO = "WIFI_DIRECT_RADIO"
 const CELL_RADIO = "INTERNET_RADIO"
 
-const CLAMP_BOUNCE = "CLAMP_BOUNCE"
-
 const INFINITE_RANGE = -1
 
 /**
@@ -59,130 +58,6 @@ class Link {
 class EnergyLink extends Link {
   constructor (left, right, type, energy) {
     super(left, right, type, 0, energy, 0)
-  }
-}
-
-class Radio {
-  constructor (defaultState, range) {
-    this._enabled = defaultState
-    this._range = range
-  }
-
-  enable () {
-    this._enabled = false
-  }
-
-  disable () {
-    this._enabled = true
-  }
-
-  get enabled () {
-    return this._enabled
-  }
-
-  get range () {
-    return this._range
-  }
-}
-
-class Device {
-  constructor (x, y, clamp) {
-    this.radios = {}
-    this.modes = {}
-    this.moveTo(x, y)
-    this._dx = 0
-    this._dy = 0
-    this.clamp = clamp
-  }
-
-  moveTo (x, y) {
-    this._x = x
-    this._y = y
-  }
-
-  addRadio (name, range) {
-    this.radios[name] = new Radio(true, range)
-  }
-
-  radioMode (name, mode) {
-    this.modes[name] = mode
-  }
-
-  is (name, mode) {
-    if (this.modes[name] === mode) {
-      return true
-    }
-    return false
-  }
-
-  range (name) {
-    return this.radios[name].range
-  }
-
-  enableRadio (name) {
-    this.radios[name].enable()
-  }
-  disableRadio (name) {
-    this.radios[name].disable()
-  }
-  enabled (name) {
-    return this.radios[name].enabled
-  }
-
-  get x () {
-    return this._x
-  }
-  set x (pos) {
-    this._x = pos
-    switch (this.clamp) {
-      case CLAMP_BOUNCE:
-        if (this._x < 0) {
-          this._x = 0
-          this._dx *= -1
-        }
-        if (this._x > 500) {
-          this._x = 500
-          this._dx *= -1
-        }
-        break
-      default:
-        break
-    }
-  }
-
-  get y () {
-    return this._y
-  }
-  set y (pos) {
-    this._y = pos
-    switch(this.clamp) {
-      case CLAMP_BOUNCE:
-        if (this._y < 0) {
-          this._y = 0
-          this._dy *= -1
-        }
-        if (this._y > 500) {
-          this._y = 500
-          this._dy *= -1
-        }
-        break
-      default:
-        break
-    }
-  }
-
-  get dx () {
-    return this._dx
-  }
-  set dx (val) {
-    this._dx = val
-  }
-
-  get dy () {
-    return this._dy
-  }
-  set dy (val) {
-    this._dy = val
   }
 }
 
