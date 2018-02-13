@@ -70,13 +70,12 @@ class Simulator {
     this.ctx = context
     this.id = this.ctx.getImageData(0, 0, 1, 1)
     this.intervalid = -1
+    this.running = false
   }
 
   generate (width, height, count, hotspotFraction, hotspotRange, dHotspotFraction, internetFraction) {
 
-    if (this.intervalid !== -1) {
-      clearInterval(this.intervalid)
-    }
+    this.pause()
 
     this.width = width
     this.height = height
@@ -126,6 +125,7 @@ class Simulator {
   }
 
   run (continuous) {
+    this.running = true
     if (continuous === false) {
       this.frame()
     } else {
@@ -134,6 +134,10 @@ class Simulator {
   }
 
   pause () {
+    if (this.running) {
+      this.pause()
+    }
+    this.running = false
     clearInterval(this.intervalid)
   }
 
