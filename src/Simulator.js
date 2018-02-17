@@ -125,6 +125,9 @@ class Simulator {
   }
 
   run (continuous) {
+    if (this.running) {
+      this.pause()
+    }
     this.running = true
     if (continuous === false) {
       this.frame()
@@ -134,9 +137,6 @@ class Simulator {
   }
 
   pause () {
-    if (this.running) {
-      this.pause()
-    }
     this.running = false
     clearInterval(this.intervalid)
   }
