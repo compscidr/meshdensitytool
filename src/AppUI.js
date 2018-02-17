@@ -104,16 +104,16 @@ class AppUI extends React.Component {
     switch (region) {
       case "canada":
         density = 4
-        break;
+        break
       case "guatcity":
         density = 1000
-        break;
+        break
       case "toronto":
         density = 2650
-        break;
+        break
       case "vancouver":
         density = 5249
-        break;
+        break
     }
 
     this.setState({
@@ -167,7 +167,7 @@ class AppUI extends React.Component {
           id="percent-internet"
           value={this.state.internetSharerPercentage}
           onChange={() => this.handleInternetSharerPercentageChange()}
-          />
+        />
         <br />
         <SimulationParameter
           label="Number of runs"

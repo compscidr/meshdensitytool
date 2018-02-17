@@ -7,3 +7,13 @@ env:
 rules:
   no-unused-vars:
     - off
+  quotes:
+    - off
+  comma-dangle:
+    - off
+  padded-blocks:
+    - off
+  space-infix-ops:
+    - off
+  operator-linebreak:
+    - off

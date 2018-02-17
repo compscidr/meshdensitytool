@@ -255,7 +255,7 @@ class Simulator {
       for (let counterRight = counterLeft + 1; counterRight < this.devices.length; counterRight++) {
         let deviceRight = this.devices[counterRight]
         let distance = Math.sqrt(Math.pow(deviceLeft.x - deviceRight.x, 2) + Math.pow(deviceLeft.y - deviceRight.y, 2))
-        
+
         let rangeLimit = 0
         let canHazHotspot = false
 
