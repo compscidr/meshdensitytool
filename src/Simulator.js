@@ -221,7 +221,7 @@ class Simulator {
       for (let counterRight in hotspots) {
         let deviceRight = hotspots[counterRight]
 
-        // TODO: figure out where this bug comes from
+        // TODO: figure out where this bug comes from:
         // Wifi is self-linking, which means that every device is
         // being reported as a hotspot of itself.
         // We remove self-links here, for now.
