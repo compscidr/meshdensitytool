@@ -30,16 +30,16 @@ describe('A mesh device', () => {
   test('can have a radio', () => {
     const device = new Device(100, 100, CLAMP_BOUNCE)
     device.addRadio("test radio", 50)
-    expect(device.enabled("test radio")).toBe(true)
+    expect(device.enabled("test radio"))
   })
   test('can disable and enable a radio', () => {
     const device = new Device(10, 10, CLAMP_BOUNCE)
     device.addRadio("test radio", 10)
-    expect(device.enabled("test radio")).toBe(true)
+    expect(device.enabled("test radio"))
     device.disableRadio("test radio")
     expect(device.enabled("test radio")).toBe(false)
     device.enableRadio("test radio")
-    expect(device.enabled("test radio")).toBe(true)
+    expect(device.enabled("test radio"))
   })
   test('can have a radio with set range', () => {
     const device = new Device(10, 10, CLAMP_BOUNCE)
