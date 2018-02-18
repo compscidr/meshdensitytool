@@ -27,4 +27,36 @@ describe('A mesh device', () => {
     expect(device.x).toBe(100)
     expect(device.y).toBe(100)
   })
+  test('can have a radio', () => {
+    const device = new Device(100, 100, CLAMP_BOUNCE)
+    device.addRadio("test radio", 50)
+    expect(device.enabled("test radio")).toBe(true)
+  })
+  test('can disable and enable a radio', () => {
+    const device = new Device(10, 10, CLAMP_BOUNCE)
+    device.addRadio("test radio", 10)
+    expect(device.enabled("test radio")).toBe(true)
+    device.disableRadio("test radio")
+    expect(device.enabled("test radio")).toBe(false)
+    device.enableRadio("test radio")
+    expect(device.enabled("test radio")).toBe(true)
+  })
+  test('can have a radio with set range', () => {
+    const device = new Device(10, 10, CLAMP_BOUNCE)
+    device.addRadio("test radio", 50)
+    expect(device.range("test radio")).toBe(50)
+  })
+  test('can set a radio mode', () => {
+    const device = new Device(1, 2, CLAMP_BOUNCE)
+    device.addRadio("test radio", 50)
+    device.radioMode("test radio", "test mode")
+    expect(device.is("test radio", "test mode"))
+  })
+  test('can be clamped', () => {
+    const device = new Device(300, 300, CLAMP_BOUNCE)
+    device.x = 501
+    device.y = -10
+    expect(device.x).toBe(500)
+    expect(device.y).toBe(0)
+  })
 })
