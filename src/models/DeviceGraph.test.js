@@ -1,5 +1,5 @@
-import DeviceGraph from '../../src/models/DeviceGraph'
-import Device, { CLAMP_BOUNCE } from '../../src/models/Device';
+import DeviceGraph from './DeviceGraph'
+import Device, { CLAMP_BOUNCE } from './Device';
 
 function generateDevices (count) {
   let devices = []
