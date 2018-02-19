@@ -1,5 +1,6 @@
 import DeviceGraph from './DeviceGraph'
-import Device, { CLAMP_BOUNCE } from './Device';
+import Device, { CLAMP_BOUNCE } from './Device'
+import EnergyLink from './EnergyLink'
 
 function generateDevices (count) {
   let devices = []
@@ -147,8 +148,25 @@ describe('A device graph', () => {
   test('can add a link', () => {
     let devices = generateDevices(10)
     const graph = new DeviceGraph(devices)
-    let link = new EnergyLink()
-    graph.addLink()
+    let link = new EnergyLink(devices[0], devices[1], "test_link", 13)
+    graph.addLink(link)
+    expect(graph.isLinked(devices[0], devices[1])).toBe(true)
+    expect(graph.isLinked(devices[1], devices[0])).toBe(true)
+  })
 
+  test('does not link unlinked devices', () => {
+    let devices = generateDevices(10)
+    const graph = new DeviceGraph(devices)
+    let link = new EnergyLink(devices[0], devices[1], "test_link", 13)
+    graph.addLink(link)
+
+    let anyLinked = false
+    for (let x = 0; x < devices.length; x++) {
+      for (let y = 2; y < devices.length; y++) {
+        anyLinked = anyLinked || graph.isLinked(devices[x], devices[y])
+      }
+    }
+
+    expect(anyLinked).toBe(false)
   })
 })

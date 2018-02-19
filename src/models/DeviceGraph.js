@@ -10,6 +10,7 @@ class DeviceGraph {
    */
   constructor (devices = []) {
     this._devices = devices
+    this._links = []
   }
 
   /**
@@ -33,7 +34,24 @@ class DeviceGraph {
    * @param {Link} link
    */
   addLink (link) {
+    this._links.push(link)
+  }
 
+  /**
+   * Check if two devices are connected.
+   * There is no distinction between the first and second arguments.
+   * @param {Device} left
+   * @param {Device} right
+   */
+  isLinked (left, right) {
+    for (let link of this._links) {
+      if (link.left === left && link.right === right ||
+          link.right === left && link.left === right) {
+            return true
+      }
+    }
+
+    return false
   }
 
   /**

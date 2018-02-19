@@ -41,27 +41,6 @@ const CELL_RADIO = "INTERNET_RADIO"
 const INFINITE_RANGE = -1
 
 /**
-* Store connection info of a link between two devices.
-* There is no distinction between the two devices.
-*/
-class Link {
-  constructor (left, right, type, delay, energy, cost) {
-    this.left = left
-    this.right = right
-    this.type = type
-    this.delay = delay
-    this.energy = energy
-    this.cost = cost
-  }
-}
-
-class EnergyLink extends Link {
-  constructor (left, right, type, energy) {
-    super(left, right, type, 0, energy, 0)
-  }
-}
-
-/**
 * The simulator engine.
 */
 class Simulator {
