@@ -1,11 +1,21 @@
 import DeviceGraph from '../../src/models/DeviceGraph'
 import Device, { CLAMP_BOUNCE } from '../../src/models/Device';
 
+function generateDevices (count) {
+  let devices = []
+  for (let i = 0; i < count; i++) {
+    devices.push(new Device(i, 100+i, CLAMP_BOUNCE))
+  }
+
+  return devices
+}
+
 describe('A device graph', () => {
   test('can be created', () => {
     const graph = new DeviceGraph()
     expect(graph instanceof DeviceGraph)
   })
+
   test('does not contain any devices before one is added', () => {
     const graph = new DeviceGraph()
 
@@ -16,6 +26,7 @@ describe('A device graph', () => {
     }
     expect(counter).toBe(0)
   })
+
   test('can add a device', () => {
     const graph = new DeviceGraph()
 
@@ -40,6 +51,7 @@ describe('A device graph', () => {
     expect(found).toBe(true)
     expect(counter).toBe(1)
   })
+
   test('can be created from a list of devices', () => {
     let devices = []
     let contained = new Map()
@@ -61,6 +73,7 @@ describe('A device graph', () => {
     }
     expect(containsAll).toBe(true)
   })
+
   test('can have last device removed', () => {
     let devices = []
     let contained = new Map()
@@ -78,6 +91,7 @@ describe('A device graph', () => {
     }
     expect(contained.get(lastDevice)).toBe(false)
   })
+
   test('can have first device removed', () => {
     let devices = []
     let contained = new Map()
@@ -95,6 +109,7 @@ describe('A device graph', () => {
     }
     expect(contained.get(firstDevice)).toBe(false)
   })
+
   test('can have a device removed', () => {
     let devices = []
     let contained = new Map()
@@ -112,6 +127,7 @@ describe('A device graph', () => {
     }
     expect(contained.get(device)).toBe(false)
   })
+
   test('can have only device removed', () => {
     let devices = []
     let contained = new Map()
@@ -126,5 +142,13 @@ describe('A device graph', () => {
       contained.set(device, true)
     }
     expect(contained.get(onlyDevice)).toBe(false)
+  })
+
+  test('can add a link', () => {
+    let devices = generateDevices(10)
+    const graph = new DeviceGraph(devices)
+    let link = new EnergyLink()
+    graph.addLink()
+
   })
 })

@@ -29,6 +29,14 @@ class DeviceGraph {
   }
 
   /**
+   * Add a link between devices.
+   * @param {Link} link
+   */
+  addLink (link) {
+
+  }
+
+  /**
    *
    */
   get devices () {
