@@ -12,9 +12,15 @@ class DeviceGraph {
     this._devices = devices
   }
 
+  /**
+   * Add a device to the graph.
+   * @param {Device} device 
+   */
   addDevice (device) {
     this._devices.push(device)
   }
+
+  
 
   /**
    * 
