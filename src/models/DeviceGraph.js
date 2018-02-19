@@ -14,16 +14,22 @@ class DeviceGraph {
 
   /**
    * Add a device to the graph.
-   * @param {Device} device 
+   * @param {Device} device
    */
   addDevice (device) {
     this._devices.push(device)
   }
 
-  
+  /**
+   * Remove a device from the graph.
+   * @param {Device} device
+   */
+  removeDevice (device) {
+    this._devices.splice(this._devices.indexOf(device))
+  }
 
   /**
-   * 
+   *
    */
   get devices () {
     return this._devices
