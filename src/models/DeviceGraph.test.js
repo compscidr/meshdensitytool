@@ -1,5 +1,5 @@
-import DeviceGraph from './DeviceGraph'
-import Device, { CLAMP_BOUNCE } from './Device';
+import DeviceGraph from '../../src/models/DeviceGraph'
+import Device, { CLAMP_BOUNCE } from '../../src/models/Device';
 
 describe('A device graph', () => {
   test('can be created', () => {
@@ -60,5 +60,71 @@ describe('A device graph', () => {
       containsAll = containsAll && contains
     }
     expect(containsAll).toBe(true)
+  })
+  test('can have last device removed', () => {
+    let devices = []
+    let contained = new Map()
+    for (let i = 0; i < 10; i++) {
+      let device = new Device(i, i+10, CLAMP_BOUNCE)
+      devices.push(device)
+      contained.set(device, false)
+    }
+
+    let graph = new DeviceGraph(devices)
+    let lastDevice = devices[devices.length - 1]
+    graph.removeDevice(lastDevice)
+    for (let device of graph.devices) {
+      contained.set(device, true)
+    }
+    expect(contained.get(lastDevice)).toBe(false)
+  })
+  test('can have first device removed', () => {
+    let devices = []
+    let contained = new Map()
+    for (let i = 0; i < 10; i++) {
+      let device = new Device(i, i+10, CLAMP_BOUNCE)
+      devices.push(device)
+      contained.set(device, false)
+    }
+
+    let graph = new DeviceGraph(devices)
+    let firstDevice = devices[0]
+    graph.removeDevice(firstDevice)
+    for (let device of graph.devices) {
+      contained.set(device, true)
+    }
+    expect(contained.get(firstDevice)).toBe(false)
+  })
+  test('can have a device removed', () => {
+    let devices = []
+    let contained = new Map()
+    for (let i = 0; i < 10; i++) {
+      let device = new Device(i, i+10, CLAMP_BOUNCE)
+      devices.push(device)
+      contained.set(device, false)
+    }
+
+    let graph = new DeviceGraph(devices)
+    let device = devices[devices.length / 2]
+    graph.removeDevice(device)
+    for (let device of graph.devices) {
+      contained.set(device, true)
+    }
+    expect(contained.get(device)).toBe(false)
+  })
+  test('can have only device removed', () => {
+    let devices = []
+    let contained = new Map()
+    let device = new Device(100, 100, CLAMP_BOUNCE)
+    devices.push(device)
+    contained.set(device, false)
+
+    let graph = new DeviceGraph(devices)
+    let onlyDevice = devices[0]
+    graph.removeDevice(onlyDevice)
+    for (let device of graph.devices) {
+      contained.set(device, true)
+    }
+    expect(contained.get(onlyDevice)).toBe(false)
   })
 })
