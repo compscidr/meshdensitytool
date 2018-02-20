@@ -1,6 +1,7 @@
 import DeviceGraph from './DeviceGraph'
 import Device, { CLAMP_BOUNCE } from './Device'
 import EnergyLink from './EnergyLink'
+import LinkHint from './LinkHint'
 
 function generateDevices (count) {
   let devices = []
@@ -168,5 +169,66 @@ describe('A device graph', () => {
     }
 
     expect(anyLinked).toBe(false)
+  })
+
+  test('can have a link removed', () => {
+    let devices = generateDevices(10)
+    const graph = new DeviceGraph(devices)
+    let link = new EnergyLink(devices[0], devices[1], "test_link", 13)
+    graph.addLink(link)
+
+    let removalHint = new LinkHint()
+      .addDevice(devices[0])
+      .addDevice(devices[1])
+      .addType("test_link")
+      .build()
+
+    graph.unlink(removalHint)
+
+    expect(graph.isLinked(devices[0], devices[1])).toBe(false)
+    expect(graph.isLinked(devices[1], devices[0])).toBe(false)
+  })
+
+  test('can have a link removed after adding it in both directions', () => {
+    let devices = generateDevices(10)
+    const graph = new DeviceGraph(devices)
+    let link = new EnergyLink(devices[0], devices[1], "test_link", 13)
+    let linkBack = new EnergyLink(devices[1], devices[0], "test_link", 14)
+    graph.addLink(link)
+    graph.addLink(linkBack)
+
+    let removalHint = new LinkHint()
+      .addDevice(devices[0])
+      .addDevice(devices[1])
+      .addType("test_link")
+      .build()
+
+    graph.unlink(removalHint)
+
+    expect(graph.isLinked(devices[0], devices[1])).toBe(false)
+    expect(graph.isLinked(devices[1], devices[0])).toBe(false)
+  })
+
+  test('can have link removed without removing other links', () => {
+    let devices = generateDevices(10)
+    const graph = new DeviceGraph(devices)
+    let link = new EnergyLink(devices[0], devices[1], "test_link", 13)
+    let linkBack = new EnergyLink(devices[1], devices[0], "test_link", 14)
+    let link2 = new EnergyLink(devices[1], devices[2], "test_link", 12)
+    graph.addLink(link)
+    graph.addLink(linkBack)
+    graph.addLink(link2)
+
+    let removalHint = new LinkHint()
+      .addDevice(devices[0])
+      .addDevice(devices[1])
+      .addType("test_link")
+      .build()
+    graph.unlink(removalHint)
+
+    expect(graph.isLinked(devices[0], devices[1])).toBe(false)
+    expect(graph.isLinked(devices[1], devices[0])).toBe(false)
+    expect(graph.isLinked(devices[1], devices[2])).toBe(true)
+    expect(graph.isLinked(devices[2], devices[1])).toBe(true)
   })
 })
