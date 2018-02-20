@@ -1,6 +1,6 @@
 {
-  "name": "reactplay",
-  "version": "0.3.0a1",
+  "name": "meshdensitytool",
+  "version": "0.3.0",
   "private": true,
   "dependencies": {
     "autoprefixer": "7.1.6",
