@@ -8,6 +8,17 @@ class History {
    */
   startEntry () {
     this._entryInProgress = true
+
+    return this
+  }
+
+  /**
+   * Commit an entry to the history.
+   */
+  endEntry () {
+    this._entryInProgress = false
+
+    return this
   }
 
   get entryInProgress () {

@@ -11,4 +11,14 @@ describe('A history object', () => {
 
     expect(hist.entryInProgress).toBe(true)
   })
+
+  test('can have an entry ended', () => {
+    let hist = new History()
+    hist.startEntry()
+    hist.endEntry()
+    expect(hist.entryInProgress).toBe(false)
+
+    hist.startEntry().endEntry()
+    expect(hist.entryInProgress).toBe(false)
+  })
 })
