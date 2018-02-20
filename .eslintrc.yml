@@ -18,3 +18,7 @@ rules:
     - off
   operator-linebreak:
     - off
+  no-return-assign:
+    - off
+  camelcase:
+    - off
