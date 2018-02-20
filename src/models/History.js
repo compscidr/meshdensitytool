@@ -22,8 +22,9 @@ class History {
    * Commit an entry to the history.
    */
   endEntry () {
-    this._entryInProgress = false
+    this.currentEntry.set(STATS, this.currentEntryStats)
     this._entries.push(this.currentEntry)
+    this._entryInProgress = false
 
     return this
   }
@@ -39,6 +40,21 @@ class History {
     }
 
     this.currentEntry.set(DEVICES, devices)
+
+    return this
+  }
+
+  /**
+   * Add a stat to the history.
+   * @param {string} name
+   * @param {number} value
+   */
+  addStat (name, value) {
+    if (!this._entryInProgress) {
+      return null
+    }
+    
+    this.currentEntryStats.set(name, value)
 
     return this
   }

@@ -1,4 +1,4 @@
-import History, { DEVICES } from './History'
+import History, { DEVICES, STATS } from './History'
 import Device, { CLAMP_BOUNCE } from './Device';
 
 describe('A history object', () => {
@@ -61,5 +61,33 @@ describe('A history object', () => {
 
     expect(hist.entries[0].get(DEVICES)).toBe(devices)
     expect(hist.entries[1].get(DEVICES)).toBe(devicesMore)
+  })
+
+  test('can add and retrieve stats from history', () => {
+    let hist = new History()
+    hist.startEntry()
+      .addStat("stat1", 100)
+      .addStat("stat2", 101)
+      .endEntry()
+
+    expect(hist.entries[0].get(STATS).get("stat1")).toBe(100)
+    expect(hist.entries[0].get(STATS).get("stat2")).toBe(101)
+  })
+
+  test('does not have an entry in progress until explicitly started', () => {
+    let hist = new History()
+    expect(hist.entryInProgress).toBe(false)
+  })
+
+  test('cannot add devices if no entry is in progress', () => {
+    let hist = new History()
+    const result = hist.addDevices([])
+    expect(result).toBe(null)
+  })
+
+  test('cannot add stats if no entry is in progress', () => {
+    let hist = new History()
+    const result = hist.addStat("stat", 100)
+    expect(result).toBe(null)
   })
 })
