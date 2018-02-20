@@ -1,6 +1,7 @@
 import $ from 'jquery'
 import Device, { CLAMP_BOUNCE } from './models/Device'
 import EnergyLink from './models/EnergyLink'
+import History, {DEVICES, STATS} from './models/History'
 
 // stats
 let hasHotspot
@@ -78,6 +79,7 @@ class Simulator {
     this.running = false
 
     this.prng = new Random(1)
+    this.history = new History()
   }
 
   generate (width, height, count, hotspotFraction, hotspotRange, dHotspotFraction, internetFraction) {
@@ -450,6 +452,38 @@ class Simulator {
   }
 
   computeStats () {
+    let averages = [0, 0.0, 0, 0, 0, 0]
+    let count = 0
+    for (let entry of this.history.entries) {
+      count += 1
+      averages[0] += entry.get(STATS).get("wifi-hotspot-coverage")
+      averages[1] += entry.get(STATS).get("wifi-average-hotspots")
+      averages[2] += entry.get(STATS).get("wifi-average-clients")
+      averages[3] += entry.get(STATS).get("total-energy")
+      averages[4] += entry.get(STATS).get("unconnected")
+      averages[5] += entry.get(STATS).get("largest-local")
+    }
+
+    for (let i = 0; i < averages.length; i++) {
+      averages[i] = averages[i] / count
+    }
+
+    $('#stat-density').text(this.count)
+    $('#stat-wifi-hotspot-percent').text(this.wifiHotspotFraction)
+    $('#stat-wifi-hotspot-range').text(this.wifiHotspotRange)
+    $('#stat-wifi-hotspot-coverage').text(averages[0])
+    $('#stat-wifi-average-hotspots').text(averages[1])
+    $('#stat-wifi-average-clients').text(averages[2])
+    $('#stat-total-energy').text(averages[3])
+    $('#stat-unconnected').text(averages[4])
+    $('#stat-largest-local').text(averages[5])
+  }
+
+  /**
+   * Store a new entry in the simulator's history.
+   */
+
+  makeHistory () {
     let largestLocalMeshSize = 0
 
     hasHotspot = 0
@@ -488,15 +522,21 @@ class Simulator {
       totalEnergy += link.energy
     }
 
-    $('#stat-density').text(this.count)
-    $('#stat-wifi-hotspot-percent').text(this.wifiHotspotFraction)
-    $('#stat-wifi-hotspot-range').text(this.wifiHotspotRange)
-    $('#stat-wifi-hotspot-coverage').text(((hasHotspot / this.count) * 100).toFixed(2))
-    $('#stat-wifi-average-hotspots').text((avgHotspots / hasHotspot).toFixed(2))
-    $('#stat-wifi-average-clients').text((avgClients / totalHotspots).toFixed(2))
-    $('#stat-total-energy').text(totalEnergy)
-    $('#stat-unconnected').text(this.getUnconnectedDevices().length)
-    $('#stat-largest-local').text(largestLocalMeshSize)
+    let entry = this.history
+      .startEntry()
+      .addDevices(this.devices)
+      .addStat("density", this.count)
+      .addStat("wifi-hotspot-percent", this.wifiHotspotFraction)
+      .addStat("wifi-hotspot-range", this.wifiHotspotRange)
+      .addStat("wifi-hotspot-coverage", ((hasHotspot / this.count) * 100))
+      .addStat("wifi-average-hotspots", (avgHotspots / hasHotspot))
+      .addStat("wifi-average-clients", (avgClients / totalHotspots))
+      .addStat("total-energy", totalEnergy)
+      .addStat("unconnected", this.getUnconnectedDevices().length)
+      .addStat("largest-local", largestLocalMeshSize)
+      .endEntry()
+
+    console.log(JSON.stringify([...entry.get(STATS)]))
   }
 }
 

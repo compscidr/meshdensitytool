@@ -1,5 +1,5 @@
 import History, { DEVICES, STATS } from './History'
-import Device, { CLAMP_BOUNCE } from './Device';
+import Device, { CLAMP_BOUNCE } from './Device'
 
 describe('A history object', () => {
   test('can be created', () => {

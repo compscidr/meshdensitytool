@@ -27,7 +27,8 @@ class AppUI extends React.Component {
       wifiHotspotPercentage: 15,
       wifiHotspotRange: 35,
       wifiDirectHotspotPercentage: 8,
-      internetSharerPercentage: 3
+      internetSharerPercentage: 3,
+      runs: 1,
     }
 
     this.regenerate()
@@ -44,11 +45,18 @@ class AppUI extends React.Component {
       this.state.internetSharerPercentage,
     )
     this.sim.run(false)
+    this.sim.makeHistory()
+  }
+
+  multi () {
+    for (let i = 0; i < this.state.runs; i++) {
+      this.regenerate()
+    }
   }
 
   handleGenerateClick () {
     this.setState({density: $('#density').val()})
-    this.regenerate()
+    this.multi()
   }
 
   handleStepClick () {
@@ -85,6 +93,12 @@ class AppUI extends React.Component {
     this.setState({
       internetSharerPercentage: $('#percent-internet').val()}
     )
+  }
+
+  handleRunsChange () {
+    this.setState({
+      runs: $('#runs').val()
+    })
   }
 
   handleConfLoad (event) {
@@ -172,7 +186,8 @@ class AppUI extends React.Component {
         <SimulationParameter
           label="Number of runs"
           id="runs"
-          default="10"
+          value={this.state.runs}
+          onChange={() => this.handleRunsChange()}
         />
 
         <label>Config </label>
@@ -187,7 +202,7 @@ class AppUI extends React.Component {
         <button onClick={() => this.handleRunClick()} id="animate" className="control-btn">Animate!</button>
         <button onClick={() => this.handlePauseClick()} id="pause" className="control-btn">Pause</button>
 
-        <div class="grid-regions">
+        <div className="grid-regions">
           <button onClick={() => this.handleRegionClick("canada")}>Canada</button>
           <button onClick={() => this.handleRegionClick("guatcity")}>Guatamala City</button>
           <button onClick={() => this.handleRegionClick("toronto")}>Vancouver</button>

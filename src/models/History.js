@@ -15,6 +15,8 @@ class History {
     this.currentEntry = new Map()
     this.currentEntryStats = new Map()
 
+    this.currentEntry.set("hello", "goodby")
+
     return this
   }
 
@@ -26,7 +28,7 @@ class History {
     this._entries.push(this.currentEntry)
     this._entryInProgress = false
 
-    return this
+    return this.currentEntry
   }
 
   /**
@@ -53,7 +55,7 @@ class History {
     if (!this._entryInProgress) {
       return null
     }
-    
+
     this.currentEntryStats.set(name, value)
 
     return this
