@@ -76,6 +76,8 @@ class Simulator {
     this.id = this.ctx.getImageData(0, 0, 1, 1)
     this.intervalid = -1
     this.running = false
+
+    this.prng = new Random(1)
   }
 
   generate (width, height, count, hotspotFraction, hotspotRange, dHotspotFraction, internetFraction) {
@@ -94,13 +96,13 @@ class Simulator {
     this.devices = []
 
     for (let counter = 0; counter < this.count; counter++) {
-      let x = Math.floor(Math.random() * 500) // TODO: globals
-      let y = Math.floor(Math.random() * 500)
+      let x = Math.floor(this.prng.nextFloat() * 500) // TODO: globals
+      let y = Math.floor(this.prng.nextFloat() * 500)
 
       let device = new Device(x, y, CLAMP_BOUNCE)
 
-      if (Math.floor(Math.random() * 100) < hotspotFraction) {
-        let range = Math.floor(Math.random() * hotspotRange) + (2 / 3 * hotspotRange)
+      if (Math.floor(this.prng.nextFloat() * 100) < hotspotFraction) {
+        let range = Math.floor(this.prng.nextFloat() * hotspotRange) + (2 / 3 * hotspotRange)
         device.addRadio(WIFI_RADIO, range)
         device.radioMode(WIFI_RADIO, WIFI_HOTSPOT)
       } else {
@@ -108,8 +110,8 @@ class Simulator {
         device.radioMode(WIFI_RADIO, WIFI_CLIENT)
       }
 
-      if (Math.floor(Math.random() * 100) < dHotspotFraction) {
-        let range = Math.floor(Math.random() * hotspotRange) + (2/3 * hotspotRange)
+      if (Math.floor(this.prng.nextFloat() * 100) < dHotspotFraction) {
+        let range = Math.floor(this.prng.nextFloat() * hotspotRange) + (2/3 * hotspotRange)
         device.addRadio(WIFI_DIRECT_RADIO, range)
         device.radioMode(WIFI_DIRECT_RADIO, WIFI_DIRECT_HOTSPOT)
       } else {
@@ -117,7 +119,7 @@ class Simulator {
         device.radioMode(WIFI_DIRECT_RADIO, WIFI_DIRECT_CLIENT)
       }
 
-      if (Math.floor(Math.random() * 100) < internetFraction) {
+      if (Math.floor(this.prng.nextFloat() * 100) < internetFraction) {
         device.addRadio(CELL_RADIO, INFINITE_RANGE)
         device.radioMode(CELL_RADIO, INTERNET_CONNECTED)
       } else {
@@ -172,8 +174,8 @@ class Simulator {
   }
 
   moveDevice (device) {
-    let xStep = (Math.random() * 0.2) - 0.1
-    let yStep = (Math.random() * 0.2) - 0.1
+    let xStep = (this.prng.nextFloat() * 0.2) - 0.1
+    let yStep = (this.prng.nextFloat() * 0.2) - 0.1
 
     device.dx += xStep
     device.dy += yStep
