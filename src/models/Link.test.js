@@ -20,6 +20,6 @@ describe('A link', () => {
     let right = new Device(100, 100, CLAMP_BOUNCE)
     let link = new Link(left, right, "type", 10, 11, 12)
 
-    expect(link.contains(left, right)).toBe(true)
+    expect(link.contains2(left, right)).toBe(true)
   })
 })

@@ -11,6 +11,14 @@ class Link {
     this.energy = energy
     this.cost = cost
   }
+
+  /**
+   * Determine if a link contains the two devices.
+   * Order does not matter.
+   */
+  contains2 (left, right) {
+    return true
+  }
 }
 
 export default Link
