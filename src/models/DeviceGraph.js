@@ -26,7 +26,7 @@ class DeviceGraph {
    * @param {Device} device
    */
   removeDevice (device) {
-    this._devices.splice(this._devices.indexOf(device))
+    this._devices.splice(this._devices.indexOf(device), 1)
   }
 
   /**
