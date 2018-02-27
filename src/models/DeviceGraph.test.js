@@ -239,11 +239,6 @@ describe('A device graph', () => {
     graph.addLink(link)
     graph.addLink(link2)
 
-    expect(graph.isLinked(devices[0], devices[1])).toBe(true)
-    expect(graph.isLinked(devices[1], devices[0])).toBe(true)
-    expect(graph.isLinked(devices[1], devices[2])).toBe(true)
-    expect(graph.isLinked(devices[2], devices[1])).toBe(true)
-
     let removalHint = new LinkHint()
       .addDevice(devices[0])
       .addDevice(devices[1])
