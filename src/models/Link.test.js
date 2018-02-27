@@ -34,4 +34,13 @@ describe('A link', () => {
     expect(link.contains2(centre, left)).toBe(false)
     expect(link.contains2(centre, right)).toBe(false)
   })
+
+  test('contains devices in any order', () => {
+    let left = new Device(100, 100, CLAMP_BOUNCE)
+    let centre = new Device(101, 102, CLAMP_BOUNCE)
+    let right = new Device(103, 104, CLAMP_BOUNCE)
+    let link = new Link(left, right, "type", 10, 11, 12)
+
+    expect(link.contains2(right, left)).toBe(true)
+  })
 })
