@@ -225,7 +225,6 @@ describe('A device graph', () => {
       .addDevice(devices[1])
       .addType("test_link")
       .build()
-
     graph.unlink(removalHint)
 
     expect(graph.isLinked(devices[0], devices[1])).toBe(false)
@@ -272,6 +271,5 @@ describe('A device graph', () => {
     graph.unlink(removalHint)
 
     expect(graph.isLinked(devices[0], devices[1])).toBe(true)
-
   })
 })
