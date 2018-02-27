@@ -42,7 +42,6 @@ class DeviceGraph {
    * @param {Link} hint A collection of properties to search for.
    */
   unlink (hint) {
-    // TODO
   }
 
   /**
@@ -53,9 +52,9 @@ class DeviceGraph {
    */
   isLinked (left, right) {
     for (let link of this._links) {
-      if (link.left === left && link.right === right ||
-          link.right === left && link.left === right) {
-            return true
+      if ((link.left === left && link.right === right) ||
+          (link.right === left && link.left === right)) {
+        return true
       }
     }
 
