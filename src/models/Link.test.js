@@ -1,5 +1,5 @@
 import Link from './Link'
-import Device, { CLAMP_BOUNCE } from './Device';
+import Device, { CLAMP_BOUNCE } from './Device'
 
 describe('A link', () => {
   test('can be created with all props', () => {
