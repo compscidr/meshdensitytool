@@ -230,11 +230,14 @@ describe('A device graph', () => {
     let devices = generateDevices(10)
     const graph = new DeviceGraph(devices)
     let link = new EnergyLink(devices[0], devices[1], "test_link", 13)
-    let linkBack = new EnergyLink(devices[1], devices[0], "test_link", 14)
     let link2 = new EnergyLink(devices[1], devices[2], "test_link", 12)
     graph.addLink(link)
-    graph.addLink(linkBack)
     graph.addLink(link2)
+
+    expect(graph.isLinked(devices[0], devices[1])).toBe(true)
+    expect(graph.isLinked(devices[1], devices[0])).toBe(true)
+    expect(graph.isLinked(devices[1], devices[2])).toBe(true)
+    expect(graph.isLinked(devices[2], devices[1])).toBe(true)
 
     let removalHint = new LinkHint()
       .addDevice(devices[0])
