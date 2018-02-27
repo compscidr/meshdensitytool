@@ -267,4 +267,19 @@ describe('A device graph', () => {
 
     expect(graph.isLinked(devices[0], devices[1])).toBe(true)
   })
+
+  test('does remove link with null link type hint', () => {
+    let devices = generateDevices(10)
+    const graph = new DeviceGraph(devices)
+    let link = new EnergyLink(devices[0], devices[1], "test_link", 13)
+    graph.addLink(link)
+
+    let removalHint = new LinkHint()
+      .addDevice(devices[0])
+      .addDevice(devices[1])
+      .build()
+    graph.unlink(removalHint)
+
+    expect(graph.isLinked(devices[0], devices[1])).toBe(false)
+  })
 })
