@@ -17,7 +17,11 @@ class Link {
    * Order does not matter.
    */
   contains2 (left, right) {
-    return true
+    let doesContainBoth = false
+    if ((this.left === left && this.right === right)) {
+      doesContainBoth = true
+    }
+    return doesContainBoth
   }
 }
 
