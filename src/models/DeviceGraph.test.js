@@ -257,4 +257,21 @@ describe('A device graph', () => {
     expect(graph.isLinked(devices[1], devices[2])).toBe(true)
     expect(graph.isLinked(devices[2], devices[1])).toBe(true)
   })
+
+  test('does not remove a link with mismatched hint link type', () => {
+    let devices = generateDevices(10)
+    const graph = new DeviceGraph(devices)
+    let link = new EnergyLink(devices[0], devices[1], "test_link", 13)
+    graph.addLink(link)
+
+    let removalHint = new LinkHint()
+      .addDevice(devices[0])
+      .addDevice(devices[1])
+      .addType("invalid_type")
+      .build()
+    graph.unlink(removalHint)
+
+    expect(graph.isLinked(devices[0], devices[1])).toBe(true)
+
+  })
 })
