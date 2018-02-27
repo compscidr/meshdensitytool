@@ -45,6 +45,10 @@ class DeviceGraph {
     let deletables = []
     for (let link of this._links) {
       if (link.contains2(hint.left, hint.right)) {
+        if ((hint.type !== null) &&
+            (hint.type !== link.type)) {
+          break
+        }
         deletables.push(link)
       }
     }
