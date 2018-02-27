@@ -14,4 +14,12 @@ describe('A link', () => {
     expect(link.energy).toBe(11)
     expect(link.cost).toBe(12)
   })
+
+  test('contains devices', () => {
+    let left = new Device(100, 100, CLAMP_BOUNCE)
+    let right = new Device(100, 100, CLAMP_BOUNCE)
+    let link = new Link(left, right, "type", 10, 11, 12)
+
+    expect(link.contains(left, right)).toBe(true)
+  })
 })
