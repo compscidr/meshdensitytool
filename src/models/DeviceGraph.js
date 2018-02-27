@@ -42,6 +42,16 @@ class DeviceGraph {
    * @param {Link} hint A collection of properties to search for.
    */
   unlink (hint) {
+    let deletables = []
+    for (let link of this._links) {
+      if (link.contains2(hint.left, hint.right)) {
+        deletables.push(link)
+      }
+    }
+
+    for (let deletable of deletables) {
+      this._links.splice(this._links.indexOf(deletable))
+    }
   }
 
   /**
