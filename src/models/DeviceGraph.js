@@ -50,7 +50,7 @@ class DeviceGraph {
     }
 
     for (let deletable of deletables) {
-      this._links.splice(this._links.indexOf(deletable))
+      this._links.splice(this._links.indexOf(deletable), 1)
     }
   }
 
