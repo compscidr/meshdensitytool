@@ -122,12 +122,18 @@ describe('A device graph', () => {
     }
 
     let graph = new DeviceGraph(devices)
-    let device = devices[devices.length / 2]
-    graph.removeDevice(device)
+    let removed = devices[devices.length / 2]
+    graph.removeDevice(removed)
     for (let device of graph.devices) {
       contained.set(device, true)
     }
-    expect(contained.get(device)).toBe(false)
+
+    contained.forEach((isContained, device) => {
+      if (device !== removed) {
+        expect(isContained).toBe(true)
+      }
+    })
+    expect(contained.get(removed)).toBe(false)
   })
 
   test('can have only device removed', () => {
