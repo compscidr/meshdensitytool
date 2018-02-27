@@ -189,6 +189,23 @@ describe('A device graph', () => {
     expect(graph.isLinked(devices[1], devices[0])).toBe(false)
   })
 
+  test('removing nonexistent links does nothing', () => {
+    let devices = generateDevices(10)
+    const graph = new DeviceGraph(devices)
+    let link = new EnergyLink(devices[0], devices[1], "test_link", 13)
+    graph.addLink(link)
+
+    let removalHint = new LinkHint()
+      .addDevice(devices[2])
+      .addDevice(devices[3])
+      .addType("test_link")
+      .build()
+
+    graph.unlink(removalHint)
+
+    expect(graph.isLinked(devices[0], devices[1])).toBe(true)
+  })
+
   test('can have a link removed after adding it in both directions', () => {
     let devices = generateDevices(10)
     const graph = new DeviceGraph(devices)
