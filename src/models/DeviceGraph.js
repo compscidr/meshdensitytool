@@ -52,8 +52,7 @@ class DeviceGraph {
    */
   isLinked (left, right) {
     for (let link of this._links) {
-      if ((link.left === left && link.right === right) ||
-          (link.right === left && link.left === right)) {
+      if (link.contains2(left, right)) {
         return true
       }
     }
