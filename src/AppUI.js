@@ -19,8 +19,6 @@ class SimulationParameter extends React.Component {
 class AppUI extends React.Component {
   constructor (props) {
     super(props)
-    let canvas = document.getElementById('canvas')
-    this.sim = new Simulator(canvas.getContext('2d'), canvas.width, canvas.height)
 
     this.state = {
       density: 50,
@@ -29,9 +27,8 @@ class AppUI extends React.Component {
       wifiDirectHotspotPercentage: 8,
       internetSharerPercentage: 3,
       runs: 1,
+      seed: 9679234,
     }
-
-    this.regenerate()
   }
 
   regenerate () {
@@ -71,6 +68,12 @@ class AppUI extends React.Component {
     this.sim.pause()
   }
 
+  handleCreateSimClick () {
+    let canvas = document.getElementById('canvas')
+    this.sim = new Simulator(canvas.getContext('2d'), this.state.seed)
+    this.regenerate()
+  }
+
   handleDensityChange () {
     this.setState({density: $('#density').val()})
   }
@@ -98,6 +101,12 @@ class AppUI extends React.Component {
   handleRunsChange () {
     this.setState({
       runs: $('#runs').val()
+    })
+  }
+
+  handleSeedChange () {
+    this.setState({
+      seed: $('#seed').val()
     })
   }
 
@@ -151,58 +160,70 @@ class AppUI extends React.Component {
 
   render () {
     return (
-      <div>
-        <SimulationParameter
-          label="Population density / square km:"
-          id="density"
-          value={this.state.density}
-          onChange={() => this.handleDensityChange()}
-        />
-        <SimulationParameter
-          label="Wifi hotspot percentage:"
-          id="ap"
-          value={this.state.wifiHotspotPercentage}
-          onChange={() => this.handleWifiHotspotPercentageChange()}
-        />
-        <SimulationParameter
-          label="Wifi hotspot range:"
-          id="coverage"
-          value={this.state.wifiHotspotRange}
-          onChange={() => this.handleWifiHotspotRangeChange()}
-        />
-        <SimulationParameter
-          label="Wifi-direct hotspot percentage:"
-          id="dap"
-          value={this.state.wifiDirectHotspotPercentage}
-          onChange={() => this.handleWifiDirectHotspotPercentageChange()}
-        />
-        <SimulationParameter
-          label="Percentage of internet-sharers:"
-          id="percent-internet"
-          value={this.state.internetSharerPercentage}
-          onChange={() => this.handleInternetSharerPercentageChange()}
-        />
-        <br />
-        <SimulationParameter
-          label="Number of runs"
-          id="runs"
-          value={this.state.runs}
-          onChange={() => this.handleRunsChange()}
-        />
+      <div className="app-ui-wrapper">
+        <div className="app-ui-init-controls">
+          <SimulationParameter
+            label="Layout seed:"
+            id="seed"
+            value={this.state.seed}
+            onChange={() => this.handleSeedChange()}
+          />
+          <SimulationParameter
+            label="Population density / square km:"
+            id="density"
+            value={this.state.density}
+            onChange={() => this.handleDensityChange()}
+          />
+          <SimulationParameter
+            label="Wifi hotspot percentage:"
+            id="ap"
+            value={this.state.wifiHotspotPercentage}
+            onChange={() => this.handleWifiHotspotPercentageChange()}
+          />
+          <SimulationParameter
+            label="Wifi hotspot range:"
+            id="coverage"
+            value={this.state.wifiHotspotRange}
+            onChange={() => this.handleWifiHotspotRangeChange()}
+          />
+          <SimulationParameter
+            label="Wifi-direct hotspot percentage:"
+            id="dap"
+            value={this.state.wifiDirectHotspotPercentage}
+            onChange={() => this.handleWifiDirectHotspotPercentageChange()}
+          />
+          <SimulationParameter
+            label="Percentage of internet-sharers:"
+            id="percent-internet"
+            value={this.state.internetSharerPercentage}
+            onChange={() => this.handleInternetSharerPercentageChange()}
+          />
+          <button onClick={() => this.handleCreateSimClick()}
+            id="create_btn" className="control-btn">Create Sim</button>
+        </div>
+        <div className="app-ui-inputs">
+          <br />
+          <SimulationParameter
+            label="Number of runs"
+            id="runs"
+            value={this.state.runs}
+            onChange={() => this.handleRunsChange()}
+          />
 
-        <label>Config </label>
-        <br/>
-        <input id="conf" type="file" onChange={() => this.updateConf()} />
-        <br/>
-        <div id="fileContents">Contents</div>
+          <label>Config </label>
+          <br/>
+          <input id="conf" type="file" onChange={() => this.updateConf()} />
+          <br/>
+          <div id="fileContents">Contents</div>
 
-        <button onClick={() => this.handleGenerateClick()}
-          id="generate_btn" className="control-btn">Generate</button>
-        <button onClick={() => this.handleStepClick()} id="step" className="control-btn">Step</button>
-        <button onClick={() => this.handleRunClick()} id="animate" className="control-btn">Animate!</button>
-        <button onClick={() => this.handlePauseClick()} id="pause" className="control-btn">Pause</button>
+          <button onClick={() => this.handleGenerateClick()}
+            id="generate_btn" className="control-btn">Generate</button>
+          <button onClick={() => this.handleStepClick()} id="step" className="control-btn">Step</button>
+          <button onClick={() => this.handleRunClick()} id="animate" className="control-btn">Animate!</button>
+          <button onClick={() => this.handlePauseClick()} id="pause" className="control-btn">Pause</button>
 
-        <div className="grid-regions">
+        </div>
+        <div className="app-ui-regions">
           <button onClick={() => this.handleRegionClick("canada")}>Canada</button>
           <button onClick={() => this.handleRegionClick("guatcity")}>Guatamala City</button>
           <button onClick={() => this.handleRegionClick("toronto")}>Vancouver</button>

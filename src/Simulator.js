@@ -72,13 +72,13 @@ Random.prototype.nextFloat = function (opt_minOrMax, opt_max) {
 */
 class Simulator {
 
-  constructor (context) {
+  constructor (context, seed = 1) {
     this.ctx = context
     this.id = this.ctx.getImageData(0, 0, 1, 1)
     this.intervalid = -1
     this.running = false
 
-    this.prng = new Random(1)
+    this.prng = new Random(seed)
     this.history = new History()
   }
 

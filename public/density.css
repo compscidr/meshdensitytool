@@ -22,7 +22,7 @@ form {
 
 .grid-container {
   display: grid;
-  grid-template-columns: 520px 520px 500px;
+  grid-template-columns: 520px 400px 500px;
   grid-template-rows: 500px 500px;
 }
 
@@ -41,14 +41,9 @@ form {
   grid-row: 1 / 2;
 }
 
-.grid-regions {
-  grid-column: 1 / 2;
-  grid-row: 2 / 3;
-}
-
 .param-grid-container {
   display: grid;
-  grid-template-columns: 300px 200px;
+  grid-template-columns: 280px 100px;
   grid-template-rows: 25px;
   grid-auto-flow: row;
 }
@@ -58,4 +53,22 @@ form {
   grid-template-columns: 300px 200px;
   grid-template-rows: 25px;
   grid-auto-flow: row;
+}
+
+.app-ui-wrapper {
+  display: grid;
+}
+
+.app-ui-init-controls {
+  background-color: #01434f;
+  color: white;
+  padding: 10px;
+}
+
+.app-ui-inputs {
+
+}
+
+.app-ui-regions {
+
 }
