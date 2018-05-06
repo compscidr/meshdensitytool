@@ -73,6 +73,10 @@ form {
   color: #1FAB81;
 }
 
+#app-ui .control-btn:disabled {
+  background-color: grey;
+}
+
 .app-ui-wrapper {
   display: grid;
 }

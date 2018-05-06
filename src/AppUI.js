@@ -28,6 +28,7 @@ class AppUI extends React.Component {
       internetSharerPercentage: 3,
       runs: 1,
       seed: 9679234,
+      enabled: false,
     }
   }
 
@@ -73,41 +74,48 @@ class AppUI extends React.Component {
     let canvas = document.getElementById('canvas')
     this.sim = new Simulator(canvas.getContext('2d'), this.state.seed)
     this.regenerate()
+    this.setState({enabled: true})
   }
 
   handleDensityChange () {
     this.setState({density: $('#density').val()})
+    this.setState({enabled: false})
   }
 
   handleWifiHotspotPercentageChange () {
     this.setState({wifiHotspotPercentage: $('#ap').val()})
+    this.setState({enabled: false})
   }
 
   handleWifiHotspotRangeChange () {
     this.setState({wifiHotspotRange: $('#coverage').val()})
+    this.setState({enabled: false})
   }
 
   handleWifiDirectHotspotPercentageChange () {
     this.setState({
-      wifiDirectHotspotPercentage: $('#dap').val()}
-    )
+      wifiDirectHotspotPercentage: $('#dap').val(),
+      enabled: false,
+    })
   }
 
   handleInternetSharerPercentageChange () {
     this.setState({
-      internetSharerPercentage: $('#percent-internet').val()}
-    )
-  }
-
-  handleRunsChange () {
-    this.setState({
-      runs: $('#runs').val()
+      internetSharerPercentage: $('#percent-internet').val(),
+      enabled: false,
     })
   }
 
   handleSeedChange () {
     this.setState({
-      seed: $('#seed').val()
+      seed: $('#seed').val(),
+      enabled: false,
+    })
+  }
+
+  handleRunsChange () {
+    this.setState({
+      runs: $('#runs').val()
     })
   }
 
@@ -245,12 +253,38 @@ class AppUI extends React.Component {
           <br/>
           <div id="fileContents">Contents</div>
 
-          <button onClick={() => this.handleGenerateClick()}
-            id="generate_btn" className="control-btn">Generate</button>
-          <button onClick={() => this.handleStepClick()} id="step" className="control-btn">Step</button>
-          <button onClick={() => this.handleRunClick()} id="animate" className="control-btn">Animate!</button>
-          <button onClick={() => this.handlePauseClick()} id="pause" className="control-btn">Pause</button>
-
+          <button
+            onClick={() => this.handleGenerateClick()}
+            id="generate_btn"
+            className="control-btn"
+            disabled={!this.state.enabled}
+          >
+            Generate
+          </button>
+          <button
+            onClick={() => this.handleStepClick()}
+            id="step"
+            className="control-btn"
+            disabled={!this.state.enabled}
+          >
+            Step
+          </button>
+          <button
+            onClick={() => this.handleRunClick()}
+            id="animate"
+            className="control-btn"
+            disabled={!this.state.enabled}
+          >
+            Animate!
+          </button>
+          <button
+            onClick={() => this.handlePauseClick()}
+            id="pause"
+            className="control-btn"
+            disabled={!this.state.enabled}
+          >
+            Pause
+          </button>
         </div>
       </div>
     )
