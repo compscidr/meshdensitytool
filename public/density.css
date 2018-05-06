@@ -12,14 +12,6 @@ form {
   margin-top: 10px;
 }
 
-.control-btn {
-  margin-bottom: 5px;
-  width: 100px;
-  border: 1px solid DarkGray;
-  background-color: #1FAB81;
-  color: white;
-}
-
 .grid-container {
   display: grid;
   grid-template-columns: 520px 400px 500px;
@@ -53,6 +45,32 @@ form {
   grid-template-columns: 300px 200px;
   grid-template-rows: 25px;
   grid-auto-flow: row;
+}
+
+.app-ui-regions {
+  border: 2px dashed white;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: -5px;
+  margin-right: -5px;
+  padding: 5px;
+}
+
+#app-ui .control-btn, #app-ui .location-btn {
+  margin-bottom: 5px;
+  width: 180px;
+  margin-right: 10px;
+  border: 1px solid white;
+}
+
+#app-ui .control-btn {
+  background-color: #1FAB81;
+  color: white;
+}
+
+#app-ui .location-btn {
+  background-color: white;
+  color: #1FAB81;
 }
 
 .app-ui-wrapper {

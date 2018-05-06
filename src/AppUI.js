@@ -69,6 +69,7 @@ class AppUI extends React.Component {
   }
 
   handleCreateSimClick () {
+    delete this.sim
     let canvas = document.getElementById('canvas')
     this.sim = new Simulator(canvas.getContext('2d'), this.state.seed)
     this.regenerate()
@@ -168,12 +169,40 @@ class AppUI extends React.Component {
             value={this.state.seed}
             onChange={() => this.handleSeedChange()}
           />
-          <SimulationParameter
-            label="Population density / square km:"
-            id="density"
-            value={this.state.density}
-            onChange={() => this.handleDensityChange()}
-          />
+
+          <div className="app-ui-regions">
+            <SimulationParameter
+              label="Population density / square km:"
+              id="density"
+              value={this.state.density}
+              onChange={() => this.handleDensityChange()}
+            />
+            <button
+              onClick={() => this.handleRegionClick("canada")}
+              className="location-btn"
+            >
+              Canada
+            </button>
+            <button
+              onClick={() => this.handleRegionClick("guatcity")}
+              className="location-btn"
+            >
+              Guatamala City
+            </button>
+            <button
+              onClick={() => this.handleRegionClick("toronto")}
+              className="location-btn"
+            >
+              Vancouver
+            </button>
+            <button
+              onClick={() => this.handleRegionClick("vancouver")}
+              className="location-btn"
+            >
+              Toronto
+            </button>
+          </div>
+
           <SimulationParameter
             label="Wifi hotspot percentage:"
             id="ap"
@@ -222,12 +251,6 @@ class AppUI extends React.Component {
           <button onClick={() => this.handleRunClick()} id="animate" className="control-btn">Animate!</button>
           <button onClick={() => this.handlePauseClick()} id="pause" className="control-btn">Pause</button>
 
-        </div>
-        <div className="app-ui-regions">
-          <button onClick={() => this.handleRegionClick("canada")}>Canada</button>
-          <button onClick={() => this.handleRegionClick("guatcity")}>Guatamala City</button>
-          <button onClick={() => this.handleRegionClick("toronto")}>Vancouver</button>
-          <button onClick={() => this.handleRegionClick("vancouver")}>Toronto</button>
         </div>
       </div>
     )
