@@ -81,6 +81,29 @@ class DeviceGraph {
   get devices () {
     return this._devices
   }
+
+  /**
+   * Get the set of elements connected in a 'local mesh'
+   * to the given device.
+   * @param {Device} device A device in the graph.
+   * @returns {list} the set of elements connected to given element.
+   */
+  localMesh (device) {
+    let mesh = []
+    mesh.push(device)
+
+    for (let link of this._links) {
+      if (link.contains(device)) {
+        if (device === link.left) {
+          mesh.push (link.right)
+        } else {
+          mesh.push (link.left)
+        }
+      }
+    }
+
+    return mesh
+  }
 }
 
 export default DeviceGraph

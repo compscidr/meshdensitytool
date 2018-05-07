@@ -15,6 +15,15 @@ describe('A link', () => {
     expect(link.cost).toBe(12)
   })
 
+  test('contains one device', () => {
+    let left = new Device(100, 100, CLAMP_BOUNCE)
+    let right = new Device(101, 100, CLAMP_BOUNCE)
+    let link = new Link(left, right, "type", 10, 11, 12)
+
+    expect(link.contains(left)).toBe(true)
+    expect(link.contains(right)).toBe(true)
+  })
+
   test('contains devices', () => {
     let left = new Device(100, 100, CLAMP_BOUNCE)
     let right = new Device(100, 100, CLAMP_BOUNCE)

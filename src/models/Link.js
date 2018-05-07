@@ -13,6 +13,17 @@ class Link {
   }
 
   /**
+   * Determine if a link contains the device.
+   */
+  contains (device) {
+    if (this.left === device ||
+        this.right === device) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Determine if a link contains the two devices.
    * Order does not matter.
    */

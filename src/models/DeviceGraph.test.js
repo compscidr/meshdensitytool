@@ -3,14 +3,8 @@ import Device, { CLAMP_BOUNCE } from './Device'
 import EnergyLink from './EnergyLink'
 import LinkHint from './LinkHint'
 
-function generateDevices (count) {
-  let devices = []
-  for (let i = 0; i < count; i++) {
-    devices.push(new Device(i, 100+i, CLAMP_BOUNCE))
-  }
+import { generateDevices, setwiseEqual } from './DeviceGraph.test.util'
 
-  return devices
-}
 
 describe('A device graph', () => {
   test('can be created', () => {
@@ -281,5 +275,35 @@ describe('A device graph', () => {
     graph.unlink(removalHint)
 
     expect(graph.isLinked(devices[0], devices[1])).toBe(false)
+  })
+
+  test('trivial local mesh contains one device', () => {
+    let devices = generateDevices(1)
+    const graph = new DeviceGraph(devices)
+
+    let expectedLocalMesh = []
+    expectedLocalMesh. push (devices[0])
+
+    expect (setwiseEqual (
+      graph.localMesh (graph.devices[0]),
+      expectedLocalMesh
+    )).toBe(true)
+
+  })
+
+  test('local mesh contains connected devices', () => {
+    let devices = generateDevices (2)
+    const graph = new DeviceGraph (devices)
+    let link = new EnergyLink(devices[0], devices[1], "test_link", 13)
+    graph.addLink(link)
+
+    let expectedLocalMesh = []
+    expectedLocalMesh.push (devices[0])
+    expectedLocalMesh.push (devices[1])
+
+    expect (setwiseEqual (
+      graph.localMesh (graph.devices[0]),
+      expectedLocalMesh
+    )).toBe(true)
   })
 })
