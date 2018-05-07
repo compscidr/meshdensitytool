@@ -172,7 +172,7 @@ class AppUI extends React.Component {
       <div className="app-ui-wrapper">
         <div className="app-ui-init-controls">
           <SimulationParameter
-            label="Layout seed:"
+            label="Seed:"
             id="seed"
             value={this.state.seed}
             onChange={() => this.handleSeedChange()}

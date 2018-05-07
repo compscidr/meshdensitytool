@@ -98,8 +98,8 @@ class Simulator {
     this.devices = []
 
     for (let counter = 0; counter < this.count; counter++) {
-      let x = Math.floor(this.prng.nextFloat() * 500) // TODO: globals
-      let y = Math.floor(this.prng.nextFloat() * 500)
+      let x = Math.floor(this.prng.nextFloat() * this.width)
+      let y = Math.floor(this.prng.nextFloat() * this.height)
 
       let device = new Device(x, y, CLAMP_BOUNCE)
 
@@ -394,6 +394,7 @@ class Simulator {
 
     nodesToVisit.push(device)
 
+    /*
     while (nodesToVisit.length !== 0) {
       let visit = nodesToVisit[0]
 
@@ -421,6 +422,7 @@ class Simulator {
       nodesVisited.push(visit)
       nodesToVisit.splice(nodesToVisit.indexOf(visit), 1)
     }
+    */
 
     return nodesVisited
   }
@@ -430,6 +432,7 @@ class Simulator {
    */
   getUnconnectedDevices () {
     let unconnectedDevices = []
+
     for (let counter in this.devices) {
       let device = this.devices[counter]
       unconnectedDevices.push(device)

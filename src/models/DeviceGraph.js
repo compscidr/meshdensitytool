@@ -75,7 +75,8 @@ class DeviceGraph {
   }
 
   /**
-   *
+   * Return all the devices known to the graph,
+   * in no particular order.
    */
   get devices () {
     return this._devices
