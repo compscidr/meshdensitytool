@@ -1,7 +1,7 @@
-import DeviceGraph from './DeviceGraph'
-import Device, { CLAMP_BOUNCE } from './Device'
-import EnergyLink from './EnergyLink'
-import LinkHint from './LinkHint'
+import DeviceGraph from 'graphtools/DeviceGraph'
+import Device, { CLAMP_BOUNCE } from 'models/Device'
+import EnergyLink from 'models/EnergyLink'
+import LinkHint from 'models/LinkHint'
 
 import { generateDevices, setwiseEqual } from './DeviceGraph.test.util'
 
@@ -305,5 +305,29 @@ describe('A device graph', () => {
       graph.localMesh (graph.devices[0]),
       expectedLocalMesh
     )).toBe(true)
+    expect (setwiseEqual (
+      graph.localMesh (graph.devices[1]),
+      expectedLocalMesh
+    )).toBe(true)
+  })
+
+  test('local mesh does not contain disconnected devices', () => {
+    let devices = generateDevices (3)
+    const graph = new DeviceGraph (devices)
+    let link = new EnergyLink(devices[0], devices[1], "test_link", 13)
+    graph.addLink(link)
+
+    expect (setwiseEqual (
+      graph.localMesh (graph.devices[2]),
+      [devices[2]]
+    )).toBe(true)
+    expect (setwiseEqual (
+      graph.localMesh (graph.devices[0]),
+      [devices[0], devices[1], devices[2]]
+    )).toBe(false)
+    expect (setwiseEqual (
+      graph.localMesh (graph.devices[1]),
+      [devices[0], devices[1], devices[2]]
+    )).toBe(false)
   })
 })

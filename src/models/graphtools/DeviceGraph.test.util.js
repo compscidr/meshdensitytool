@@ -1,4 +1,4 @@
-import Device, { CLAMP_BOUNCE } from './Device'
+import Device, { CLAMP_BOUNCE } from 'models/Device'
 
 export function generateDevices(count) {
   let devices = [];
