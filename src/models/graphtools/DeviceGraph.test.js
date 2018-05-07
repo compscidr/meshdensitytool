@@ -3,7 +3,7 @@ import Device, { CLAMP_BOUNCE } from 'models/Device'
 import EnergyLink from 'models/EnergyLink'
 import LinkHint from 'models/LinkHint'
 
-import { generateDevices, setwiseEqual } from './DeviceGraph.test.util'
+import { generateDevices, setwiseEqual } from 'graphtools/DeviceGraph.test.util'
 
 
 describe('A device graph', () => {
