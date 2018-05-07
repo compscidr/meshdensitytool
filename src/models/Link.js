@@ -18,9 +18,9 @@ class Link {
   contains (device) {
     if (this.left === device ||
         this.right === device) {
-      return true;
+      return true
     }
-    return false;
+    return false
   }
 
   /**
