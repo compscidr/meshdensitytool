@@ -4,17 +4,7 @@ import YAML from 'yamljs'
 import $ from 'jquery'
 
 import Simulator from './Simulator'
-
-class SimulationParameter extends React.Component {
-  render () {
-    return (
-      <div className="SimulationParameter param-grid-container">
-        <label>{this.props.label}</label>
-        <input id={this.props.id} type="text" value={this.props.value} onChange={(event) => this.props.onChange(event)} />
-      </div>
-    )
-  }
-}
+import SimulationParameter from './views/SimulationParameter'
 
 class AppUI extends React.Component {
   constructor (props) {
@@ -147,7 +137,7 @@ class AppUI extends React.Component {
             onChange={(event) => this.handleParamChange(event)}
           />
 
-          <div className="app-ui-regions">
+          <div className="app-ui-input-group">
             <SimulationParameter
               label="Population density / square km:"
               id="density"
@@ -180,24 +170,48 @@ class AppUI extends React.Component {
             </button>
           </div>
 
-          <SimulationParameter
-            label="Wifi hotspot percentage:"
-            id="wifiHotspotPercentage"
-            value={this.state.wifiHotspotPercentage}
-            onChange={(event) => this.handleParamChange(event)}
-          />
-          <SimulationParameter
-            label="Wifi hotspot range:"
-            id="wifiHotspotRange"
-            value={this.state.wifiHotspotRange}
-            onChange={(event) => this.handleParamChange(event)}
-          />
-          <SimulationParameter
-            label="Wifi-direct hotspot percentage:"
-            id="wifiDirectHotspotPercentage"
-            value={this.state.wifiDirectHotspotPercentage}
-            onChange={(event) => this.handleParamChange(event)}
-          />
+          <div className="app-ui-input-group">
+            <SimulationParameter
+              label="Wifi hotspot percentage:"
+              id="wifiHotspotPercentage"
+              value={this.state.wifiHotspotPercentage}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+            <SimulationParameter
+              label="Wifi hotspot range:"
+              id="wifiHotspotRange"
+              value={this.state.wifiHotspotRange}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+          </div>
+          <div className="app-ui-input-group">
+            <SimulationParameter
+              label="Wifi-direct hotspot percentage:"
+              id="wifiDirectHotspotPercentage"
+              value={this.state.wifiDirectHotspotPercentage}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+            <SimulationParameter
+              label="Wifi-direct hotspot range:"
+              id="wifiDirectHotspotRange"
+              value={this.state.wifiDirectHotspotRange}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+          </div>
+          <div className="app-ui-input-group">
+            <SimulationParameter
+              label="Bluetooth percentage:"
+              id="bluetoothPercentage"
+              value={this.state.bluetoothPercentage}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+            <SimulationParameter
+              label="Bluetooth range:"
+              id="bluetoothRange"
+              value={this.state.bluetoothRange}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+          </div>
           <SimulationParameter
             label="Percentage of internet-sharers:"
             id="internetSharerPercentage"

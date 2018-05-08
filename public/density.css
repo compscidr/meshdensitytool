@@ -47,10 +47,10 @@ form {
   grid-auto-flow: row;
 }
 
-.app-ui-regions {
-  border: 2px dashed white;
-  margin-top: 1em;
-  margin-bottom: 1em;
+.app-ui-input-group {
+  border: 1px dashed white;
+  margin-top: 5px;
+  margin-bottom: 5px;
   margin-left: -5px;
   margin-right: -5px;
   padding: 5px;
@@ -88,9 +88,5 @@ form {
 }
 
 .app-ui-inputs {
-
-}
-
-.app-ui-regions {
 
 }
