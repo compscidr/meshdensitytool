@@ -167,7 +167,7 @@ class AppUI extends React.Component {
               onClick={() => this.handleRegionClick("guatcity")}
               className="location-btn"
             >
-              Guatamala City
+              Guatemala City
             </button>
             <button
               onClick={() => this.handleRegionClick("toronto")}
