@@ -10,7 +10,7 @@ class SimulationParameter extends React.Component {
     return (
       <div className="SimulationParameter param-grid-container">
         <label>{this.props.label}</label>
-        <input id={this.props.id} type="text" value={this.props.value} onChange={() => this.props.onChange()} />
+        <input id={this.props.id} type="text" value={this.props.value} onChange={(event) => this.props.onChange(event)} />
       </div>
     )
   }
@@ -77,45 +77,14 @@ class AppUI extends React.Component {
     this.setState({enabled: true})
   }
 
-  handleDensityChange () {
-    this.setState({density: $('#density').val()})
+  handleParamChange (event) {
+    this.setState({[event.target.id]: event.target.value})
     this.setState({enabled: false})
   }
 
-  handleWifiHotspotPercentageChange () {
-    this.setState({wifiHotspotPercentage: $('#ap').val()})
-    this.setState({enabled: false})
-  }
-
-  handleWifiHotspotRangeChange () {
-    this.setState({wifiHotspotRange: $('#coverage').val()})
-    this.setState({enabled: false})
-  }
-
-  handleWifiDirectHotspotPercentageChange () {
+  handleRunsChange (event) {
     this.setState({
-      wifiDirectHotspotPercentage: $('#dap').val(),
-      enabled: false,
-    })
-  }
-
-  handleInternetSharerPercentageChange () {
-    this.setState({
-      internetSharerPercentage: $('#percent-internet').val(),
-      enabled: false,
-    })
-  }
-
-  handleSeedChange () {
-    this.setState({
-      seed: $('#seed').val(),
-      enabled: false,
-    })
-  }
-
-  handleRunsChange () {
-    this.setState({
-      runs: $('#runs').val()
+      runs: event.target.value
     })
   }
 
@@ -175,7 +144,7 @@ class AppUI extends React.Component {
             label="Seed:"
             id="seed"
             value={this.state.seed}
-            onChange={() => this.handleSeedChange()}
+            onChange={(event) => this.handleParamChange(event)}
           />
 
           <div className="app-ui-regions">
@@ -183,7 +152,7 @@ class AppUI extends React.Component {
               label="Population density / square km:"
               id="density"
               value={this.state.density}
-              onChange={() => this.handleDensityChange()}
+              onChange={(event) => this.handleParamChange(event)}
             />
             <button
               onClick={() => this.handleRegionClick("canada")}
@@ -213,27 +182,27 @@ class AppUI extends React.Component {
 
           <SimulationParameter
             label="Wifi hotspot percentage:"
-            id="ap"
+            id="wifiHotspotPercentage"
             value={this.state.wifiHotspotPercentage}
-            onChange={() => this.handleWifiHotspotPercentageChange()}
+            onChange={(event) => this.handleParamChange(event)}
           />
           <SimulationParameter
             label="Wifi hotspot range:"
-            id="coverage"
+            id="wifiHotspotRange"
             value={this.state.wifiHotspotRange}
-            onChange={() => this.handleWifiHotspotRangeChange()}
+            onChange={(event) => this.handleParamChange(event)}
           />
           <SimulationParameter
             label="Wifi-direct hotspot percentage:"
-            id="dap"
+            id="wifiDirectHotspotPercentage"
             value={this.state.wifiDirectHotspotPercentage}
-            onChange={() => this.handleWifiDirectHotspotPercentageChange()}
+            onChange={(event) => this.handleParamChange(event)}
           />
           <SimulationParameter
             label="Percentage of internet-sharers:"
-            id="percent-internet"
+            id="internetSharerPercentage"
             value={this.state.internetSharerPercentage}
-            onChange={() => this.handleInternetSharerPercentageChange()}
+            onChange={(event) => this.handleParamChange(event)}
           />
           <button onClick={() => this.handleCreateSimClick()}
             id="create_btn" className="control-btn">Create Sim</button>
@@ -244,7 +213,7 @@ class AppUI extends React.Component {
             label="Number of runs"
             id="runs"
             value={this.state.runs}
-            onChange={() => this.handleRunsChange()}
+            onChange={(event) => this.handleRunsChange(event)}
           />
 
           <label>Config </label>
