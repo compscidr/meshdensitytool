@@ -19,6 +19,10 @@ class AppUI extends React.Component {
       bluetoothPercentage: 80,
       bluetoothRange: 5,
       internetSharerPercentage: 3,
+      wifiPowerLevel: 10,
+      wifiDirectPowerLevel: 10,
+      bluetoothPowerLevel: 10,
+      cellPowerLevel: 10,
       runs: 1,
       seed: 9679234,
       enabled: false,
@@ -218,6 +222,32 @@ class AppUI extends React.Component {
               label="Bluetooth range [m]:"
               id="bluetoothRange"
               value={this.state.bluetoothRange}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+          </div>
+          <div className="app-ui-input-group">
+            <SimulationParameter
+              label="Wifi power level:"
+              id="wifiPowerLevel"
+              value={this.state.wifiPowerLevel}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+            <SimulationParameter
+              label="Wifi-direct power level:"
+              id="wifiDirectPowerLevel"
+              value={this.state.wifiDirectPowerLevel}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+            <SimulationParameter
+              label="Bluetooth power level:"
+              id="bluetoothPowerLevel"
+              value={this.state.bluetoothPowerLevel}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+            <SimulationParameter
+              label="Cell energy level:"
+              id="cellPowerLevel"
+              value={this.state.wifiPowerLevel}
               onChange={(event) => this.handleParamChange(event)}
             />
           </div>
