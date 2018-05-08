@@ -15,6 +15,9 @@ class AppUI extends React.Component {
       wifiHotspotPercentage: 15,
       wifiHotspotRange: 35,
       wifiDirectHotspotPercentage: 8,
+      wifiDirectHotspotRange: 35,
+      bluetoothPercentage: 80,
+      bluetoothRange: 5,
       internetSharerPercentage: 3,
       runs: 1,
       seed: 9679234,
@@ -28,8 +31,11 @@ class AppUI extends React.Component {
       500,
       this.state.density,
       this.state.wifiHotspotPercentage,
-      this.state.wifiHotspotRange,
+      this.state.wifiHotspotRange / 2.0,
       this.state.wifiDirectHotspotPercentage,
+      this.state.wifiDirectHotspotRange / 2.0,
+      this.state.bluetoothPercentage,
+      this.state.bluetoothRange / 2.0,
       this.state.internetSharerPercentage,
     )
     this.sim.run(false)
@@ -86,6 +92,9 @@ class AppUI extends React.Component {
       wifiHotspotPercentage: meshconf.devices.wifi.hotspotPercentage,
       wifiHotspotRange: meshconf.devices.wifi.hotspotRange,
       wifiDirectHotspotPercentage: meshconf.devices.wifiDirect.hotspotPercentage,
+      wifiDirectHotspotRange: meshconf.devices.wifiDirect.hotspotRange,
+      bluetoothPercentage: meshconf.devices.bluetooth.percentage,
+      bluetoothRange: meshconf.devices.bluetooth.range,
       internetSharerPercentage: meshconf.devices.internet.sharerPercentage,
     })
   }
@@ -139,7 +148,7 @@ class AppUI extends React.Component {
 
           <div className="app-ui-input-group">
             <SimulationParameter
-              label="Population density / square km:"
+              label="Population density [devices / km^2]:"
               id="density"
               value={this.state.density}
               onChange={(event) => this.handleParamChange(event)}
@@ -172,13 +181,13 @@ class AppUI extends React.Component {
 
           <div className="app-ui-input-group">
             <SimulationParameter
-              label="Wifi hotspot percentage:"
+              label="Wifi hotspot %:"
               id="wifiHotspotPercentage"
               value={this.state.wifiHotspotPercentage}
               onChange={(event) => this.handleParamChange(event)}
             />
             <SimulationParameter
-              label="Wifi hotspot range:"
+              label="Wifi hotspot range [m]:"
               id="wifiHotspotRange"
               value={this.state.wifiHotspotRange}
               onChange={(event) => this.handleParamChange(event)}
@@ -186,13 +195,13 @@ class AppUI extends React.Component {
           </div>
           <div className="app-ui-input-group">
             <SimulationParameter
-              label="Wifi-direct hotspot percentage:"
+              label="Wifi-direct hotspot %:"
               id="wifiDirectHotspotPercentage"
               value={this.state.wifiDirectHotspotPercentage}
               onChange={(event) => this.handleParamChange(event)}
             />
             <SimulationParameter
-              label="Wifi-direct hotspot range:"
+              label="Wifi-direct hotspot range [m]:"
               id="wifiDirectHotspotRange"
               value={this.state.wifiDirectHotspotRange}
               onChange={(event) => this.handleParamChange(event)}
@@ -200,13 +209,13 @@ class AppUI extends React.Component {
           </div>
           <div className="app-ui-input-group">
             <SimulationParameter
-              label="Bluetooth percentage:"
+              label="Bluetooth %:"
               id="bluetoothPercentage"
               value={this.state.bluetoothPercentage}
               onChange={(event) => this.handleParamChange(event)}
             />
             <SimulationParameter
-              label="Bluetooth range:"
+              label="Bluetooth range [m]:"
               id="bluetoothRange"
               value={this.state.bluetoothRange}
               onChange={(event) => this.handleParamChange(event)}

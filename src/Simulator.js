@@ -82,7 +82,17 @@ class Simulator {
     this.history = new History()
   }
 
-  generate (width, height, count, hotspotFraction, hotspotRange, dHotspotFraction, internetFraction) {
+  generate (
+    width,
+    height,
+    count,
+    hotspotFraction,
+    hotspotRange,
+    dHotspotFraction,
+    dHotspotRange,
+    btFraction,
+    btRange,
+    internetFraction) {
 
     this.pause()
 
@@ -92,6 +102,9 @@ class Simulator {
     this.wifiHotspotFraction = hotspotFraction
     this.wifiHotspotRange = hotspotRange
     this.wifiDirectHotspotFraction = dHotspotFraction
+    this.wifiDirectHotspotRange = dHotspotRange
+    this.bluetoothFraction = btFraction
+    this.bluetoothRange = btRange
     this.internetFraction = internetFraction
 
     this.links = []
@@ -113,7 +126,9 @@ class Simulator {
       }
 
       if (Math.floor(this.prng.nextFloat() * 100) < dHotspotFraction) {
-        let range = Math.floor(this.prng.nextFloat() * hotspotRange) + (2/3 * hotspotRange)
+        let range = Math.floor(
+          this.prng.nextFloat() * this.wifiDirectHotspotRange)
+          + (2/3 * hotspotRange)
         device.addRadio(WIFI_DIRECT_RADIO, range)
         device.radioMode(WIFI_DIRECT_RADIO, WIFI_DIRECT_HOTSPOT)
       } else {
