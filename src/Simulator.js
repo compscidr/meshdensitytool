@@ -19,18 +19,14 @@ const WIFI_DIRECT_LINK = 2
 const CELL_LINK = 3
 const INTERNET_LINK = 100
 
-const BT_RANGE = 10
-
-const WIFI_ENERGY = 10
-const BT_ENERGY = 1
-const WIFI_DIRECT_ENERGY = 10
-const CELL_ENERGY = 100
-
 const WIFI_HOTSPOT = "WIFI_HOTSPOT"
 const WIFI_CLIENT = "WIFI_CLIENT"
 
 const WIFI_DIRECT_HOTSPOT = "WIFI_DIRECT_HOTSPOT"
 const WIFI_DIRECT_CLIENT = "WIFI_DIRECT_CLIENT"
+
+const BLUETOOTH_ON = "BLUETOOTH_ON"
+const BLUETOOTH_OFF = "BLUETOOTH_OFF"
 
 const INTERNET_CONNECTED = "CELL_INTERNET"
 const NOT_INTERNET_CONNECTED = "CELL_NO_INTERNET"
@@ -72,17 +68,31 @@ Random.prototype.nextFloat = function (opt_minOrMax, opt_max) {
 */
 class Simulator {
 
-  constructor (context) {
+  constructor (context, seed = 1) {
     this.ctx = context
     this.id = this.ctx.getImageData(0, 0, 1, 1)
     this.intervalid = -1
     this.running = false
 
-    this.prng = new Random(1)
+    this.prng = new Random(seed)
     this.history = new History()
   }
 
-  generate (width, height, count, hotspotFraction, hotspotRange, dHotspotFraction, internetFraction) {
+  generate (
+    width,
+    height,
+    count,
+    hotspotFraction,
+    hotspotRange,
+    dHotspotFraction,
+    dHotspotRange,
+    btFraction,
+    btRange,
+    wifiPower,
+    wifiDPower,
+    btPower,
+    cellPower,
+    internetFraction) {
 
     this.pause()
 
@@ -92,14 +102,21 @@ class Simulator {
     this.wifiHotspotFraction = hotspotFraction
     this.wifiHotspotRange = hotspotRange
     this.wifiDirectHotspotFraction = dHotspotFraction
+    this.wifiDirectHotspotRange = dHotspotRange
+    this.bluetoothFraction = btFraction
+    this.bluetoothRange = btRange
+    this.wifiPower = wifiPower
+    this.wifiDirectPower = wifiDPower
+    this.bluetoothPower = btPower
+    this.cellPower = cellPower
     this.internetFraction = internetFraction
 
     this.links = []
     this.devices = []
 
     for (let counter = 0; counter < this.count; counter++) {
-      let x = Math.floor(this.prng.nextFloat() * 500) // TODO: globals
-      let y = Math.floor(this.prng.nextFloat() * 500)
+      let x = Math.floor(this.prng.nextFloat() * this.width)
+      let y = Math.floor(this.prng.nextFloat() * this.height)
 
       let device = new Device(x, y, CLAMP_BOUNCE)
 
@@ -113,12 +130,23 @@ class Simulator {
       }
 
       if (Math.floor(this.prng.nextFloat() * 100) < dHotspotFraction) {
-        let range = Math.floor(this.prng.nextFloat() * hotspotRange) + (2/3 * hotspotRange)
+        let range = Math.floor(
+          this.prng.nextFloat() * this.wifiDirectHotspotRange)
+          + (2/3 * hotspotRange)
         device.addRadio(WIFI_DIRECT_RADIO, range)
         device.radioMode(WIFI_DIRECT_RADIO, WIFI_DIRECT_HOTSPOT)
       } else {
         device.addRadio(WIFI_DIRECT_RADIO, INFINITE_RANGE)
         device.radioMode(WIFI_DIRECT_RADIO, WIFI_DIRECT_CLIENT)
+      }
+
+      if (Math.floor(this.prng.nextFloat() * 100) < btFraction) {
+        let range = Math.floor(this.prng.nextFloat() * btRange) + (2 / 3 * btRange)
+        device.addRadio(BT_RADIO, range)
+        device.radioMode(BT_RADIO, BLUETOOTH_ON)
+      } else {
+        device.addRadio(BT_RADIO, 0)
+        device.radioMode(BT_RADIO, BLUETOOTH_OFF)
       }
 
       if (Math.floor(this.prng.nextFloat() * 100) < internetFraction) {
@@ -237,7 +265,7 @@ class Simulator {
 
         if (deviceLeft !== deviceRight) {
           this.links.push(new EnergyLink(
-            deviceLeft, deviceRight, WIFI_LINK, WIFI_ENERGY
+            deviceLeft, deviceRight, WIFI_LINK, this.wifiPower
           ))
         }
       }
@@ -251,7 +279,7 @@ class Simulator {
         if (deviceLeft.is(CELL_RADIO, INTERNET_CONNECTED)
             && deviceRight.is(CELL_RADIO, INTERNET_CONNECTED)) {
           this.links.push(new EnergyLink(
-            deviceLeft, deviceRight, INTERNET_LINK, CELL_ENERGY
+            deviceLeft, deviceRight, INTERNET_LINK, this.cellPower
           ))
         }
       }
@@ -279,7 +307,7 @@ class Simulator {
         if (canHazHotspot) {
           if (distance < rangeLimit) {
             this.links.push(new EnergyLink(
-              deviceLeft, deviceRight, WIFI_DIRECT_LINK, WIFI_DIRECT_ENERGY
+              deviceLeft, deviceRight, WIFI_DIRECT_LINK, this.wifiDirectPower
             ))
           }
         }
@@ -294,10 +322,14 @@ class Simulator {
       for (let counterRight = counterLeft + 1; counterRight < this.devices.length; counterRight++) {
         let deviceRight = this.devices[counterRight]
         let distance = Math.sqrt(Math.pow(deviceLeft.x - deviceRight.x, 2) + Math.pow(deviceLeft.y - deviceRight.y, 2))
-        if (distance < BT_RANGE) {
-          this.links.push(new EnergyLink(
-            deviceLeft, deviceRight, BT_LINK, BT_ENERGY
-          ))
+        if (deviceLeft.is(BT_RADIO, BLUETOOTH_ON) &&
+            deviceRight.is(BT_RADIO, BLUETOOTH_ON)) {
+          if (distance < deviceLeft.range(BT_RADIO) &&
+              distance < deviceRight.range(BT_RADIO)) {
+            this.links.push(new EnergyLink(
+              deviceLeft, deviceRight, BT_LINK, this.bluetoothPower
+            ))
+          }
         }
       }
     }
@@ -320,6 +352,7 @@ class Simulator {
     this.id.data[ALPHA_CHAN] = 255
 
     this.ctx.putImageData(this.id, device.x, device.y)
+
     if (device.is(WIFI_RADIO, WIFI_HOTSPOT) === true) {
       this.ctx.fillStyle = 'rgba(255, 10, 10, .2)'
       this.ctx.beginPath()
@@ -334,11 +367,14 @@ class Simulator {
       this.ctx.closePath()
       this.ctx.fill()
     }
-    this.ctx.fillStyle = 'rgba(10, 10, 255, .2)'
-    this.ctx.beginPath()
-    this.ctx.arc(device.x, device.y, BT_RANGE, 0, Math.PI * 2, true)
-    this.ctx.closePath()
-    this.ctx.fill()
+
+    if (device.is(BT_RADIO, BLUETOOTH_ON)) {
+      this.ctx.fillStyle = 'rgba(10, 10, 255, .2)'
+      this.ctx.beginPath()
+      this.ctx.arc(device.x, device.y, device.range(BT_RADIO), 0, Math.PI * 2, true)
+      this.ctx.closePath()
+      this.ctx.fill()
+    }
 
     if (device.is(CELL_RADIO, INTERNET_CONNECTED)) {
       this.ctx.beginPath()
@@ -430,6 +466,7 @@ class Simulator {
    */
   getUnconnectedDevices () {
     let unconnectedDevices = []
+
     for (let counter in this.devices) {
       let device = this.devices[counter]
       unconnectedDevices.push(device)

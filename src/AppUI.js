@@ -4,34 +4,29 @@ import YAML from 'yamljs'
 import $ from 'jquery'
 
 import Simulator from './Simulator'
-
-class SimulationParameter extends React.Component {
-  render () {
-    return (
-      <div className="SimulationParameter param-grid-container">
-        <label>{this.props.label}</label>
-        <input id={this.props.id} type="text" value={this.props.value} onChange={() => this.props.onChange()} />
-      </div>
-    )
-  }
-}
+import SimulationParameter from './views/SimulationParameter'
 
 class AppUI extends React.Component {
   constructor (props) {
     super(props)
-    let canvas = document.getElementById('canvas')
-    this.sim = new Simulator(canvas.getContext('2d'), canvas.width, canvas.height)
 
     this.state = {
       density: 50,
       wifiHotspotPercentage: 15,
       wifiHotspotRange: 35,
       wifiDirectHotspotPercentage: 8,
+      wifiDirectHotspotRange: 35,
+      bluetoothPercentage: 80,
+      bluetoothRange: 5,
       internetSharerPercentage: 3,
+      wifiPowerLevel: 10,
+      wifiDirectPowerLevel: 10,
+      bluetoothPowerLevel: 10,
+      cellPowerLevel: 10,
       runs: 1,
+      seed: 9679234,
+      enabled: false,
     }
-
-    this.regenerate()
   }
 
   regenerate () {
@@ -40,8 +35,15 @@ class AppUI extends React.Component {
       500,
       this.state.density,
       this.state.wifiHotspotPercentage,
-      this.state.wifiHotspotRange,
+      this.state.wifiHotspotRange / 2.0,
       this.state.wifiDirectHotspotPercentage,
+      this.state.wifiDirectHotspotRange / 2.0,
+      this.state.bluetoothPercentage,
+      this.state.bluetoothRange / 2.0,
+      this.state.wifiPowerLevel,
+      this.state.wifiDirectPowerLevel,
+      this.state.bluetoothPowerLevel,
+      this.state.cellPowerLevel,
       this.state.internetSharerPercentage,
     )
     this.sim.run(false)
@@ -71,33 +73,22 @@ class AppUI extends React.Component {
     this.sim.pause()
   }
 
-  handleDensityChange () {
-    this.setState({density: $('#density').val()})
+  handleCreateSimClick () {
+    delete this.sim
+    let canvas = document.getElementById('canvas')
+    this.sim = new Simulator(canvas.getContext('2d'), this.state.seed)
+    this.regenerate()
+    this.setState({enabled: true})
   }
 
-  handleWifiHotspotPercentageChange () {
-    this.setState({wifiHotspotPercentage: $('#ap').val()})
+  handleParamChange (event) {
+    this.setState({[event.target.id]: event.target.value})
+    this.setState({enabled: false})
   }
 
-  handleWifiHotspotRangeChange () {
-    this.setState({wifiHotspotRange: $('#coverage').val()})
-  }
-
-  handleWifiDirectHotspotPercentageChange () {
+  handleRunsChange (event) {
     this.setState({
-      wifiDirectHotspotPercentage: $('#dap').val()}
-    )
-  }
-
-  handleInternetSharerPercentageChange () {
-    this.setState({
-      internetSharerPercentage: $('#percent-internet').val()}
-    )
-  }
-
-  handleRunsChange () {
-    this.setState({
-      runs: $('#runs').val()
+      runs: event.target.value
     })
   }
 
@@ -109,6 +100,9 @@ class AppUI extends React.Component {
       wifiHotspotPercentage: meshconf.devices.wifi.hotspotPercentage,
       wifiHotspotRange: meshconf.devices.wifi.hotspotRange,
       wifiDirectHotspotPercentage: meshconf.devices.wifiDirect.hotspotPercentage,
+      wifiDirectHotspotRange: meshconf.devices.wifiDirect.hotspotRange,
+      bluetoothPercentage: meshconf.devices.bluetooth.percentage,
+      bluetoothRange: meshconf.devices.bluetooth.range,
       internetSharerPercentage: meshconf.devices.internet.sharerPercentage,
     })
   }
@@ -151,62 +145,172 @@ class AppUI extends React.Component {
 
   render () {
     return (
-      <div>
-        <SimulationParameter
-          label="Population density / square km:"
-          id="density"
-          value={this.state.density}
-          onChange={() => this.handleDensityChange()}
-        />
-        <SimulationParameter
-          label="Wifi hotspot percentage:"
-          id="ap"
-          value={this.state.wifiHotspotPercentage}
-          onChange={() => this.handleWifiHotspotPercentageChange()}
-        />
-        <SimulationParameter
-          label="Wifi hotspot range:"
-          id="coverage"
-          value={this.state.wifiHotspotRange}
-          onChange={() => this.handleWifiHotspotRangeChange()}
-        />
-        <SimulationParameter
-          label="Wifi-direct hotspot percentage:"
-          id="dap"
-          value={this.state.wifiDirectHotspotPercentage}
-          onChange={() => this.handleWifiDirectHotspotPercentageChange()}
-        />
-        <SimulationParameter
-          label="Percentage of internet-sharers:"
-          id="percent-internet"
-          value={this.state.internetSharerPercentage}
-          onChange={() => this.handleInternetSharerPercentageChange()}
-        />
-        <br />
-        <SimulationParameter
-          label="Number of runs"
-          id="runs"
-          value={this.state.runs}
-          onChange={() => this.handleRunsChange()}
-        />
+      <div className="app-ui-wrapper">
+        <div className="app-ui-init-controls">
+          <SimulationParameter
+            label="Seed:"
+            id="seed"
+            value={this.state.seed}
+            onChange={(event) => this.handleParamChange(event)}
+          />
 
-        <label>Config </label>
-        <br/>
-        <input id="conf" type="file" onChange={() => this.updateConf()} />
-        <br/>
-        <div id="fileContents">Contents</div>
+          <div className="app-ui-input-group">
+            <SimulationParameter
+              label="Population density [devices / km^2]:"
+              id="density"
+              value={this.state.density}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+            <button
+              onClick={() => this.handleRegionClick("canada")}
+              className="location-btn"
+            >
+              Canada
+            </button>
+            <button
+              onClick={() => this.handleRegionClick("guatcity")}
+              className="location-btn"
+            >
+              Guatemala City
+            </button>
+            <button
+              onClick={() => this.handleRegionClick("toronto")}
+              className="location-btn"
+            >
+              Vancouver
+            </button>
+            <button
+              onClick={() => this.handleRegionClick("vancouver")}
+              className="location-btn"
+            >
+              Toronto
+            </button>
+          </div>
 
-        <button onClick={() => this.handleGenerateClick()}
-          id="generate_btn" className="control-btn">Generate</button>
-        <button onClick={() => this.handleStepClick()} id="step" className="control-btn">Step</button>
-        <button onClick={() => this.handleRunClick()} id="animate" className="control-btn">Animate!</button>
-        <button onClick={() => this.handlePauseClick()} id="pause" className="control-btn">Pause</button>
+          <div className="app-ui-input-group">
+            <SimulationParameter
+              label="Wifi hotspot %:"
+              id="wifiHotspotPercentage"
+              value={this.state.wifiHotspotPercentage}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+            <SimulationParameter
+              label="Wifi hotspot range [m]:"
+              id="wifiHotspotRange"
+              value={this.state.wifiHotspotRange}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+          </div>
+          <div className="app-ui-input-group">
+            <SimulationParameter
+              label="Wifi-direct hotspot %:"
+              id="wifiDirectHotspotPercentage"
+              value={this.state.wifiDirectHotspotPercentage}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+            <SimulationParameter
+              label="Wifi-direct hotspot range [m]:"
+              id="wifiDirectHotspotRange"
+              value={this.state.wifiDirectHotspotRange}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+          </div>
+          <div className="app-ui-input-group">
+            <SimulationParameter
+              label="Bluetooth %:"
+              id="bluetoothPercentage"
+              value={this.state.bluetoothPercentage}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+            <SimulationParameter
+              label="Bluetooth range [m]:"
+              id="bluetoothRange"
+              value={this.state.bluetoothRange}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+          </div>
+          <div className="app-ui-input-group">
+            <SimulationParameter
+              label="Wifi power level:"
+              id="wifiPowerLevel"
+              value={this.state.wifiPowerLevel}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+            <SimulationParameter
+              label="Wifi-direct power level:"
+              id="wifiDirectPowerLevel"
+              value={this.state.wifiDirectPowerLevel}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+            <SimulationParameter
+              label="Bluetooth power level:"
+              id="bluetoothPowerLevel"
+              value={this.state.bluetoothPowerLevel}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+            <SimulationParameter
+              label="Cell energy level:"
+              id="cellPowerLevel"
+              value={this.state.cellPowerLevel}
+              onChange={(event) => this.handleParamChange(event)}
+            />
+          </div>
+          <SimulationParameter
+            label="Percentage of internet-sharers:"
+            id="internetSharerPercentage"
+            value={this.state.internetSharerPercentage}
+            onChange={(event) => this.handleParamChange(event)}
+          />
+          <button onClick={() => this.handleCreateSimClick()}
+            id="create_btn" className="control-btn">Create Sim</button>
+        </div>
+        <div className="app-ui-inputs">
+          <br />
+          <SimulationParameter
+            label="Number of runs"
+            id="runs"
+            value={this.state.runs}
+            onChange={(event) => this.handleRunsChange(event)}
+          />
 
-        <div className="grid-regions">
-          <button onClick={() => this.handleRegionClick("canada")}>Canada</button>
-          <button onClick={() => this.handleRegionClick("guatcity")}>Guatamala City</button>
-          <button onClick={() => this.handleRegionClick("toronto")}>Vancouver</button>
-          <button onClick={() => this.handleRegionClick("vancouver")}>Toronto</button>
+          <label>Config </label>
+          <br/>
+          <input id="conf" type="file" onChange={() => this.updateConf()} />
+          <br/>
+          <div id="fileContents">Contents</div>
+
+          <button
+            onClick={() => this.handleGenerateClick()}
+            id="generate_btn"
+            className="control-btn"
+            disabled={!this.state.enabled}
+          >
+            Generate
+          </button>
+          <button
+            onClick={() => this.handleStepClick()}
+            id="step"
+            className="control-btn"
+            disabled={!this.state.enabled}
+          >
+            Step
+          </button>
+          <button
+            onClick={() => this.handleRunClick()}
+            id="animate"
+            className="control-btn"
+            disabled={!this.state.enabled}
+          >
+            Animate!
+          </button>
+          <button
+            onClick={() => this.handlePauseClick()}
+            id="pause"
+            className="control-btn"
+            disabled={!this.state.enabled}
+          >
+            Pause
+          </button>
         </div>
       </div>
     )

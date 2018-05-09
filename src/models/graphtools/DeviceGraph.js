@@ -26,7 +26,7 @@ class DeviceGraph {
    * @param {Device} device
    */
   removeDevice (device) {
-    this._devices.splice(this._devices.indexOf(device))
+    this._devices.splice(this._devices.indexOf(device), 1)
   }
 
   /**
@@ -42,7 +42,20 @@ class DeviceGraph {
    * @param {Link} hint A collection of properties to search for.
    */
   unlink (hint) {
-    // TODO
+    let deletables = []
+    for (let link of this._links) {
+      if (link.contains2(hint.left, hint.right)) {
+        if ((hint.type !== null) &&
+            (hint.type !== link.type)) {
+          break
+        }
+        deletables.push(link)
+      }
+    }
+
+    for (let deletable of deletables) {
+      this._links.splice(this._links.indexOf(deletable), 1)
+    }
   }
 
   /**
@@ -53,9 +66,8 @@ class DeviceGraph {
    */
   isLinked (left, right) {
     for (let link of this._links) {
-      if (link.left === left && link.right === right ||
-          link.right === left && link.left === right) {
-            return true
+      if (link.contains2(left, right)) {
+        return true
       }
     }
 
@@ -63,10 +75,34 @@ class DeviceGraph {
   }
 
   /**
-   *
+   * Return all the devices known to the graph,
+   * in no particular order.
    */
   get devices () {
     return this._devices
+  }
+
+  /**
+   * Get the set of elements connected in a 'local mesh'
+   * to the given device.
+   * @param {Device} device A device in the graph.
+   * @returns {list} the set of elements connected to given element.
+   */
+  localMesh (device) {
+    let mesh = []
+    mesh.push(device)
+
+    for (let link of this._links) {
+      if (link.contains(device)) {
+        if (device === link.left) {
+          mesh.push (link.right)
+        } else {
+          mesh.push (link.left)
+        }
+      }
+    }
+
+    return mesh
   }
 }
 

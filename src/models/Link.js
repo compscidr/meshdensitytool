@@ -11,6 +11,30 @@ class Link {
     this.energy = energy
     this.cost = cost
   }
+
+  /**
+   * Determine if a link contains the device.
+   */
+  contains (device) {
+    if (this.left === device ||
+        this.right === device) {
+      return true
+    }
+    return false
+  }
+
+  /**
+   * Determine if a link contains the two devices.
+   * Order does not matter.
+   */
+  contains2 (left, right) {
+    let doesContainBoth = false
+    if ((this.left === left && this.right === right) ||
+        (this.right === left && this.left === right)) {
+      doesContainBoth = true
+    }
+    return doesContainBoth
+  }
 }
 
 export default Link

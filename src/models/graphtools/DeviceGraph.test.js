@@ -1,16 +1,10 @@
-import DeviceGraph from './DeviceGraph'
-import Device, { CLAMP_BOUNCE } from './Device'
-import EnergyLink from './EnergyLink'
-import LinkHint from './LinkHint'
+import DeviceGraph from 'graphtools/DeviceGraph'
+import Device, { CLAMP_BOUNCE } from 'models/Device'
+import EnergyLink from 'models/EnergyLink'
+import LinkHint from 'models/LinkHint'
 
-function generateDevices (count) {
-  let devices = []
-  for (let i = 0; i < count; i++) {
-    devices.push(new Device(i, 100+i, CLAMP_BOUNCE))
-  }
+import { generateDevices, setwiseEqual } from 'graphtools/DeviceGraph.test.util'
 
-  return devices
-}
 
 describe('A device graph', () => {
   test('can be created', () => {
@@ -122,12 +116,18 @@ describe('A device graph', () => {
     }
 
     let graph = new DeviceGraph(devices)
-    let device = devices[devices.length / 2]
-    graph.removeDevice(device)
+    let removed = devices[devices.length / 2]
+    graph.removeDevice(removed)
     for (let device of graph.devices) {
       contained.set(device, true)
     }
-    expect(contained.get(device)).toBe(false)
+
+    contained.forEach((isContained, device) => {
+      if (device !== removed) {
+        expect(isContained).toBe(true)
+      }
+    })
+    expect(contained.get(removed)).toBe(false)
   })
 
   test('can have only device removed', () => {
@@ -189,6 +189,23 @@ describe('A device graph', () => {
     expect(graph.isLinked(devices[1], devices[0])).toBe(false)
   })
 
+  test('removing nonexistent links does nothing', () => {
+    let devices = generateDevices(10)
+    const graph = new DeviceGraph(devices)
+    let link = new EnergyLink(devices[0], devices[1], "test_link", 13)
+    graph.addLink(link)
+
+    let removalHint = new LinkHint()
+      .addDevice(devices[2])
+      .addDevice(devices[3])
+      .addType("test_link")
+      .build()
+
+    graph.unlink(removalHint)
+
+    expect(graph.isLinked(devices[0], devices[1])).toBe(true)
+  })
+
   test('can have a link removed after adding it in both directions', () => {
     let devices = generateDevices(10)
     const graph = new DeviceGraph(devices)
@@ -202,7 +219,6 @@ describe('A device graph', () => {
       .addDevice(devices[1])
       .addType("test_link")
       .build()
-
     graph.unlink(removalHint)
 
     expect(graph.isLinked(devices[0], devices[1])).toBe(false)
@@ -213,10 +229,8 @@ describe('A device graph', () => {
     let devices = generateDevices(10)
     const graph = new DeviceGraph(devices)
     let link = new EnergyLink(devices[0], devices[1], "test_link", 13)
-    let linkBack = new EnergyLink(devices[1], devices[0], "test_link", 14)
     let link2 = new EnergyLink(devices[1], devices[2], "test_link", 12)
     graph.addLink(link)
-    graph.addLink(linkBack)
     graph.addLink(link2)
 
     let removalHint = new LinkHint()
@@ -230,5 +244,90 @@ describe('A device graph', () => {
     expect(graph.isLinked(devices[1], devices[0])).toBe(false)
     expect(graph.isLinked(devices[1], devices[2])).toBe(true)
     expect(graph.isLinked(devices[2], devices[1])).toBe(true)
+  })
+
+  test('does not remove a link with mismatched hint link type', () => {
+    let devices = generateDevices(10)
+    const graph = new DeviceGraph(devices)
+    let link = new EnergyLink(devices[0], devices[1], "test_link", 13)
+    graph.addLink(link)
+
+    let removalHint = new LinkHint()
+      .addDevice(devices[0])
+      .addDevice(devices[1])
+      .addType("invalid_type")
+      .build()
+    graph.unlink(removalHint)
+
+    expect(graph.isLinked(devices[0], devices[1])).toBe(true)
+  })
+
+  test('does remove link with null link type hint', () => {
+    let devices = generateDevices(10)
+    const graph = new DeviceGraph(devices)
+    let link = new EnergyLink(devices[0], devices[1], "test_link", 13)
+    graph.addLink(link)
+
+    let removalHint = new LinkHint()
+      .addDevice(devices[0])
+      .addDevice(devices[1])
+      .build()
+    graph.unlink(removalHint)
+
+    expect(graph.isLinked(devices[0], devices[1])).toBe(false)
+  })
+
+  test('trivial local mesh contains one device', () => {
+    let devices = generateDevices(1)
+    const graph = new DeviceGraph(devices)
+
+    let expectedLocalMesh = []
+    expectedLocalMesh. push (devices[0])
+
+    expect (setwiseEqual (
+      graph.localMesh (graph.devices[0]),
+      expectedLocalMesh
+    )).toBe(true)
+
+  })
+
+  test('local mesh contains connected devices', () => {
+    let devices = generateDevices (2)
+    const graph = new DeviceGraph (devices)
+    let link = new EnergyLink(devices[0], devices[1], "test_link", 13)
+    graph.addLink(link)
+
+    let expectedLocalMesh = []
+    expectedLocalMesh.push (devices[0])
+    expectedLocalMesh.push (devices[1])
+
+    expect (setwiseEqual (
+      graph.localMesh (graph.devices[0]),
+      expectedLocalMesh
+    )).toBe(true)
+    expect (setwiseEqual (
+      graph.localMesh (graph.devices[1]),
+      expectedLocalMesh
+    )).toBe(true)
+  })
+
+  test('local mesh does not contain disconnected devices', () => {
+    let devices = generateDevices (3)
+    const graph = new DeviceGraph (devices)
+    let link = new EnergyLink(devices[0], devices[1], "test_link", 13)
+    graph.addLink(link)
+
+    expect (setwiseEqual (
+      graph.localMesh (graph.devices[2]),
+      [devices[2]]
+    )).toBe(true)
+    expect (setwiseEqual (
+      graph.localMesh (graph.devices[0]),
+      [devices[0], devices[1], devices[2]]
+    )).toBe(false)
+    expect (setwiseEqual (
+      graph.localMesh (graph.devices[1]),
+      [devices[0], devices[1], devices[2]]
+    )).toBe(false)
   })
 })
