@@ -247,7 +247,7 @@ class AppUI extends React.Component {
             <SimulationParameter
               label="Cell energy level:"
               id="cellPowerLevel"
-              value={this.state.wifiPowerLevel}
+              value={this.state.cellPowerLevel}
               onChange={(event) => this.handleParamChange(event)}
             />
           </div>

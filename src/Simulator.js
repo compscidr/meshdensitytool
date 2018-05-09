@@ -409,7 +409,6 @@ class Simulator {
 
     nodesToVisit.push(device)
 
-    /*
     while (nodesToVisit.length !== 0) {
       let visit = nodesToVisit[0]
 
@@ -437,7 +436,6 @@ class Simulator {
       nodesVisited.push(visit)
       nodesToVisit.splice(nodesToVisit.indexOf(visit), 1)
     }
-    */
 
     return nodesVisited
   }
