@@ -40,6 +40,10 @@ class AppUI extends React.Component {
       this.state.wifiDirectHotspotRange / 2.0,
       this.state.bluetoothPercentage,
       this.state.bluetoothRange / 2.0,
+      this.state.wifiPowerLevel,
+      this.state.wifiDirectPowerLevel,
+      this.state.bluetoothPowerLevel,
+      this.state.cellPowerLevel,
       this.state.internetSharerPercentage,
     )
     this.sim.run(false)
